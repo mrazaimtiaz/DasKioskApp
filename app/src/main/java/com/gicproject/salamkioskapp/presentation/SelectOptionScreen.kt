@@ -166,6 +166,8 @@ fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
     var fontEnglish = FontFamily(Font(R.font.questrial_regular))
     var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
     Box(modifier = Modifier.padding(horizontal = 0.dp, vertical = 0.dp)) {
+
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -176,46 +178,51 @@ fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp, vertical = 30.dp),
+                    .padding(horizontal = 10.dp, vertical = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = Constants.LOGO),
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = "bg",
-                    modifier = Modifier
-                        .width(180.dp) //sidra
-                        //  .width(90.dp) //hadi
-                        .height(70.dp)
-                        .pointerInput(Unit) {
-                            detectDragGestures { change, _ ->
-                                if (change.position.y > 400) {
-                                    navController.navigate(Screen.SettingScreen.route)
-                                }
-                                change.consume()
-                            }
-                        }
-                )
+
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 22.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(title, fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black,
+                    Column(verticalArrangement = Arrangement.Center,modifier  =Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(title, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Black,
                             style = TextStyle(fontFamily =fontEnglish),)
-                        Text(titleAr, fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black,
+                        Text(titleAr, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Black,
                             style = TextStyle(fontFamily =fontArabic),)
 
                     }
+
                 }
+
             }
 
 
+        }
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 30.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = Constants.LOGO),
+                contentScale = ContentScale.FillBounds,
+                contentDescription = "bg",
+                modifier = Modifier
+                    // .width(180.dp) //sidra
+                    .width(90.dp) //hadi
+                    .height(70.dp)
+                    .pointerInput(Unit) {
+                        detectDragGestures { change, _ ->
+                            if (change.position.y > 400) {
+                                navController.navigate(Screen.SettingScreen.route)
+                            }
+                            change.consume()
+                        }
+                    }
+            )
         }
     }
 

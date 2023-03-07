@@ -68,12 +68,32 @@ fun SelectServiceScreen(
 
     val listState = rememberLazyListState()
 
-    val second = remember { mutableStateOf(30) }
+    val second = remember { mutableStateOf(60) }
 
     val state = viewModel.stateSelectService.value
 
 
     var showDialog = remember { mutableStateOf(false) }
+
+    if(state.isAppointment =="Y"){
+        //hadi
+        showDialog.value = true
+
+
+    }else if(state.isAppointment == "N"){
+        //sidra
+         viewModel.onEvent(MyEvent.GetBookTicket(
+             serviceID = viewModel.selectService.ServicesPKID.toString(),
+             isHandicap = false,
+             isVip = false,
+             languageID = "0",
+             appointmentCode = "-1",
+             isaapt = false,
+             refid = "-1",
+             DoctorServiceID = "-1",
+             ticketDesignId = viewModel.selectService.ServicesTicketDesignerFKID.toString()
+         ))
+    }
     if (showDialog.value) {
         /*val second = remember { mutableStateOf(30) }
         LaunchedEffect(key1 = Unit, block = {
@@ -151,7 +171,12 @@ fun SelectServiceScreen(
                             modifier = Modifier.size(50.dp)
                         )
                         Spacer(modifier = Modifier.width(20.dp))
-                        Text("Go Back", fontSize = 25.sp)
+                        val fontEnglish = FontFamily(Font(R.font.questrial_regular))
+                        val fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
+                        Row(){
+                            Text("Back  ", fontSize = 25.sp, fontFamily = fontEnglish)
+                            Text("عوده", fontSize = 25.sp, fontFamily = fontArabic)
+                        }
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                     // HeartBeatTimeRow(second = second)
@@ -243,30 +268,17 @@ fun SelectServiceScreen(
                     contentPadding = PaddingValues(70.dp),
                     modifier = Modifier
                         .width(730.dp)
-                        .height(950.dp),//sidra
-                       // .height(750.dp), //hadi
+                        //.height(950.dp),//sidra
+                        .height(750.dp), //hadi
                     columns = GridCells.Fixed(2),
                 ) {
                     items(state.services.size) { index ->
                         ServiceInfo(state.services[index], navController, onClick = {
-                            //hadi
-                            /*showDialog.value = true
-                            viewModel.selectService = state.services[index]*/
+
+                            viewModel.selectService = state.services[index]
+                            viewModel.onEvent(MyEvent.GetIsCheckAppointment("dff"))
 
 
-
-                            //sidra
-                             viewModel.onEvent(MyEvent.GetBookTicket(
-                                 serviceID = state.services[index].ServicesPKID.toString(),
-                                 isHandicap = false,
-                                 isVip = false,
-                                 languageID = "0",
-                                 appointmentCode = "-1",
-                                 isaapt = false,
-                                 refid = "-1",
-                                 DoctorServiceID = "-1",
-                                 ticketDesignId = state.services[index].ServicesTicketDesignerFKID.toString()
-                             ))
                         })
 
                     }

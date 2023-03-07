@@ -6,6 +6,13 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface MyRepository {
+
+
+    suspend fun getCivilIdAppointment(civilId: String): List<SelectServiceDto>?
+
+    suspend fun checkIsAppointment(
+        serviceId: String,
+    ): List<SelectServiceDto>?
     suspend fun getBookTicket(
         serviceID: String,
         isHandicap: Boolean,

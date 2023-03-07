@@ -21,6 +21,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -121,7 +123,12 @@ fun SelectDepartmentScreen(
                             modifier = Modifier.size(50.dp)
                         )
                         Spacer(modifier = Modifier.width(20.dp))
-                        Text("Go Back", fontSize = 25.sp)
+                        val fontEnglish = FontFamily(Font(R.font.questrial_regular))
+                        val fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
+                        Row(){
+                            Text("Back  ", fontSize = 25.sp, fontFamily = fontEnglish)
+                            Text("عوده", fontSize = 25.sp, fontFamily = fontArabic)
+                        }
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                     HeartBeatTimeRow(second = second)
@@ -283,7 +290,12 @@ fun GoBack(navController: NavController) {
             modifier = Modifier.size(50.dp)
         )
         Spacer(modifier = Modifier.width(20.dp))
-        Text("Go Back", fontSize = 25.sp)
+        val fontEnglish = FontFamily(Font(R.font.questrial_regular))
+        val fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
+        Row(){
+            Text("Back  ", fontSize = 25.sp, fontFamily = fontEnglish)
+            Text("عوده", fontSize = 25.sp, fontFamily = fontArabic)
+        }
         Spacer(modifier = Modifier.width(10.dp))
     }
 }

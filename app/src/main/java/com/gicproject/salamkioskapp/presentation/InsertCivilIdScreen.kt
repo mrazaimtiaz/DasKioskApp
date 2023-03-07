@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -23,9 +24,14 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,7 +52,7 @@ fun InsertCivilIdScreen(
 
     val listState = rememberLazyListState()
 
-    val second = remember { mutableStateOf(20) }
+    val second = remember { mutableStateOf(60) }
 
     var textCivilId = remember { mutableStateOf("") }
 
@@ -88,25 +94,8 @@ fun InsertCivilIdScreen(
                     contentDescription = "bg",
                     modifier = Modifier.fillMaxSize()
                 )
-
-
-            }
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(20.dp)
-                ) {
-                    GoBack(navController)
-                }
             }
             HeartBeatTime(second = second)
-            HeaderDesign("Insert Civil ID of Patient","أدخل البطاقة المدنية للمريض",navController)
-
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -130,172 +119,299 @@ fun InsertCivilIdScreen(
 
                     }
                 }
-                    Image(
-                        painter = painterResource(id = R.drawable.animatedcivilid),
-                        modifier = Modifier.size(350.dp),
-                        contentDescription = "civilid"
-                    )
-                  // PayKnetAnimation()
+                HeaderDesign("Appointment","موعد",navController)
 
-               /* Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .width(500.dp)
-                            .background(Color.White, shape = RoundedCornerShape(10.dp))
-                    ) {
-                        Text(
-                            textCivilId.value,
-                            color = Color.Black,
-                            fontSize = 35.sp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(20.dp),
-                            textAlign = TextAlign.Center
-                        )
+                  // PayKnetAnimation()
+                var fontEnglish = FontFamily(Font(R.font.questrial_regular))
+                var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
+                Column(modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(5f), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                   Column(modifier = Modifier.fillMaxWidth().padding(25.dp)) {
+                       Text("Insert Mobile Number or Civil ID of Patient",modifier = Modifier.fillMaxWidth(), fontSize = 27.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, style = TextStyle(fontFamily = fontEnglish))
+                       Spacer(modifier = Modifier.height(10.dp))
+                       Text("أدخل البطاقة المدنية للمريض أو رقم الهاتف المحمول" , modifier = Modifier.fillMaxWidth(), fontSize = 27.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, style = TextStyle(fontFamily = fontArabic))
+                   }
+
+                    Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+
+                        Column( modifier = Modifier
+                            .weight(1f)
+                            .padding(25.dp),) {
+
+                            Image(
+                                painter = painterResource(id = R.drawable.animatedcivilid),
+                                modifier = Modifier.size(250.dp),
+                                contentDescription = "civilid"
+                            )
+
+
+
+                        }
+                        Column(modifier = Modifier.weight(1f), ){
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(20.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .width(250.dp)
+                                        .background(
+                                            Color.LightGray,
+                                            shape = RoundedCornerShape(10.dp)
+                                        )
+                                ) {
+                                    Text(
+                                        textCivilId.value,
+                                        color = Color.Black,
+                                        fontSize = 25.sp,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(10.dp),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                var context = LocalContext.current
+                                Row() {
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "1"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "1")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "2"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "2")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "3"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "3")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                }
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Row() {
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "4"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "4")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "5"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "5")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "6"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "6")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                }
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Row() {
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "7"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "7")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "8"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "8")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "9"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "9")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                }
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Row() {
+                                    NumberKeypad({
+                                        textCivilId.value = ""
+                                    }, isIconClose = true)
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    NumberKeypad({
+                                        if (textCivilId.value.length != 12) {
+                                            textCivilId.value = textCivilId.value + "0"
+                                        } else {
+                                            //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
+                                            //                                   .show()
+                                        }
+                                    }, "0")
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    NumberKeypad({
+                                        if (textCivilId.value.isNotBlank()) {
+                                            textCivilId.value =
+                                                textCivilId.value.substring(0, textCivilId.value.length - 1);
+                                        }
+
+                                    }, isIconBack = true)
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                }
+
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            if(isService == true){
+                                                navController.navigate(Screen.SelectServiceScreen.route)
+                                            }else{
+                                                navController.navigate(Screen.DoctorPayScreen.route)
+                                            }
+                                        },
+                                        modifier = Modifier
+                                            .padding(vertical = 20.dp)
+                                            .shadow(50.dp, shape = RoundedCornerShape(5.dp)),
+                                        shape = RoundedCornerShape(10.dp)
+                                    ) {
+                                        Spacer(modifier = Modifier.width(20.dp))
+                                        Icon(
+                                            Icons.Default.Send,
+                                            contentDescription = "",
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(10.dp))
+                                        Row() {
+                                            Text("Submit  ", fontSize = 20.sp, fontFamily = fontEnglish, fontWeight = FontWeight.Bold)
+                                            Text("ارسل", fontSize = 20.sp, fontFamily = fontArabic, fontWeight = FontWeight.Bold)
+
+                                        }
+                                        Spacer(modifier = Modifier.width(10.dp))
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-                Spacer(modifier = Modifier.height(30.dp))
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    var context = LocalContext.current
-                    Row() {
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "1"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "1")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "2"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "2")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "3"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "3")
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Row() {
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "4"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "4")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "5"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "5")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "6"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "6")
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Row() {
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "7"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "7")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "8"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "8")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "9"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "9")
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Row() {
-                        NumberKeypad({
-                            textCivilId.value = ""
-                        }, isIconClose = true)
-                        Spacer(modifier = Modifier.width(10.dp))
-                        NumberKeypad({
-                            if (textCivilId.value.length != 12) {
-                                textCivilId.value = textCivilId.value + "0"
-                            } else {
-                                //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
- //                                   .show()
-                            }
-                        }, "0")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        NumberKeypad({
-                            if (textCivilId.value.isNotBlank()) {
-                                textCivilId.value =
-                                    textCivilId.value.substring(0, textCivilId.value.length - 1);
-                            }
 
-                        }, isIconBack = true)
-                        Spacer(modifier = Modifier.width(10.dp))
+                //divider section
+               /* Row() {
+                    Column(modifier = Modifier.weight(2f),horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                        Divider()
+
                     }
-                    Spacer(modifier = Modifier.height(80.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                   *//* Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                        Row() {
+                            Text("OR  ", fontSize = 35.sp, fontFamily = fontEnglish, fontWeight = FontWeight.Bold)
+                            Text("أو", fontSize = 35.sp, fontFamily = fontArabic, fontWeight = FontWeight.Bold)
+
+                        }
+
+                    }*//*
+                    Column(modifier = Modifier.weight(2f),horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                        Divider()
+
+                    }
+
+                }*/
+                //bottom section
+            /*    Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.weight(4f)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                            .padding(15.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        SubmitButton(onClick = {
-                            if(isService == true){
-                                navController.navigate(Screen.SelectServiceScreen.route)
-                            }else{
-                                navController.navigate(Screen.DoctorPayScreen.route)
-                            }
-                        }, text = "Proceed")
+                        Text(
+                            "Insert Patient Civil ID to the \n Machine",
+                            modifier = Modifier.fillMaxWidth(),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Start,
+                            style = TextStyle(fontFamily = fontEnglish)
+                        )
+                        Spacer(modifier = Modifier.height(30.dp))
+                        Text(
+                            "أدخل الهوية المدنية للمريض على \nالجهاز",
+                            modifier = Modifier.fillMaxWidth(),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.End,
+                            style = TextStyle(fontFamily = fontArabic)
+                        )
+
+                    }
+                    Column(  modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .padding(15.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center) {
+                            Image(
+                                painter = painterResource(id = R.drawable.animatedcivilid),
+                                modifier = Modifier.size(200.dp),
+                                contentDescription = "civilid"
+                            )
                     }
                 }*/
 
+
+                    Row(
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically,
+
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .fillMaxWidth()
+                    ) {
+                        GoBack(navController)
+                    }
+
+
+
             }
+
+
 
 
             /* if (state.error.isNotBlank()) {
@@ -349,15 +465,15 @@ fun NumberKeypad(
             ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
         },
         modifier = Modifier
-            .width(80.dp)
-            .height(80.dp)
-            .shadow(20.dp, shape = CircleShape),
-        shape = CircleShape
+            .width(48.dp)
+            .height(48.dp)
+            .shadow(10.dp, shape = RoundedCornerShape(15.dp)),
+        shape = RoundedCornerShape(15.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(5.dp),
+                .padding(0.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -378,7 +494,7 @@ fun NumberKeypad(
             } else {
 
                 Text(
-                    text, fontSize = 40.sp,  textAlign = TextAlign.Center
+                    text, fontSize = 20.sp,  textAlign = TextAlign.Center, color = Color.White
                 )
             }
         }

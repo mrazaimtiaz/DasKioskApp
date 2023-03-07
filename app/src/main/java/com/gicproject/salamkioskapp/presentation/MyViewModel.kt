@@ -370,6 +370,70 @@ class MyViewModel @Inject constructor(
                 }
 
             }
+            is MyEvent.GetCivilIdAppointment -> {
+                surveyUseCases.getCheckIsAppointment(event.civilId).onEach { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            result.data?.let {
+                                viewModelScope.launch {
+                                //    _stateSelectService.value =  _stateSelectService.value.copy(isAppointment = "Y", isLoading = false)
+                                 //   delay(500)
+                                  //  _stateSelectService.value =  _stateSelectService.value.copy(isAppointment = "", isLoading = false)
+
+
+                                }
+                            }
+                        }
+                        is Resource.Error -> {
+                            _stateInsertCivilId.value = InsertCivilIdScreenState(
+                                error = result.message ?: "An unexpected error occurred",
+                                isLoading = false,
+                            )
+                            // delay(2000)
+                            //  onEvent(MyEvent.GetDepartment)
+                        }
+                        is Resource.Loading -> {
+                            _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = true)
+
+
+                        }
+                    }
+                }.launchIn(viewModelScope)
+
+
+            }
+            is MyEvent.GetIsCheckAppointment -> {
+                    surveyUseCases.getCheckIsAppointment(event.serviceId).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                result.data?.let {
+                                    viewModelScope.launch {
+                                        _stateSelectService.value =  _stateSelectService.value.copy(isAppointment = "Y", isLoading = false)
+                                        delay(500)
+                                        _stateSelectService.value =  _stateSelectService.value.copy(isAppointment = "", isLoading = false)
+
+
+                                    }
+                                }
+                            }
+                            is Resource.Error -> {
+                                _stateSelectService.value = SelectServiceScreenState(
+                                    error = result.message ?: "An unexpected error occurred",
+                                    isLoading = false,
+                                )
+                                // delay(2000)
+                                //  onEvent(MyEvent.GetDepartment)
+                            }
+                            is Resource.Loading -> {
+                                _stateSelectService.value =  _stateSelectService.value.copy(isLoading = true)
+
+
+                            }
+                        }
+                    }.launchIn(viewModelScope)
+
+
+            }
             is MyEvent.GetSelectServices -> {
                 if(_selectedBranchId.value.isNotEmpty()){
                     surveyUseCases.getSelectServices(_selectedBranchId.value,event.deptId).onEach { result ->
@@ -954,7 +1018,7 @@ class MyViewModel @Inject constructor(
                                 }else{
                                     Log.d(TAG, "onCardEvent: get result $civilidText $firstNameArText $secondNameArText `6f")
 
-                                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error="$civilidText $firstNameArText getting text")
+                                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error="$civilidText")
                                   /*  withContext(Dispatchers.Main){
                                         Toast.makeText(baseContext," $civilidText $firstNameArText",
                                             Toast.LENGTH_LONG).show()

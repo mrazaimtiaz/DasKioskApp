@@ -10,4 +10,5 @@ data class SelectServiceScreenState(
     val error: String = "",
     val success: String = "",
     val services: List<SelectService> = emptyList(),
+    val isAppointment: String = "",
 )

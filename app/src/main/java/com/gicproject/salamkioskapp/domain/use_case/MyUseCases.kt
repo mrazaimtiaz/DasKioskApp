@@ -12,4 +12,6 @@ data class MyUseCases(
     val getSelectServices: GetSelectServices,
     val getBookTicket: GetBookTicket,
     val getTicket: GetTicket,
+    val getCheckIsAppointment: GetCheckIsAppointment,
+    val getCivilIdAppointment: GetCivilIdAppointment,
 )
