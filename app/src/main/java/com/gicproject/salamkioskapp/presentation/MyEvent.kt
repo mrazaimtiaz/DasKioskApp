@@ -7,11 +7,12 @@ sealed class MyEvent {
     object GetDepartments: MyEvent()
     object GetSelectDepartments: MyEvent()
     data class GetSelectServices(val deptId: String) : MyEvent()
-    data class GetIsCheckAppointment(val serviceId: String) : MyEvent()
+    data class GetCheckIsWalkIn(val serviceId: String) : MyEvent()
     data class GetCivilIdAppointment(val civilId: String) : MyEvent()
     object GetDoctor: MyEvent()
     object GetPrintTicket: MyEvent()
     data class GetBookTicket(
+        val isCivilIdPage: Boolean,
         val serviceID: String,
         val isHandicap: Boolean,
         val isVip: Boolean,

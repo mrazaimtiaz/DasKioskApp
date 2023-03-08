@@ -6,17 +6,19 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface MyApi {
-    @GET("api/getCivilIdAppointment")
+    @POST("api/checkAppt")
     suspend fun getCivilIdAppointment(
-        @Query("civilId")
-        branchId: String,
-    ): List<SelectServiceDto>?
+        @Query("civilID")
+        civilID: String,
+        @Query("ServiceID")
+        serviceID: String,
+    ): List<CheckAppt>?
 
-    @GET("api/checkIsAppointment")
-    suspend fun checkIsAppointment(
-        @Query("serviceId")
+    @POST("api/Checkwalkinappt")
+    suspend fun checkIsWalkIn(
+        @Query("ServiceID")
         serviceId: String,
-    ): List<SelectServiceDto>?
+    ): List<CheckIsWalkIn>?
 
     @POST("api/BookTicket")
     suspend fun getBookTicket(

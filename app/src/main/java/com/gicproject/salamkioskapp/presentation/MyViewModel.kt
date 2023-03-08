@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gicproject.salamkioskapp.UsbBroadCastReceiver
@@ -94,7 +95,9 @@ class MyViewModel @Inject constructor(
 
     private val _readCivilId = mutableStateOf(false)
 
+    var textCivilId =   mutableStateOf("")
 
+    var showDialogService =  mutableStateOf(false)
     private val _isRefreshingSetting = MutableStateFlow(false)
     val isRefreshingSetting: StateFlow<Boolean>
         get() = _isRefreshingSetting.asStateFlow()
@@ -295,7 +298,7 @@ class MyViewModel @Inject constructor(
                                                                 }*/
                                                                 bitmap?.let {
                                                                     funcPrinterImage(
-                                                                        it
+                                                                        it,event.isCivilIdPage
                                                                     )
                                                                 }
                                                                // var bitmap2  =convertBase64ToBitmap(Constants.baseImage2)
@@ -371,46 +374,85 @@ class MyViewModel @Inject constructor(
 
             }
             is MyEvent.GetCivilIdAppointment -> {
-                surveyUseCases.getCheckIsAppointment(event.civilId).onEach { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            result.data?.let {
-                                viewModelScope.launch {
-                                //    _stateSelectService.value =  _stateSelectService.value.copy(isAppointment = "Y", isLoading = false)
-                                 //   delay(500)
-                                  //  _stateSelectService.value =  _stateSelectService.value.copy(isAppointment = "", isLoading = false)
-
-
-                                }
-                            }
-                        }
-                        is Resource.Error -> {
-                            _stateInsertCivilId.value = InsertCivilIdScreenState(
-                                error = result.message ?: "An unexpected error occurred",
-                                isLoading = false,
-                            )
-                            // delay(2000)
-                            //  onEvent(MyEvent.GetDepartment)
-                        }
-                        is Resource.Loading -> {
-                            _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = true)
-
-
-                        }
-                    }
-                }.launchIn(viewModelScope)
-
-
-            }
-            is MyEvent.GetIsCheckAppointment -> {
-                    surveyUseCases.getCheckIsAppointment(event.serviceId).onEach { result ->
+                if(event.civilId.isNotBlank()){
+                    surveyUseCases.getCivilIdAppointment(event.civilId,selectService.ServicesPKID.toString()).onEach { result ->
                         when (result) {
                             is Resource.Success -> {
                                 result.data?.let {
                                     viewModelScope.launch {
-                                        _stateSelectService.value =  _stateSelectService.value.copy(isAppointment = "Y", isLoading = false)
-                                        delay(500)
-                                        _stateSelectService.value =  _stateSelectService.value.copy(isAppointment = "", isLoading = false)
+                                        if(result.data.ApptExist == true){
+                                            onEvent(MyEvent.GetBookTicket(
+                                                isCivilIdPage = true,
+                                                serviceID = selectService.ServicesPKID.toString(),
+                                                isHandicap = false,
+                                                isVip = false,
+                                                languageID = "0",
+                                                appointmentCode = "-1",
+                                                isaapt = false,
+                                                refid = "-1",
+                                                DoctorServiceID = selectService.ServicesPKID.toString(),
+                                                ticketDesignId = selectService.ServicesTicketDesignerFKID.toString()
+                                            ))
+                                        }else{
+                                            textCivilId.value = ""
+                                            _stateInsertCivilId.value = InsertCivilIdScreenState(
+                                                error = "No Appointment Found - لم يتم العثور على موعد",
+                                                isLoading = false,
+                                            )
+                                        }
+
+                                    }
+                                }
+                            }
+                            is Resource.Error -> {
+                                _stateInsertCivilId.value = InsertCivilIdScreenState(
+                                    error = result.message ?: "An unexpected error occurred",
+                                    isLoading = false,
+                                )
+                                // delay(2000)
+                                //  onEvent(MyEvent.GetDepartment)
+                            }
+                            is Resource.Loading -> {
+                                _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = true)
+
+
+                            }
+                        }
+                    }.launchIn(viewModelScope)
+
+
+                }else{
+                    _stateInsertCivilId.value = InsertCivilIdScreenState(
+                        error =  "",
+                        isLoading = false,
+                    )
+                }
+
+            }
+            is MyEvent.GetCheckIsWalkIn -> {
+                    surveyUseCases.getCheckIsWalkIn(event.serviceId).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                result.data?.let {
+                                    viewModelScope.launch {
+                                        if(result.data.IsAvailable == true){
+
+                                            showDialogService.value = true
+                                            _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false)
+                                        }else{
+                                            onEvent(MyEvent.GetBookTicket(
+                                                isCivilIdPage = false,
+                                                serviceID = selectService.ServicesPKID.toString(),
+                                                isHandicap = false,
+                                                isVip = false,
+                                                languageID = "0",
+                                                appointmentCode = "-1",
+                                                isaapt = false,
+                                                refid = "-1",
+                                                DoctorServiceID = "-1",
+                                                ticketDesignId = selectService.ServicesTicketDesignerFKID.toString()
+                                            ))
+                                        }
 
 
                                     }
@@ -611,7 +653,7 @@ class MyViewModel @Inject constructor(
         mContext = context
     }
 
-    fun funcPrinterImage(bitmap: Bitmap) {
+    fun funcPrinterImage(bitmap: Bitmap,isCivilIdPage: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
             Log.d(TAG, "funcPrinterImage: called ")
             if (mPrinter?.isConnect == true) {
@@ -659,12 +701,23 @@ class MyViewModel @Inject constructor(
                // mPrinter!!.printFeed()
 
                // mPrinter?.fullCut()
-                _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,success = "printed")
+                if(isCivilIdPage){
+                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,success = "printed")
+
+                }else{
+                    _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,success = "printed")
+
+                }
 
                 // mPrinter!!.cutPaper(66, 0)
 
             } catch (e: java.lang.Exception) {
-                _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,success = "printing error: ${e.printStackTrace()}")
+                if(isCivilIdPage){
+                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error = "printing error: ${e.printStackTrace()}")
+                }else{
+                    _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,success = "printed")
+
+                }
 
                 e.printStackTrace()
             }

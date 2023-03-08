@@ -4,6 +4,7 @@ import android.content.Context
 import com.gicproject.salamkioskapp.data.remote.MyApi
 import com.gicproject.dasdoctorcvapp.domain.use_case.*
 import com.gicproject.salamkioskapp.common.Constants
+import com.gicproject.salamkioskapp.data.remote.dto.CheckIsWalkIn
 import com.gicproject.salamkioskapp.data.repository.DataStoreRepositoryImpl
 import com.gicproject.salamkioskapp.data.repository.MyRepositoryImpl
 import com.gicproject.salamkioskapp.domain.repository.DataStoreRepository
@@ -60,7 +61,7 @@ class AppModule {
             getSelectServices = GetSelectServices(repository = repository),
             getTicket = GetTicket(repository = repository),
             getBookTicket = GetBookTicket(repository = repository),
-            getCheckIsAppointment = GetCheckIsAppointment(repository = repository),
+            getCheckIsWalkIn = GetCheckIsWalkIn(repository = repository),
             getCivilIdAppointment = GetCivilIdAppointment(repository = repository)
         )
     }

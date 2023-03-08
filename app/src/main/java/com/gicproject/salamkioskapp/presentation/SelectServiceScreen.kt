@@ -73,28 +73,9 @@ fun SelectServiceScreen(
     val state = viewModel.stateSelectService.value
 
 
-    var showDialog = remember { mutableStateOf(false) }
-
-    if(state.isAppointment =="Y"){
-        //hadi
-        showDialog.value = true
 
 
-    }else if(state.isAppointment == "N"){
-        //sidra
-         viewModel.onEvent(MyEvent.GetBookTicket(
-             serviceID = viewModel.selectService.ServicesPKID.toString(),
-             isHandicap = false,
-             isVip = false,
-             languageID = "0",
-             appointmentCode = "-1",
-             isaapt = false,
-             refid = "-1",
-             DoctorServiceID = "-1",
-             ticketDesignId = viewModel.selectService.ServicesTicketDesignerFKID.toString()
-         ))
-    }
-    if (showDialog.value) {
+    if (viewModel.showDialogService.value) {
         /*val second = remember { mutableStateOf(30) }
         LaunchedEffect(key1 = Unit, block = {
             while (true) {
@@ -112,7 +93,8 @@ fun SelectServiceScreen(
                 usePlatformDefaultWidth = false
             ),
             onDismissRequest = {
-                showDialog.value = false
+
+                viewModel.showDialogService.value = false
             },
 
             ) {
@@ -130,17 +112,18 @@ fun SelectServiceScreen(
                         .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     CustomButton(onClick = {
-                        showDialog.value = false
+                        viewModel.showDialogService.value = false
                         navController.currentBackStackEntry?.savedStateHandle?.set(
                             Constants.STATE_EXTRA, false
                         )
                         navController.navigate(Screen.InsertCivilIdScreen.route)
                     }, text = "Appointment","موعد")
                     CustomButton(onClick = {
-                        showDialog.value = false
+                        viewModel.showDialogService.value = false
                         Log.d("TAG", "SelectServiceScreen: ${viewModel.selectService.ServicesPKID.toString()} ${viewModel.selectService.ServicesTicketDesignerFKID.toString()}")
                         viewModel.onEvent(
                             MyEvent.GetBookTicket(
+                                isCivilIdPage = false,
                                 serviceID = viewModel.selectService.ServicesPKID.toString(),
                                 isHandicap = false,
                                 isVip = false,
@@ -158,7 +141,9 @@ fun SelectServiceScreen(
                 Spacer(modifier = Modifier.height(20.dp))
                 Row() {
                     Button(
-                        onClick = { showDialog.value = false },
+                        onClick = {
+
+                            viewModel.showDialogService.value = false },
                         modifier = Modifier
                             .padding(20.dp)
                             .shadow(50.dp, shape = RoundedCornerShape(5.dp)),
@@ -274,9 +259,8 @@ fun SelectServiceScreen(
                 ) {
                     items(state.services.size) { index ->
                         ServiceInfo(state.services[index], navController, onClick = {
-
                             viewModel.selectService = state.services[index]
-                            viewModel.onEvent(MyEvent.GetIsCheckAppointment("dff"))
+                            viewModel.onEvent(MyEvent.GetCheckIsWalkIn(state.services[index].ServicesPKID.toString()))
 
 
                         })

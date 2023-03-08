@@ -8,11 +8,11 @@ import retrofit2.http.Query
 interface MyRepository {
 
 
-    suspend fun getCivilIdAppointment(civilId: String): List<SelectServiceDto>?
+    suspend fun getCivilIdAppointment(civilId: String,serviceId: String): List<CheckAppt>?
 
-    suspend fun checkIsAppointment(
+    suspend fun checkIsWalkIn(
         serviceId: String,
-    ): List<SelectServiceDto>?
+    ): List<CheckIsWalkIn>?
     suspend fun getBookTicket(
         serviceID: String,
         isHandicap: Boolean,

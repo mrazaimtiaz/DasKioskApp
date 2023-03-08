@@ -54,7 +54,6 @@ fun InsertCivilIdScreen(
 
     val second = remember { mutableStateOf(60) }
 
-    var textCivilId = remember { mutableStateOf("") }
 
 
     val state = viewModel.stateInsertCivilId.value
@@ -101,6 +100,8 @@ fun InsertCivilIdScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+
+                HeaderDesign("Appointment","موعد",navController)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -119,8 +120,6 @@ fun InsertCivilIdScreen(
 
                     }
                 }
-                HeaderDesign("Appointment","موعد",navController)
-
                   // PayKnetAnimation()
                 var fontEnglish = FontFamily(Font(R.font.questrial_regular))
                 var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
@@ -165,7 +164,7 @@ fun InsertCivilIdScreen(
                                         )
                                 ) {
                                     Text(
-                                        textCivilId.value,
+                                        viewModel.textCivilId.value,
                                         color = Color.Black,
                                         fontSize = 25.sp,
                                         modifier = Modifier
@@ -182,8 +181,8 @@ fun InsertCivilIdScreen(
                                 var context = LocalContext.current
                                 Row() {
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "1"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "1"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -191,8 +190,8 @@ fun InsertCivilIdScreen(
                                     }, "1")
                                     Spacer(modifier = Modifier.width(10.dp))
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "2"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "2"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -200,8 +199,8 @@ fun InsertCivilIdScreen(
                                     }, "2")
                                     Spacer(modifier = Modifier.width(10.dp))
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "3"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "3"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -212,8 +211,8 @@ fun InsertCivilIdScreen(
                                 Spacer(modifier = Modifier.height(5.dp))
                                 Row() {
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "4"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "4"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -221,8 +220,8 @@ fun InsertCivilIdScreen(
                                     }, "4")
                                     Spacer(modifier = Modifier.width(10.dp))
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "5"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "5"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -230,8 +229,8 @@ fun InsertCivilIdScreen(
                                     }, "5")
                                     Spacer(modifier = Modifier.width(10.dp))
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "6"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "6"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -242,8 +241,8 @@ fun InsertCivilIdScreen(
                                 Spacer(modifier = Modifier.height(5.dp))
                                 Row() {
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "7"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "7"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -251,8 +250,8 @@ fun InsertCivilIdScreen(
                                     }, "7")
                                     Spacer(modifier = Modifier.width(10.dp))
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "8"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "8"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -260,8 +259,8 @@ fun InsertCivilIdScreen(
                                     }, "8")
                                     Spacer(modifier = Modifier.width(10.dp))
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "9"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "9"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -272,12 +271,12 @@ fun InsertCivilIdScreen(
                                 Spacer(modifier = Modifier.height(5.dp))
                                 Row() {
                                     NumberKeypad({
-                                        textCivilId.value = ""
+                                        viewModel.textCivilId.value = ""
                                     }, isIconClose = true)
                                     Spacer(modifier = Modifier.width(10.dp))
                                     NumberKeypad({
-                                        if (textCivilId.value.length != 12) {
-                                            textCivilId.value = textCivilId.value + "0"
+                                        if (viewModel.textCivilId.value.length != 12) {
+                                            viewModel.textCivilId.value = viewModel.textCivilId.value + "0"
                                         } else {
                                             //Toast.makeText(context, "Current Length 12", Toast.LENGTH_SHORT)
                                             //                                   .show()
@@ -285,9 +284,9 @@ fun InsertCivilIdScreen(
                                     }, "0")
                                     Spacer(modifier = Modifier.width(10.dp))
                                     NumberKeypad({
-                                        if (textCivilId.value.isNotBlank()) {
-                                            textCivilId.value =
-                                                textCivilId.value.substring(0, textCivilId.value.length - 1);
+                                        if (viewModel.textCivilId.value.isNotBlank()) {
+                                            viewModel.textCivilId.value =
+                                                viewModel.textCivilId.value.substring(0, viewModel.textCivilId.value.length - 1);
                                         }
 
                                     }, isIconBack = true)
@@ -301,11 +300,7 @@ fun InsertCivilIdScreen(
                                 ) {
                                     Button(
                                         onClick = {
-                                            if(isService == true){
-                                                navController.navigate(Screen.SelectServiceScreen.route)
-                                            }else{
-                                                navController.navigate(Screen.DoctorPayScreen.route)
-                                            }
+                                            viewModel.onEvent(MyEvent.GetCivilIdAppointment(viewModel.textCivilId.value))
                                         },
                                         modifier = Modifier
                                             .padding(vertical = 20.dp)
@@ -429,9 +424,7 @@ fun InsertCivilIdScreen(
         }
 
         if (state.success.isNotBlank()) {
-            LaunchedEffect(key1 = true) {
-                navController.navigate(Screen.DoctorPayScreen.route)
-            }
+            navController.popBackStack(Screen.SelectDepartmentScreen.route, false)
         }
         if (state.isLoading) {
             Column(
