@@ -39,7 +39,10 @@ import androidx.navigation.NavController
 import com.gicproject.salamkioskapp.R
 import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Constants
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -126,7 +129,9 @@ fun InsertCivilIdScreen(
                 Column(modifier = Modifier
                     .fillMaxHeight()
                     .weight(5f), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                   Column(modifier = Modifier.fillMaxWidth().padding(25.dp)) {
+                   Column(modifier = Modifier
+                       .fillMaxWidth()
+                       .padding(25.dp)) {
                        Text("Insert Mobile Number or Civil ID of Patient",modifier = Modifier.fillMaxWidth(), fontSize = 27.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, style = TextStyle(fontFamily = fontEnglish))
                        Spacer(modifier = Modifier.height(10.dp))
                        Text("أدخل البطاقة المدنية للمريض أو رقم الهاتف المحمول" , modifier = Modifier.fillMaxWidth(), fontSize = 27.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, style = TextStyle(fontFamily = fontArabic))
@@ -300,7 +305,17 @@ fun InsertCivilIdScreen(
                                 ) {
                                     Button(
                                         onClick = {
-                                            viewModel.onEvent(MyEvent.GetCivilIdAppointment(viewModel.textCivilId.value))
+                                            if(viewModel.textCivilId.value.isNotBlank()){
+                                                if(!viewModel.stateInsertCivilId.value.isLoading){
+                                                    viewModel.enableInsertCivilIdLoading()
+                                                    CoroutineScope(Dispatchers.Main).launch {
+                                                        delay(300)
+                                                        Log.d("TAG", "InsertCivilIdScreen: called isLoading")
+                                                        viewModel.onEvent(MyEvent.GetCivilIdAppointment(viewModel.textCivilId.value))
+                                                    }
+                                                }
+                                            }
+
                                         },
                                         modifier = Modifier
                                             .padding(vertical = 20.dp)

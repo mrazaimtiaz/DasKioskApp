@@ -117,6 +117,7 @@ class MyViewModel @Inject constructor(
         _stateSelectService.value = SelectServiceScreenState()
     }
     fun resetInsertCivilIdScreen(){
+        textCivilId.value = ""
         _stateInsertCivilId.value = InsertCivilIdScreenState()
     }
     //preferences
@@ -222,6 +223,14 @@ class MyViewModel @Inject constructor(
         _stateSelectDoctor.value = SelectDoctorScreenState()
     }
 
+    fun enableServiceLoading(){
+        _stateSelectService.value = _stateSelectService.value.copy(isLoading = true)
+    }
+
+    fun enableInsertCivilIdLoading(){
+        _stateInsertCivilId.value = _stateInsertCivilId.value.copy(isLoading = true)
+    }
+
 
     suspend fun convertBase64ToBitmap(b64: String): Bitmap? {
         var bitmap: Bitmap? = null
@@ -261,6 +270,7 @@ class MyViewModel @Inject constructor(
                 }.launchIn(viewModelScope)
             }
             is MyEvent.GetBookTicket -> {
+                Log.d("TAG", "InsertCivilIdScreen: called isLoading2")
                 if(_selectedBranchId.value.isNotEmpty()){
                     surveyUseCases.getBookTicket(
                     event.serviceID,
@@ -274,7 +284,13 @@ class MyViewModel @Inject constructor(
                         when (result) {
                             is Resource.Success -> {
                                 if(result.data == null){
-                                    _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,error = "Result Data in getBookTicket api is null")
+                                    if(event.isCivilIdPage){
+                                        _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error = "Result Data in getBookTicket api is null")
+
+                                    }else{
+                                        _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,error = "Result Data in getBookTicket api is null")
+
+                                    }
                                 }
                                 result.data?.let {
                                         surveyUseCases.getTicket(it.NewPKID ?: 1,1).onEach { result ->
@@ -317,10 +333,18 @@ class MyViewModel @Inject constructor(
 
                                                                 }*/
                                                             }else{
-                                                                _stateSelectService.value = _stateSelectService.value.copy(
-                                                                    error = result.message ?: "Empty Ticket String",
-                                                                    isLoading = false,
-                                                                )
+                                                                if(event.isCivilIdPage){
+                                                                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(
+                                                                        error = result.message ?: "Empty Ticket String",
+                                                                        isLoading = false,)
+
+                                                                }else{
+                                                                    _stateSelectService.value = _stateSelectService.value.copy(
+                                                                        error = result.message ?: "Empty Ticket String",
+                                                                        isLoading = false,
+                                                                    )
+                                                                }
+
                                                             }
                                                            /* convertBase64ToBitmap(Constants.baseImage2)?.let { it1 ->
                                                                 funcPrinterImage(
@@ -330,19 +354,39 @@ class MyViewModel @Inject constructor(
                                                         }
                                                     }
                                                     if(result.data == null){
-                                                        _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,error = "Result Data in getTicket api is null")
+                                                        if(event.isCivilIdPage){
+                                                            _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error = "Result Data in getTicket api is null")
+
+                                                        }else{
+                                                            _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,error = "Result Data in getTicket api is null")
+
+                                                        }
                                                     }
                                                 }
                                                 is Resource.Error -> {
-                                                    _stateSelectService.value = _stateSelectService.value.copy(
-                                                        error = result.message ?: "An unexpected error occurred",
-                                                        isLoading = false,
-                                                    )
+                                                    if(event.isCivilIdPage){
+                                                        _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(
+                                                            error = result.message ?: "An unexpected error occurred",
+                                                            isLoading = false,)
+
+                                                    }else{
+                                                        _stateSelectService.value = _stateSelectService.value.copy(
+                                                            error = result.message ?: "An unexpected error occurred",
+                                                            isLoading = false,
+                                                        )
+                                                    }
+
                                                     // delay(2000)
                                                     //  onEvent(MyEvent.GetDepartment)
                                                 }
                                                 is Resource.Loading -> {
-                                                    _stateSelectService.value = _stateSelectService.value.copy(isLoading = true)
+                                                    if(event.isCivilIdPage){
+                                                        _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = true)
+
+                                                    }else{
+
+                                                        _stateSelectService.value = _stateSelectService.value.copy(isLoading = true)
+                                                    }
 
 
                                                 }
@@ -351,35 +395,59 @@ class MyViewModel @Inject constructor(
                                 }
                             }
                             is Resource.Error -> {
-                                _stateSelectService.value =  _stateSelectService.value.copy(
-                                    error = result.message ?: "An unexpected error occurred",
-                                    isLoading = false,
-                                )
+                                if(event.isCivilIdPage){
+                                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(
+                                        error = result.message ?: "An unexpected error occurred",
+                                        isLoading = false,
+                                    )
+
+                                }else{
+                                    _stateSelectService.value =  _stateSelectService.value.copy(
+                                        error = result.message ?: "An unexpected error occurred",
+                                        isLoading = false,
+                                    )
+                                }
+
                                 // delay(2000)
                                 //  onEvent(MyEvent.GetDepartment)
                             }
                             is Resource.Loading -> {
-                                _stateSelectService.value = _stateSelectService.value.copy(isLoading = true)
+                                if(event.isCivilIdPage){
+                                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = true
+                                    )
+
+                                }else{
+                                    _stateSelectService.value = _stateSelectService.value.copy(isLoading = true)
+
+                                }
 
 
                             }
                         }
                     }.launchIn(viewModelScope)
                 }else{
-                    _stateSelectService.value = _stateSelectService.value.copy(
+                    if(event.isCivilIdPage){
+                        _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(   error =  "Select Branch First",
+                            isLoading = false,
+                        )
+
+                    }else{ _stateSelectService.value = _stateSelectService.value.copy(
                         error =  "Select Branch First",
                         isLoading = false,
                     )
+
+                    }
+
                 }
 
             }
             is MyEvent.GetCivilIdAppointment -> {
-                if(event.civilId.isNotBlank()){
                     surveyUseCases.getCivilIdAppointment(event.civilId,selectService.ServicesPKID.toString()).onEach { result ->
                         when (result) {
                             is Resource.Success -> {
                                 result.data?.let {
                                     viewModelScope.launch {
+                                        Log.d("TAG", "InsertCivilIdScreen: called isLoading1")
                                         if(result.data.ApptExist == true){
                                             onEvent(MyEvent.GetBookTicket(
                                                 isCivilIdPage = true,
@@ -405,6 +473,7 @@ class MyViewModel @Inject constructor(
                                 }
                             }
                             is Resource.Error -> {
+                                Log.d("TAG", "InsertCivilIdScreen: called isLoading2")
                                 _stateInsertCivilId.value = InsertCivilIdScreenState(
                                     error = result.message ?: "An unexpected error occurred",
                                     isLoading = false,
@@ -421,12 +490,7 @@ class MyViewModel @Inject constructor(
                     }.launchIn(viewModelScope)
 
 
-                }else{
-                    _stateInsertCivilId.value = InsertCivilIdScreenState(
-                        error =  "",
-                        isLoading = false,
-                    )
-                }
+
 
             }
             is MyEvent.GetCheckIsWalkIn -> {
@@ -702,10 +766,10 @@ class MyViewModel @Inject constructor(
 
                // mPrinter?.fullCut()
                 if(isCivilIdPage){
-                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,success = "printed")
+                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(success = "printed")
 
                 }else{
-                    _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,success = "printed")
+                    _stateSelectService.value =  _stateSelectService.value.copy(success = "printed")
 
                 }
 
@@ -715,7 +779,7 @@ class MyViewModel @Inject constructor(
                 if(isCivilIdPage){
                     _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error = "printing error: ${e.printStackTrace()}")
                 }else{
-                    _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,success = "printed")
+                    _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false,error = "printing error: ${e.printStackTrace()}")
 
                 }
 
@@ -1071,7 +1135,8 @@ class MyViewModel @Inject constructor(
                                 }else{
                                     Log.d(TAG, "onCardEvent: get result $civilidText $firstNameArText $secondNameArText `6f")
 
-                                    _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error="$civilidText")
+                                    onEvent(MyEvent.GetCivilIdAppointment(civilidText))
+                                    //_stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error="$civilidText")
                                   /*  withContext(Dispatchers.Main){
                                         Toast.makeText(baseContext," $civilidText $firstNameArText",
                                             Toast.LENGTH_LONG).show()

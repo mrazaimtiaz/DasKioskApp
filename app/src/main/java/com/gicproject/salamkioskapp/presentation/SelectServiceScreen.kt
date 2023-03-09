@@ -56,6 +56,9 @@ import androidx.compose.ui.text.font.GenericFontFamily
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gicproject.salamkioskapp.ui.theme.primarySidra
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -253,14 +256,21 @@ fun SelectServiceScreen(
                     contentPadding = PaddingValues(70.dp),
                     modifier = Modifier
                         .width(730.dp)
-                        //.height(950.dp),//sidra
-                        .height(750.dp), //hadi
+                        .height(950.dp),//sidra
+                       // .height(750.dp), //hadi
                     columns = GridCells.Fixed(2),
                 ) {
                     items(state.services.size) { index ->
                         ServiceInfo(state.services[index], navController, onClick = {
-                            viewModel.selectService = state.services[index]
-                            viewModel.onEvent(MyEvent.GetCheckIsWalkIn(state.services[index].ServicesPKID.toString()))
+                            if(!viewModel.stateSelectService.value.isLoading){
+                                viewModel.enableServiceLoading()
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    delay(300)
+                                    viewModel.selectService = state.services[index]
+                                    viewModel.onEvent(MyEvent.GetCheckIsWalkIn(state.services[index].ServicesPKID.toString()))
+
+                                }
+                            }
 
 
                         })

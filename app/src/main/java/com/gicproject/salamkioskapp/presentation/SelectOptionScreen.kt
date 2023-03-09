@@ -211,8 +211,8 @@ fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
                 contentScale = ContentScale.FillBounds,
                 contentDescription = "bg",
                 modifier = Modifier
-                    // .width(180.dp) //sidra
-                    .width(90.dp) //hadi
+                     .width(180.dp) //sidra
+                   // .width(90.dp) //hadi
                     .height(70.dp)
                     .pointerInput(Unit) {
                         detectDragGestures { change, _ ->
