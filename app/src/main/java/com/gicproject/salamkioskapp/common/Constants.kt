@@ -1,5 +1,6 @@
 package com.gicproject.salamkioskapp.common
 
+import androidx.compose.ui.unit.dp
 import com.gicproject.salamkioskapp.R
 
 class Constants {
@@ -18,9 +19,10 @@ const val MY_FATOORAH_TOKEN = "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7F
       //live
       // const val MY_FATOORAH_TOKEN= "yp6iUqQO7A2sAyhoEMB990qaL4rswztsH1hLL4nhiLssbT6Fk3JZsUxcb7NJVP1pW4tsgx1xC7ZNrv3zC51SsciTF40iFJwS-iZOSgd_hHNwbr7O_QQliJNsbeJkJqrrio_u3wU8Hs2bhTqLwHO82aJ3Hmo1pynXqgy4JsXSgvcFUc6ngeEwxPaOgxB4YOyLDXImS6hkuyl2jwuUuhYNXvnEP2FbAwwGCyRGTtt1t2FOH40orB8Z9PnHhAQGG3WRMA5a-8OeMrrRi7Nmw_D7v9i8zUvDU1v4Qoq9igrLX_VD_e5xNAJBe0e8RMTxDm3DgEQ4cQm2BOcwuhVAKMF9Priq4EhfBGQruu8BVC2XGRw0YAhN3o7_2XQBrlBz2cruNy4VxHhbuprWAAFOXTODZw8Fracyj2N_m_yBCRNwp4vMawuj5mRNAztZbQ5rZ5YVjVDNtihGq_9haaW2c1o2HUfwVqxkXRJNl_G7_xAf7rQhoLo64DPJY8kkmggacrUMos1OOMh6gxtg1j0ZFghrfLwcZ6Xu8idRq0TvodBePIKljsO1f3X2NQATrStE11FtsqGKjVKrSYXgxcf7HT8rlxj_x5ewvnPTW6tSOArZhBnigzqSb4_1PXVxxg4uttLSh4pnbYsRndEm0Ytl4_kU4AueVMHmapfFzzPql1UbQE3_D484--XuOM1Pnyydza3ZVQ6_tQ"
 
-
+//172.16.10.41     /APIQ/ //sidra
         // const val BASE_URL = "http://192.168.0.68/APIQ/" kiwan
-        const val BASE_URL = "http://gickuwait-dev.com/APIQ/"
+        const val BASE_URL = "http://172.16.10.41/APIQ/" //sidra
+      //  const val BASE_URL = "http://gickuwait-dev.com/APIQ/"
         // const val BASE_URL = "http://172.16.199.68/screensapi/" //international hospital
 
         //const val BASE_URL = "http://kcbg2gweb.kcb.gov.kw/"
@@ -28,8 +30,15 @@ const val MY_FATOORAH_TOKEN = "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7F
 
       const val LOGO = R.drawable.logo //sidra
        const val BACKGROUND_IMAGE = R.drawable.background //sidra
-       //const val LOGO = R.drawable.hadilogo //hadi
-       // const val BACKGROUND_IMAGE = R.drawable.hadibg //hadi
+     val SERVICE_HEIGHT = 950.dp; //sidra
+     val OPTION_WIDTH = 180.dp; //sidra
+
+
+      /* const val LOGO = R.drawable.hadilogo //hadi
+        const val BACKGROUND_IMAGE = R.drawable.hadibg //hadi
+        val SERVICE_HEIGHT = 750.dp; //hadi
+        val OPTION_WIDTH = 90.dp; //hadi*/
+
       const val DOCTOR_SAMPLE_IMAGE = R.drawable.doctorsample
       const val DOCTOR_SAMPLE_IMAGE_TWO = R.drawable.doctorsampletwo
 

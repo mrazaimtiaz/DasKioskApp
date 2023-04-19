@@ -9,6 +9,7 @@ data class SelectServiceDto (
 
     @SerializedName("Services_Name_EN"              ) var ServicesNameEN             : String?  = null,
     @SerializedName("Services_Name_AR"              ) var ServicesNameAR             : String?  = null,
+
     @SerializedName("Services_PK_ID"                ) var ServicesPKID               : Int?     = null,
     @SerializedName("Services_TicketDesigner_FK_ID" ) var ServicesTicketDesignerFKID : Int?     = null,
     @SerializedName("Services_Description"          ) var ServicesDescription        : String?  = null,

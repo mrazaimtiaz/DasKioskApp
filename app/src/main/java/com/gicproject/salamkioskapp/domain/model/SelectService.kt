@@ -10,6 +10,7 @@ data class SelectService(
     var ServicesAllowSMS: Boolean? = null,
     var BranchServicesServiceFKID: Int? = null,
     var BranchServicesBranchFKID: Int? = null,
+   var ApptServiceID : Int? = null,
     var ServicesParentID: Int? = null,
     var ServicesLogo: String? = null,
     var ServicesDescriptionAr: String? = null,

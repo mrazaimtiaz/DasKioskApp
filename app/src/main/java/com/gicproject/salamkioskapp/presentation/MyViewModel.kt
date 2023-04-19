@@ -3,12 +3,12 @@ package com.gicproject.salamkioskapp.presentation
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gicproject.salamkioskapp.UsbBroadCastReceiver
@@ -28,7 +28,6 @@ import com.identive.libs.WinDefs
 import com.szsicod.print.escpos.PrinterAPI
 import com.szsicod.print.io.InterfaceAPI
 import com.szsicod.print.io.USBAPI
-import com.szsicod.print.utils.BitmapUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -335,8 +334,10 @@ class MyViewModel @Inject constructor(
                                                             }else{
                                                                 if(event.isCivilIdPage){
                                                                     _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(
-                                                                        error = result.message ?: "Empty Ticket String",
-                                                                        isLoading = false,)
+                                                                        error = result.message
+                                                                            ?: "Empty Ticket String",
+                                                                        isLoading = false,
+                                                                    )
 
                                                                 }else{
                                                                     _stateSelectService.value = _stateSelectService.value.copy(
@@ -366,8 +367,10 @@ class MyViewModel @Inject constructor(
                                                 is Resource.Error -> {
                                                     if(event.isCivilIdPage){
                                                         _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(
-                                                            error = result.message ?: "An unexpected error occurred",
-                                                            isLoading = false,)
+                                                            error = result.message
+                                                                ?: "An unexpected error occurred",
+                                                            isLoading = false,
+                                                        )
 
                                                     }else{
                                                         _stateSelectService.value = _stateSelectService.value.copy(
@@ -427,7 +430,8 @@ class MyViewModel @Inject constructor(
                     }.launchIn(viewModelScope)
                 }else{
                     if(event.isCivilIdPage){
-                        _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(   error =  "Select Branch First",
+                        _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(
+                            error = "Select Branch First",
                             isLoading = false,
                         )
 
@@ -451,7 +455,7 @@ class MyViewModel @Inject constructor(
                                         if(result.data.ApptExist == true){
                                             onEvent(MyEvent.GetBookTicket(
                                                 isCivilIdPage = true,
-                                                serviceID = selectService.ServicesPKID.toString(),
+                                                serviceID =  selectService.ApptServiceID.toString(),//selectService.ServicesPKID.toString()
                                                 isHandicap = false,
                                                 isVip = false,
                                                 languageID = "0",
@@ -502,6 +506,7 @@ class MyViewModel @Inject constructor(
                                         if(result.data.IsAvailable == true){
 
                                             showDialogService.value = true
+                                            selectService.ApptServiceID = result.data.ApptServiceID
                                             _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false)
                                         }else{
                                             onEvent(MyEvent.GetBookTicket(
@@ -742,7 +747,18 @@ class MyViewModel @Inject constructor(
                 mPrinter!!.setPrintColorSize(4)
              //   mPrinter!!.printString("Picture test printing:\n")
                // mPrinter!!.printFeed()
+                val cx = bitmap.width / 2f
+                val cy = bitmap.height / 2f
+             //   val bitmap90 =  bitmap.rotate(90f)
+              //  val bitmap180 =  bitmap.rotate(180f)
                 mPrinter!!.printRasterBitmap(bitmap)
+
+
+
+              //  mPrinter!!.printRasterBitmap(bitmap90)
+               // mPrinter!!.printRasterBitmap(bitmap180)
+
+
 
 //                    byte[] bmpBytes = PrintImageUtils.parseBmpToByte(bmp);
 //                    mPrinter.sendOrder(bmpBytes);
@@ -1566,3 +1582,13 @@ class MyProvider     // Set the initial value for the class attribute x
     }
 
 }*/
+
+private fun Bitmap.rotate(angle: Float): Bitmap? {
+    val matrix = Matrix()
+    matrix.postRotate(angle)
+    return Bitmap.createBitmap(this, 0, 0, this.width, this.height, matrix, true)
+}
+private fun Bitmap.flip(x: Float, y: Float, cx: Float, cy: Float): Bitmap {
+    val matrix = Matrix().apply { postScale(x, y, cx, cy) }
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+}

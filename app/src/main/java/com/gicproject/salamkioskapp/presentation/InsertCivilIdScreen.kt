@@ -39,6 +39,8 @@ import androidx.navigation.NavController
 import com.gicproject.salamkioskapp.R
 import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Constants
+import com.gicproject.salamkioskapp.ui.theme.keypadBackground
+import com.gicproject.salamkioskapp.ui.theme.keypadText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -470,7 +472,7 @@ fun NumberKeypad(
         colors = if (isIconClose || isIconBack) {
             ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary)
         } else {
-            ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
+            ButtonDefaults.buttonColors(backgroundColor = keypadBackground)
         },
         modifier = Modifier
             .width(48.dp)
@@ -502,7 +504,7 @@ fun NumberKeypad(
             } else {
 
                 Text(
-                    text, fontSize = 20.sp,  textAlign = TextAlign.Center, color = Color.White
+                    text, fontSize = 20.sp,  textAlign = TextAlign.Center, color = keypadText
                 )
             }
         }

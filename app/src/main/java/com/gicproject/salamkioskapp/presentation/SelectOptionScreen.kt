@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import com.gicproject.salamkioskapp.R
 import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Constants
+import com.gicproject.salamkioskapp.common.Constants.Companion.OPTION_WIDTH
 import com.gicproject.salamkioskapp.ui.theme.primarySidra
 
 @Composable
@@ -211,8 +212,7 @@ fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
                 contentScale = ContentScale.FillBounds,
                 contentDescription = "bg",
                 modifier = Modifier
-                     .width(180.dp) //sidra
-                   // .width(90.dp) //hadi
+                     .width(OPTION_WIDTH)
                     .height(70.dp)
                     .pointerInput(Unit) {
                         detectDragGestures { change, _ ->

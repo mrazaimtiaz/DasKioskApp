@@ -55,6 +55,7 @@ import java.util.*
 import androidx.compose.ui.text.font.GenericFontFamily
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gicproject.salamkioskapp.common.Constants.Companion.SERVICE_HEIGHT
 import com.gicproject.salamkioskapp.ui.theme.primarySidra
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -256,8 +257,7 @@ fun SelectServiceScreen(
                     contentPadding = PaddingValues(70.dp),
                     modifier = Modifier
                         .width(730.dp)
-                        .height(950.dp),//sidra
-                       // .height(750.dp), //hadi
+                        .height(SERVICE_HEIGHT),
                     columns = GridCells.Fixed(2),
                 ) {
                     items(state.services.size) { index ->
@@ -405,18 +405,27 @@ fun ServiceInfo(service: SelectService, navController: NavController, onClick: (
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
+                style = TextStyle(fontFamily =fontArabic),
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                service.ServicesDescription
+                    ?: "",
+                color = MaterialTheme.colors.secondary,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 style = TextStyle(fontFamily =fontEnglish),
             )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                (service.ServicesDescription
-                    ?: "") + "\n" + (service.ServicesDescriptionAr ?: ""),
+                service.ServicesDescriptionAr ?: "",
                 color = MaterialTheme.colors.secondary,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = TextStyle(fontFamily =fontArabic),
             )
-
             Spacer(modifier = Modifier.height(10.dp))
 
         }
