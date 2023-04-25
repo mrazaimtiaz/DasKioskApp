@@ -156,6 +156,7 @@ fun SelectSingleServiceScreen(
                     modifier = Modifier.padding(top = 180.dp)
                 )
             }
+
             FlowColumn(
                 Modifier.fillMaxSize(),
                 crossAxisAlignment = FlowCrossAxisAlignment.Center,
@@ -172,6 +173,37 @@ fun SelectSingleServiceScreen(
                     columns = GridCells.Fixed(2),
                 ) {
                     items(state.services.size) { index ->
+
+                        if(state.services[index].ServicesLogo != null)
+                            CustomButton(onClick = {
+                                if(!viewModel.stateSelectService.value.isLoading){
+                                    viewModel.enableServiceLoading()
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        delay(300)
+                                        viewModel.selectService = state.services[index]
+                                        viewModel.onEvent(
+                                            MyEvent.GetBookTicket(
+                                                isCivilIdPage = false,
+                                                serviceID = state.services[index].ServicesPKID.toString(),
+                                                isHandicap = false,
+                                                isVip = false,
+                                                languageID = "0",
+                                                appointmentCode = "-1",
+                                                isaapt = false,
+                                                refid = "-1",
+                                                DoctorServiceID = "-1",
+                                                ticketDesignId = state.services[index].ServicesTicketDesignerFKID.toString()
+                                            )
+                                        )
+
+                                    }
+                                }
+                                // showDialog.value = true
+                            }, text = state.services[index].ServicesNameEN
+                                ?: "" , textAr =
+                            state.services[index].ServicesNameAR ?: "",
+                            )
+                        else
                         ServiceInfo(state.services[index], navController, onClick = {
                             if(!viewModel.stateSelectService.value.isLoading){
                                 viewModel.enableServiceLoading()
