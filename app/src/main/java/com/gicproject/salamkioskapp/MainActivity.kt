@@ -326,7 +326,8 @@ class MainActivity : ComponentActivity(){
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.SelectDepartmentScreen.route
+                       // startDestination = Screen.SelectDepartmentScreen.route //double sidra and hadi app
+                        startDestination = Screen.SelectSingleServiceScreen.route  //single sidra app
                     ) {
                         composable(
                             route = Screen.SelectOptionScreen.route
@@ -344,6 +345,19 @@ class MainActivity : ComponentActivity(){
                             SelectDepartmentScreen(navController, viewModel!!)
                         }
                         composable(
+                            route = Screen.SelectSingleServiceScreen.route
+                        ) {
+                            viewModel?.resetInsertCivilIdScreen()
+
+                            var selectDepartment =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
+                                    Constants.STATE_SELECT_DEPARTMENT
+                                ) //double sidra and hadi app
+                            selectDepartment = SelectDepartment(2,"","","","",3,4) //single sidra app
+                            viewModel?.readCivilIdOff()
+                            SelectSingleServiceScreen(selectDepartment,navController, viewModel!!)
+                        }
+                        composable(
                             route = Screen.SelectServiceScreen.route
                         ) {
                             viewModel?.resetInsertCivilIdScreen()
@@ -351,7 +365,7 @@ class MainActivity : ComponentActivity(){
                             var selectDepartment =
                                 navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
                                     Constants.STATE_SELECT_DEPARTMENT
-                                )
+                                ) //double sidra and hadi app
                             viewModel?.readCivilIdOff()
                             SelectServiceScreen(selectDepartment,navController, viewModel!!)
                         }

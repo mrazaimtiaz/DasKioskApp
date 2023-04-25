@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.gicproject.hadikioskapp",
+  "applicationId": "com.gicproject.singlehadikioskapp",
   "variantName": "release",
   "elements": [
     {
