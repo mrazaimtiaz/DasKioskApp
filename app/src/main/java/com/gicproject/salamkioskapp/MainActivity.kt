@@ -326,7 +326,7 @@ class MainActivity : ComponentActivity(){
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                       // startDestination = Screen.SelectDepartmentScreen.route //double sidra and hadi app
+                       //startDestination = Screen.SelectDepartmentScreen.route //double sidra and hadi app
                         startDestination = Screen.SelectSingleServiceScreen.route  //single sidra app
                     ) {
                         composable(
@@ -342,6 +342,7 @@ class MainActivity : ComponentActivity(){
                             viewModel?.readCivilIdOff()
                             viewModel?.resetInsertCivilIdScreen()
                             viewModel?.resetServicesScreen()
+                            viewModel?.isFirstSelectServicesApi = true
                             SelectDepartmentScreen(navController, viewModel!!)
                         }
                         composable(
@@ -353,7 +354,7 @@ class MainActivity : ComponentActivity(){
                                 navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
                                     Constants.STATE_SELECT_DEPARTMENT
                                 ) //double sidra and hadi app
-                            selectDepartment = SelectDepartment(2,"","","","",3,4) //single sidra app
+                            selectDepartment = SelectDepartment(44,"","","","",3,4) //single sidra app
                             viewModel?.readCivilIdOff()
                             SelectSingleServiceScreen(selectDepartment,navController, viewModel!!)
                         }

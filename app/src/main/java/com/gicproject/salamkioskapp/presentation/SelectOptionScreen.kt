@@ -1,5 +1,6 @@
 package com.gicproject.salamkioskapp.presentation
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -212,11 +213,13 @@ fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
                 contentScale = ContentScale.FillBounds,
                 contentDescription = "bg",
                 modifier = Modifier
-                     .width(OPTION_WIDTH)
+                    .width(OPTION_WIDTH)
                     .height(70.dp)
                     .pointerInput(Unit) {
                         detectDragGestures { change, _ ->
+                            Log.d("TAG", "HeaderDesign: called")
                             if (change.position.y > 400) {
+                                Log.d("TAG", "HeaderDesign: called1")
                                 navController.navigate(Screen.SettingScreen.route)
                             }
                             change.consume()

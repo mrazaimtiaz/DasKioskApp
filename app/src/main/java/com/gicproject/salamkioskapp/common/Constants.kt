@@ -21,8 +21,8 @@ const val MY_FATOORAH_TOKEN = "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7F
 
 //172.16.10.41     /APIQ/ //sidra
         // const val BASE_URL = "http://192.168.0.68/APIQ/" kiwan
-       // const val BASE_URL = "http://172.16.10.41/APIQ/" //sidra
-       const val BASE_URL = "http://gickuwait-dev.com/APIQ/"
+        const val BASE_URL = "http://172.16.10.41/APIQ/" //sidra
+      // const val BASE_URL = "http://gickuwait-dev.com/APIQ/"
         // const val BASE_URL = "http://172.16.199.68/screensapi/" //international hospital
 
         //const val BASE_URL = "http://kcbg2gweb.kcb.gov.kw/"

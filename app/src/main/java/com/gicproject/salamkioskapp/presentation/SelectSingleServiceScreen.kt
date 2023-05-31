@@ -78,16 +78,25 @@ fun SelectSingleServiceScreen(
 
 
 
-
-
     LaunchedEffect(true) {
+        while (true) {
+            Log.d("TAG", "SelectDepartmentScreen: called GetSelectDepartments" )
+            if(!state.isApiLoading){
+                viewModel.onEvent(MyEvent.GetSelectServices(selectDepartment?.DepartmentPKID.toString()))
+
+            }
+            delay(4000)
+        }
+    }
+
+/*    LaunchedEffect(true) {
 
         Log.d(
             "TAG",
             "SelectServiceScreen: department id ${selectDepartment?.DepartmentPKID.toString()}"
         )
         viewModel.onEvent(MyEvent.GetSelectServices(selectDepartment?.DepartmentPKID.toString()))
-    }
+    }*/
     /*LaunchedEffect(key1 = Unit, block = {
         while (true) {
             delay(1000)

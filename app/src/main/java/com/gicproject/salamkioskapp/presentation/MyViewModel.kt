@@ -246,6 +246,7 @@ class MyViewModel @Inject constructor(
         return bitmap
     }
     var isFirstSelectDepartmentApi = true
+    var isFirstSelectServicesApi = true
     fun onEvent(event: MyEvent) {
         when (event) {
             is MyEvent.GetBranches -> {
@@ -552,7 +553,8 @@ class MyViewModel @Inject constructor(
                             is Resource.Success -> {
                                 result.data?.let {
                                     viewModelScope.launch {
-                                        _stateSelectService.value = SelectServiceScreenState(services = it)
+                                        isFirstSelectServicesApi = false;
+                                        _stateSelectService.value = SelectServiceScreenState(services = it,isApiLoading = false)
 
                                     }
                                 }
@@ -566,7 +568,12 @@ class MyViewModel @Inject constructor(
                                 //  onEvent(MyEvent.GetDepartment)
                             }
                             is Resource.Loading -> {
+                                if(isFirstSelectServicesApi){
                                     _stateSelectService.value = SelectServiceScreenState(isLoading = true)
+                                }
+                                _stateSelectService.value = _stateSelectService.value.copy(
+                                    isApiLoading = true,
+                                )
 
 
                             }
@@ -576,6 +583,7 @@ class MyViewModel @Inject constructor(
                     _stateSelectService.value = _stateSelectService.value.copy(
                         error =  "Select Branch First",
                         isLoading = false,
+                        isApiLoading = false,
                     )
                 }
 
@@ -588,7 +596,7 @@ class MyViewModel @Inject constructor(
                                 result.data?.let {
                                     isFirstSelectDepartmentApi = false
                                     viewModelScope.launch {
-                                        _stateSelectDepartment.value = SelectDepartmentScreenState(departments = it)
+                                        _stateSelectDepartment.value = SelectDepartmentScreenState(departments = it,isApiLoading = false)
 
                                     }
                                 }
@@ -606,6 +614,9 @@ class MyViewModel @Inject constructor(
                                     _stateSelectDepartment.value = SelectDepartmentScreenState(isLoading = true)
 
                                 }
+                                _stateSelectDepartment.value = _stateSelectDepartment.value.copy(
+                                    isApiLoading = true,
+                                )
                             }
                         }
                     }.launchIn(viewModelScope)
@@ -613,6 +624,7 @@ class MyViewModel @Inject constructor(
                     _stateSelectDepartment.value = _stateSelectDepartment.value.copy(
                         error =  "Select Department and Branch",
                         isLoading = false,
+                        isApiLoading = true,
                     )
                 }
 

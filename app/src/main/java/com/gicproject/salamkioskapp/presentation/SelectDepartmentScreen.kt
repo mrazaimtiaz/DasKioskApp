@@ -56,7 +56,10 @@ fun SelectDepartmentScreen(
     LaunchedEffect(true) {
         while (true) {
             Log.d("TAG", "SelectDepartmentScreen: called GetSelectDepartments" )
-            viewModel.onEvent(MyEvent.GetSelectDepartments)
+            if(!state.isApiLoading){
+                viewModel.onEvent(MyEvent.GetSelectDepartments)
+
+            }
             delay(4000)
         }
     }

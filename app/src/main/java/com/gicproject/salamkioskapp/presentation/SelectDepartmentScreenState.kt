@@ -6,6 +6,7 @@ import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 
 data class SelectDepartmentScreenState(
     val isLoading: Boolean = false,
+    val isApiLoading: Boolean = false,
     val error: String = "",
     val departments: List<SelectDepartment> = emptyList(),
 )

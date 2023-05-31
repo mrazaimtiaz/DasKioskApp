@@ -236,7 +236,7 @@ fun SelectServiceScreen(
             ) {
                 HeartBeatTime(second = second)
             }
-            HeaderDesign("Select Service","حدد الخدمة", navController)
+            HeaderDesign("Select Doctor","اختر الدكتور", navController)
             if (state.error.isNotBlank()) {
                 Text(
                     state.error,
@@ -407,6 +407,37 @@ fun ServiceInfo(service: SelectService, navController: NavController, onClick: (
                 textAlign = TextAlign.Center,
                 style = TextStyle(fontFamily =fontArabic),
             )
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ){
+                Text(
+                     "Waiting",
+                    color = Color.DarkGray,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(fontFamily =fontEnglish),
+                )
+                Text(
+                    service.ServicesFontSize ?: "",
+                    color = Color.DarkGray,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(fontFamily =fontEnglish),
+                )
+                Text(
+                     "الانتظار",
+                    color = Color.DarkGray,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(fontFamily =fontArabic),
+                )
+            }
+
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 service.ServicesDescription
