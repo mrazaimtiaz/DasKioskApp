@@ -327,11 +327,12 @@ class MainActivity : ComponentActivity(){
                     NavHost(
                         navController = navController,
                        //startDestination = Screen.SelectDepartmentScreen.route //double sidra and hadi app
-                        startDestination = Screen.SelectSingleServiceScreen.route  //single sidra app
+                        startDestination = Screen.SelectOptionScreen.route  //single sidra app
                     ) {
                         composable(
                             route = Screen.SelectOptionScreen.route
                         ) {
+                            viewModel?.resetDepartmentScreen()
                             viewModel?.readCivilIdOff()
 
                             SelectOptionScreen(navController, viewModel!!)
@@ -345,7 +346,7 @@ class MainActivity : ComponentActivity(){
                             viewModel?.isFirstSelectServicesApi = true
                             SelectDepartmentScreen(navController, viewModel!!)
                         }
-                        composable(
+                       /* composable(
                             route = Screen.SelectSingleServiceScreen.route
                         ) {
                             viewModel?.resetInsertCivilIdScreen()
@@ -357,7 +358,7 @@ class MainActivity : ComponentActivity(){
                             selectDepartment = SelectDepartment(44,"","","","",3,4) //single sidra app
                             viewModel?.readCivilIdOff()
                             SelectSingleServiceScreen(selectDepartment,navController, viewModel!!)
-                        }
+                        }*/
                         composable(
                             route = Screen.SelectServiceScreen.route
                         ) {

@@ -61,7 +61,7 @@ fun DoctorPayScreen(
             delay(1000)
             second.value = second.value - 1
             if (second.value == 0) {
-                navController.popBackStack(Screen.SelectDepartmentScreen.route, false)
+                navController.popBackStack(Screen.SelectOptionScreen.route, false)
             }
         }
     })
@@ -128,10 +128,10 @@ fun DoctorPayScreen(
                 Spacer(modifier = Modifier.height(60.dp))
                 SubmitButton(
                     {
-                     //   showDialog.value = true
-                    viewModel.funcPrinterConnect()
+                        showDialog.value = true
+                   // viewModel.funcPrinterConnect()
                     },
-                    "Print Ticket"
+                    "Proceed to Pay"
                 )
 
 

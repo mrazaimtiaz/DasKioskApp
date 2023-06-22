@@ -34,6 +34,11 @@ interface MyRepository {
         deptId: String,
     ): List<SelectServiceDto>?
 
+    suspend fun getOptions(
+        branchId: String,
+        deptParentId: String,
+    ): List<SelectOptionDto>?
+
     suspend fun getSelectDepartments(
         branchId: String,
         deptParentId: String,

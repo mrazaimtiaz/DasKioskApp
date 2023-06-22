@@ -52,6 +52,7 @@ class AppModule {
         dataStoreRepository: DataStoreRepository
     ): MyUseCases {
         return MyUseCases(
+            getSelectOptions = GetSelectOptions(repository = repository),
             getDepartments = GetDepartments(repository = repository),
             getBranches = GetBranches(repository = repository),
             getCounters = GetCounters(repository = repository),

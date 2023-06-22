@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -33,6 +34,7 @@ import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Constants
 import com.gicproject.salamkioskapp.common.Constants.Companion.OPTION_WIDTH
 import com.gicproject.salamkioskapp.ui.theme.primarySidra
+import kotlinx.coroutines.delay
 
 @Composable
 fun SelectOptionScreen(
@@ -40,9 +42,17 @@ fun SelectOptionScreen(
     viewModel: MyViewModel,
 ) {
 
-    val listState = rememberLazyListState()
+    val state = viewModel.stateSelectOption.value
+      LaunchedEffect(true) {
+          while (true) {
+              Log.d("TAG", "SelectDepartmentScreen: called GetSelectDepartments" )
+              if(!state.isApiLoading){
+                  viewModel.onEvent(MyEvent.GetSelectOptions)
 
-
+              }
+              delay(4000)
+          }
+      }
     Scaffold { innerPadding ->
         Box(
             modifier = Modifier
@@ -62,55 +72,89 @@ fun SelectOptionScreen(
                     modifier = Modifier.fillMaxSize()
                 )
             }
+
             HeaderDesign("Select Option","حدد خيار", navController)
-            Column(
-                modifier = Modifier.fillMaxSize(),
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(top = 180.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                CustomButtonLarge(onClick = {
-                    navController.navigate(Screen.SelectDepartmentScreen.route)
-                }, text = "Consultation Visit")
-                Spacer(modifier = Modifier.height(40.dp))
-                CustomButtonLarge(onClick = {
-                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                        Constants.STATE_EXTRA, true
-                    )
-                    navController.navigate(Screen.InsertCivilIdScreen.route)
-                }, text = "Services")
+
+                items(state.options.size) { index ->
+                    CustomButtonLarge(onClick = {
+                        if(state.options[index].DepartmentPKID == 2){
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                Constants.STATE_EXTRA, true
+                            )
+                            navController.navigate(Screen.InsertCivilIdScreen.route)
+                        }else{
+                            navController.navigate(Screen.SelectDepartmentScreen.route)
+
+                        }
+                        //  navController.navigate(Screen.SelectTestServiceScreen.route)
+                    }, textEn = state.options[index].DepartmentNameEN ?: "" , textAr =state.options[index].DepartmentNameAR ?: "" )
+                    Spacer(modifier = Modifier.height(40.dp))
+                }
+
+
             }
-            /* if (state.error.isNotBlank()) {
 
-             }
-             if (state.isLoading) {
-                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-             }
-             if (state.success.isNotBlank()) {
-                 LaunchedEffect(key1 = true) {
+        }
 
-                 }
-             }*/
+        if (state.error.isNotBlank()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(15.dp),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Bottom,
+            ) {
+                Text(state.error, color = MaterialTheme.colors.error, fontSize = 24.sp)
+            }
+        }
+
+
+        if (state.isLoading) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.6f)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                CircularProgressIndicator()
+            }
         }
     }
 }
 
 @Composable
-fun CustomButtonLarge(onClick: () -> Unit, text: String) {
+fun CustomButtonLarge(onClick: () -> Unit, textEn: String,textAr: String,) {
+
+    var fontEnglish = FontFamily(Font(R.font.questrial_regular))
+    var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
     Button(
         onClick = onClick,
         modifier = Modifier
-            .width(500.dp)
-            .height(180.dp)
+            .width(480.dp)
+            .height(140.dp)
             .shadow(50.dp, shape = RoundedCornerShape(5.dp)), shape = RoundedCornerShape(30.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text,
-                fontSize = 60.sp,
+                textEn,
+                style = TextStyle(fontFamily =fontEnglish),
+                fontSize = 40.sp,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                textAr,
+                style = TextStyle(fontFamily =fontArabic),
+                fontSize = 40.sp,
                 textAlign = TextAlign.Center
             )
         }
@@ -167,23 +211,28 @@ fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
 
     var fontEnglish = FontFamily(Font(R.font.questrial_regular))
     var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
-    Box(modifier = Modifier.padding(horizontal = 0.dp, vertical = 0.dp)) {
+    Box(modifier = Modifier.padding(horizontal = 10.dp, vertical = 20.dp)) {
 
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                .border(
-                    BorderStroke(2.dp, primarySidra)
-                )
+
         ) {
             Row(
                 modifier = Modifier
                     .padding(horizontal = 10.dp, vertical = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
+                Image(
+                    painter = painterResource(id = Constants.LOGO),
+                    contentScale = ContentScale.FillBounds,
+                    contentDescription = "bg",
+                    modifier = Modifier
+                        .width(180.dp)
+                        .height(55.dp)
+                )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically

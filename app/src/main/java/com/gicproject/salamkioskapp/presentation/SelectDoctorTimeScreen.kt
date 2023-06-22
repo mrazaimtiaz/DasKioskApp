@@ -156,7 +156,7 @@ fun SelectDoctorTimeScreen(
             delay(1000)
             second.value = second.value - 1
             if (second.value == 0) {
-                navController.popBackStack(Screen.SelectDepartmentScreen.route, false)
+                navController.popBackStack(Screen.SelectOptionScreen.route, false)
             }
         }
     })
@@ -247,8 +247,7 @@ fun SelectDoctorTimeScreen(
                                 balloonWindow
                             ) {
                                 if (!state.isLoading) {
-                                    showDialog.value = true
-                                   // navController.navigate(Screen.DoctorPayScreen.route)
+                                    navController.navigate(Screen.DoctorPayScreen.route)
                                 }
                             }
 

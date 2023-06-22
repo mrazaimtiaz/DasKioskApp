@@ -80,8 +80,7 @@ fun SettingScreen(
                 title = { Text("Settings") },
                 navigationIcon = {
                     IconButton(onClick = {
-                      // navController.popBackStack(Screen.SelectDepartmentScreen.route, false) // double sidra hadi app
-                        navController.popBackStack(Screen.SelectSingleServiceScreen.route, false) //single sidra app
+                        navController.popBackStack(Screen.SelectOptionScreen.route, false)
                     }) {
                         Icon(
                             Icons.Filled.KeyboardArrowLeft,

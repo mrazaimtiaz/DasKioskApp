@@ -6,6 +6,16 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface MyApi {
+
+    @GET("api/getOptions")
+    suspend fun getOptions(
+        @Query("branchid")
+        branchId: String,
+        @Query("DeptParentID")
+        DeptParentID: String,
+    ): List<SelectOptionDto>?
+
+
     @POST("api/checkAppt")
     suspend fun getCivilIdAppointment(
         @Query("civilID")

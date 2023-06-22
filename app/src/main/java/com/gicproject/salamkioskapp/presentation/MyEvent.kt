@@ -6,6 +6,7 @@ sealed class MyEvent {
     object GetCounters: MyEvent()
     object GetDepartments: MyEvent()
     object GetSelectDepartments: MyEvent()
+    object GetSelectOptions: MyEvent()
     data class GetSelectServices(val deptId: String) : MyEvent()
     data class GetCheckIsWalkIn(val serviceId: String) : MyEvent()
     data class GetCivilIdAppointment(val civilId: String) : MyEvent()

@@ -45,6 +45,14 @@ class MyRepositoryImpl @Inject constructor(
         return api.getSelectServices(branchId, deptId)
     }
 
+    override suspend fun getOptions(
+        branchId: String,
+        deptParentId: String,
+    ): List<SelectOptionDto>? {
+        return api.getOptions(branchId, deptParentId)
+    }
+
+
     override suspend fun getSelectDepartments(
         branchId: String,
         deptParentId: String,

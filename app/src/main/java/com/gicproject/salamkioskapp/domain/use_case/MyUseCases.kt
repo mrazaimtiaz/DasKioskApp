@@ -7,6 +7,7 @@ data class MyUseCases(
     val getCounters: GetCounters,
     val getDepartments: GetDepartments,
     val getSelectDepartments: GetSelectDepartments,
+    val getSelectOptions: GetSelectOptions,
     val getDoctors: GetDoctors,
     val getPrintTicket: GetPrintTicket,
     val getSelectServices: GetSelectServices,

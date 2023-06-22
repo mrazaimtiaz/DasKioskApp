@@ -124,7 +124,10 @@ fun SelectServiceScreen(
                     }, text = "Appointment","موعد")
                     CustomButton(onClick = {
                         viewModel.showDialogService.value = false
-                        Log.d("TAG", "SelectServiceScreen: ${viewModel.selectService.ServicesPKID.toString()} ${viewModel.selectService.ServicesTicketDesignerFKID.toString()}")
+
+
+                        navController.navigate(Screen.SelectDoctorTimeScreen.route)
+                     /*   Log.d("TAG", "SelectServiceScreen: ${viewModel.selectService.ServicesPKID.toString()} ${viewModel.selectService.ServicesTicketDesignerFKID.toString()}")
                         viewModel.onEvent(
                             MyEvent.GetBookTicket(
                                 isCivilIdPage = false,
@@ -138,7 +141,7 @@ fun SelectServiceScreen(
                                 DoctorServiceID = "-1",
                                 ticketDesignId = viewModel.selectService.ServicesTicketDesignerFKID.toString()
                             )
-                        )
+                        )*/
                     }, text = "Without Appointment","بدون موعد")
                 }
 
@@ -187,12 +190,12 @@ fun SelectServiceScreen(
             delay(1000)
             second.value = second.value - 1
             if (second.value == 0) {
-                navController.popBackStack(Screen.SelectDepartmentScreen.route, false)
+                navController.popBackStack(Screen.SelectOptionScreen.route, false)
             }
         }
     })
     if (state.success.isNotBlank()) {
-        navController.popBackStack(Screen.SelectDepartmentScreen.route, false)
+        navController.popBackStack(Screen.SelectOptionScreen.route, false)
     }
     Scaffold { innerPadding ->
         Box(

@@ -71,7 +71,7 @@ fun InsertCivilIdScreen(
                 Log.d("TAG", "InsertCivilIdScreen2: ${state.isLoading}")
                 second.value = second.value - 1
                 if (second.value == 0) {
-                    navController.popBackStack(Screen.SelectDepartmentScreen.route, false)
+                    navController.popBackStack(Screen.SelectOptionScreen.route, false)
                 }
             }
 
@@ -106,7 +106,7 @@ fun InsertCivilIdScreen(
                 verticalArrangement = Arrangement.Center
             ) {
 
-                HeaderDesign("Appointment","موعد",navController)
+                HeaderDesign(  "Appointment","موعد",navController)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -307,7 +307,13 @@ fun InsertCivilIdScreen(
                                 ) {
                                     Button(
                                         onClick = {
-                                            if(viewModel.textCivilId.value.isNotBlank()){
+
+                                            if(isService == true){
+                                                navController.navigate(Screen.SelectTestServiceScreen.route)
+                                            }else{
+                                                navController.navigate(Screen.DoctorPayScreen.route)
+                                            }
+                                          /*  if(viewModel.textCivilId.value.isNotBlank()){
                                                 if(!viewModel.stateInsertCivilId.value.isLoading){
                                                     viewModel.enableInsertCivilIdLoading()
                                                     CoroutineScope(Dispatchers.Main).launch {
@@ -316,7 +322,7 @@ fun InsertCivilIdScreen(
                                                         viewModel.onEvent(MyEvent.GetCivilIdAppointment(viewModel.textCivilId.value))
                                                     }
                                                 }
-                                            }
+                                            }*/
 
                                         },
                                         modifier = Modifier
@@ -441,7 +447,7 @@ fun InsertCivilIdScreen(
         }
 
         if (state.success.isNotBlank()) {
-            navController.popBackStack(Screen.SelectDepartmentScreen.route, false)
+            navController.popBackStack(Screen.SelectOptionScreen.route, false)
         }
         if (state.isLoading) {
             Column(

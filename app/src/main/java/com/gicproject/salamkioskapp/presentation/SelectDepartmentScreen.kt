@@ -51,9 +51,16 @@ fun SelectDepartmentScreen(
     viewModel: MyViewModel,
 ) {
 
+    val secondToExit = remember { mutableStateOf(120) }
     val state = viewModel.stateSelectDepartment.value
 
+
+
     LaunchedEffect(true) {
+
+        viewModel.onEvent(MyEvent.GetSelectDepartments)
+    }
+  /*  LaunchedEffect(true) {
         while (true) {
             Log.d("TAG", "SelectDepartmentScreen: called GetSelectDepartments" )
             if(!state.isApiLoading){
@@ -62,7 +69,7 @@ fun SelectDepartmentScreen(
             }
             delay(4000)
         }
-    }
+    }*/
     var showDialog = remember { mutableStateOf(false) }
     if (showDialog.value) {
         val second = remember { mutableStateOf(30) }
@@ -140,7 +147,15 @@ fun SelectDepartmentScreen(
         }
     }
 
-
+    LaunchedEffect(key1 = Unit, block = {
+        while (true) {
+            delay(1000)
+            secondToExit.value = secondToExit.value - 1
+            if (secondToExit.value == 0) {
+                navController.popBackStack(Screen.SelectOptionScreen.route, false)
+            }
+        }
+    })
     Scaffold { innerPadding ->
 
         Box(
@@ -161,26 +176,27 @@ fun SelectDepartmentScreen(
                     modifier = Modifier.fillMaxSize()
                 )
             }
-            /* Column(
-                 modifier = Modifier.fillMaxSize(),
-                 horizontalAlignment = Alignment.Start,
-                 verticalArrangement = Arrangement.Bottom
-             ) {
-                 Row(
-                     horizontalArrangement = Arrangement.Center,
-                     verticalAlignment = Alignment.CenterVertically,
-                     modifier = Modifier.padding(20.dp)
-                 ) {
-                    GoBack(navController)
-                 }
-             }*/
-            // HeartBeatTime(second = second)
 
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(20.dp)
+                    ) {
+                        GoBack(navController = navController)
+                    }
+                }
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    HeartBeatTime(second = secondToExit)
+                }
                 HeaderDesign("Select Department","حدد القسم", navController)
               /*  AndroidView(
                     factory = { context ->
@@ -216,8 +232,7 @@ fun SelectDepartmentScreen(
                                 navController.currentBackStackEntry?.savedStateHandle?.set(
                                     Constants.STATE_SELECT_DEPARTMENT, state.departments[index]
                                 )
-                               navController.navigate(Screen.SelectServiceScreen.route)
-                               // showDialog.value = true
+                             showDialog.value = true
                             }, text = state.departments[index].DepartmentNameEN
                                 ?: "" , textAr =
                             state.departments[index].DepartmentNameAR ?: "",
@@ -225,7 +240,7 @@ fun SelectDepartmentScreen(
                         }
                     }
                 }
-            }
+
             /*
              if (state.isLoading) {
                  CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))

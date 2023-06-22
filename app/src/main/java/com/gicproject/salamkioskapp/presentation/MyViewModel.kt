@@ -77,6 +77,9 @@ class MyViewModel @Inject constructor(
     private val _stateSetting = mutableStateOf(SettingScreenState())
     val stateSetting: State<SettingScreenState> = _stateSetting
 
+    private val _stateSelectOption = mutableStateOf(SelectOptionScreenState())
+    val stateSelectOption : State<SelectOptionScreenState> = _stateSelectOption
+
     private val _stateSelectDepartment = mutableStateOf(SelectDepartmentScreenState())
     val stateSelectDepartment: State<SelectDepartmentScreenState> = _stateSelectDepartment
 
@@ -247,6 +250,7 @@ class MyViewModel @Inject constructor(
     }
     var isFirstSelectDepartmentApi = true
     var isFirstSelectServicesApi = true
+    var isFirstSelectOptionApi = true
     fun onEvent(event: MyEvent) {
         when (event) {
             is MyEvent.GetBranches -> {
@@ -588,6 +592,47 @@ class MyViewModel @Inject constructor(
                 }
 
             }
+            is MyEvent.GetSelectOptions -> {
+                if(_selectedBranchId.value.isNotEmpty() && _selectedDepartmentId.value.isNotEmpty()){
+                    surveyUseCases.getSelectOptions(_selectedBranchId.value,_selectedDepartmentId.value).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                result.data?.let {
+                                    isFirstSelectOptionApi = false
+                                    viewModelScope.launch {
+                                        _stateSelectOption.value = SelectOptionScreenState(options = it,isApiLoading = false)
+
+                                    }
+                                }
+                            }
+                            is Resource.Error -> {
+                                _stateSelectOption.value = SelectOptionScreenState(
+                                    error = result.message ?: "An unexpected error occurred",
+                                    isLoading = false,
+                                )
+                                // delay(2000)
+                                //  onEvent(MyEvent.GetDepartment)
+                            }
+                            is Resource.Loading -> {
+                                if(isFirstSelectOptionApi){
+                                    _stateSelectOption.value = SelectOptionScreenState(isLoading = true)
+
+                                }
+                                _stateSelectOption.value = _stateSelectOption.value.copy(
+                                    isApiLoading = true,
+                                )
+                            }
+                        }
+                    }.launchIn(viewModelScope)
+                }else{
+                    _stateSelectOption.value = _stateSelectOption.value.copy(
+                        error =  "Select Department and Branch",
+                        isLoading = false,
+                        isApiLoading = false,
+                    )
+                }
+
+            }
             is MyEvent.GetSelectDepartments -> {
                 if(_selectedBranchId.value.isNotEmpty() && _selectedDepartmentId.value.isNotEmpty()){
                     surveyUseCases.getSelectDepartments(_selectedBranchId.value,_selectedDepartmentId.value).onEach { result ->
@@ -624,7 +669,7 @@ class MyViewModel @Inject constructor(
                     _stateSelectDepartment.value = _stateSelectDepartment.value.copy(
                         error =  "Select Department and Branch",
                         isLoading = false,
-                        isApiLoading = true,
+                        isApiLoading = false,
                     )
                 }
 
