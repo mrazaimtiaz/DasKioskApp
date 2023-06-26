@@ -126,7 +126,7 @@ fun SelectServiceScreen(
                         viewModel.showDialogService.value = false
 
 
-                        navController.navigate(Screen.SelectDoctorTimeScreen.route)
+                        navController.navigate(Screen.SelectDoctorScreen.route)
                      /*   Log.d("TAG", "SelectServiceScreen: ${viewModel.selectService.ServicesPKID.toString()} ${viewModel.selectService.ServicesTicketDesignerFKID.toString()}")
                         viewModel.onEvent(
                             MyEvent.GetBookTicket(

@@ -26,7 +26,7 @@ class GetSelectDepartments @Inject constructor(
 
            // var selectDepartments = listOf(SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(2,"Medical"))
             if (!selectDepartments.isNullOrEmpty()) {
-                emit(Resource.Success(selectDepartments.map {
+                emit(Resource.Success((selectDepartments).map {
                     it.toSelectDepartment()
                 }))
             } else {

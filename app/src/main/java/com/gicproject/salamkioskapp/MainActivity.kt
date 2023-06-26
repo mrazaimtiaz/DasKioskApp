@@ -375,13 +375,11 @@ class MainActivity : ComponentActivity(){
                             route = Screen.SelectDoctorScreen.route
                         ) {
                             viewModel?.readCivilIdOff()
-                            SelectDoctorScreen(navController, viewModel!!)
-                        }
-                        composable(
-                            route = Screen.SelectDoctorTimeScreen.route
-                        ) {
-                            viewModel?.readCivilIdOff()
-                            SelectDoctorTimeScreen(navController, viewModel!!)
+                            var selectDepartment =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
+                                    Constants.STATE_SELECT_DEPARTMENT
+                                ) //d
+                            SelectDoctorScreen(selectDepartment,navController, viewModel!!)
                         }
                         composable(
                             route = Screen.DoctorPayScreen.route

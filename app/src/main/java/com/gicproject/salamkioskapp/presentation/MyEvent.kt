@@ -10,7 +10,7 @@ sealed class MyEvent {
     data class GetSelectServices(val deptId: String) : MyEvent()
     data class GetCheckIsWalkIn(val serviceId: String) : MyEvent()
     data class GetCivilIdAppointment(val civilId: String) : MyEvent()
-    object GetDoctor: MyEvent()
+    data class GetDoctor(val parentId: String) : MyEvent()
     object GetPrintTicket: MyEvent()
     data class GetBookTicket(
         val isCivilIdPage: Boolean,

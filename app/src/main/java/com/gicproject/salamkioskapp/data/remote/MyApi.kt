@@ -7,6 +7,14 @@ import retrofit2.http.*
 
 interface MyApi {
 
+    @GET("api/getDoctorsWithTime")
+    suspend fun getDoctorsWithTime(
+        @Query("branchid")
+        branchId: String,
+        @Query("ParentID")
+        ParentID: String,
+    ): List<DoctorDto>?
+
     @GET("api/getOptions")
     suspend fun getOptions(
         @Query("branchid")

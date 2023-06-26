@@ -7,6 +7,10 @@ import retrofit2.http.Query
 
 interface MyRepository {
 
+    suspend fun getDoctorsWithTime(
+        branchId: String,
+        ParentID: String,
+    ): List<DoctorDto>?
 
     suspend fun getCivilIdAppointment(civilId: String,serviceId: String): List<CheckAppt>?
 

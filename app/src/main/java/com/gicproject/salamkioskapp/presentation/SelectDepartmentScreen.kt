@@ -3,7 +3,9 @@ package com.gicproject.salamkioskapp.presentation
 import android.util.Log
 import android.view.LayoutInflater
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -17,10 +19,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,7 +48,7 @@ import com.gicproject.salamkioskapp.common.Constants.Companion.heartBeatJson
 import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -51,13 +58,15 @@ fun SelectDepartmentScreen(
     viewModel: MyViewModel,
 ) {
 
-    val secondToExit = remember { mutableStateOf(120) }
+    val secondToExit = remember { mutableStateOf(180) }
     val state = viewModel.stateSelectDepartment.value
+
+    var isClickable = true
 
 
 
     LaunchedEffect(true) {
-
+        Log.d("TAG", "SelectDepartmentScreen: getting")
         viewModel.onEvent(MyEvent.GetSelectDepartments)
     }
   /*  LaunchedEffect(true) {
@@ -107,13 +116,27 @@ fun SelectDepartmentScreen(
                         .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     CustomButton(onClick = {
-                        navController.currentBackStackEntry?.savedStateHandle?.set(
-                            Constants.STATE_EXTRA, false
-                        )
-                        navController.navigate(Screen.InsertCivilIdScreen.route)
+                        if(isClickable){
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                Constants.STATE_EXTRA, false
+                            )
+                            navController.navigate(Screen.InsertCivilIdScreen.route)
+                        }
+
+
+
                     }, text = "Appointment","موعد")
-                    CustomButton(onClick = {
-                        navController.navigate(Screen.SelectDoctorTimeScreen.route)
+                    CustomButton(
+                        onClick = {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    navController.navigate(Screen.SelectDoctorScreen.route)
+
+
+
+                                }
+
+
+
                     }, text = "Without Appointment","بدون موعد")
                 }
 
@@ -176,28 +199,56 @@ fun SelectDepartmentScreen(
                     modifier = Modifier.fillMaxSize()
                 )
             }
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Bottom
+                HeaderDesign("Select Department","حدد القسم", navController)
+
+                LazyVerticalGrid(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.Center,
+                    state = rememberLazyGridState(),
+                    contentPadding = PaddingValues(horizontal =70.dp,),
+                    columns = GridCells.Fixed(2),
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(20.dp)
-                    ) {
-                        GoBack(navController = navController)
+
+                    items(state.departments.size) { index ->
+                        CustomButton(onClick = {
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                Constants.STATE_SELECT_DEPARTMENT, state.departments[index]
+                            )
+                            showDialog.value = true
+                        }, text = state.departments[index].DepartmentNameEN
+                            ?: "" , textAr =
+                        state.departments[index].DepartmentNameAR ?: "",
+                        )
                     }
                 }
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.Bottom
+
+
+            }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp, vertical = 5.dp)
+                        .fillMaxWidth()
                 ) {
-                    HeartBeatTime(second = secondToExit)
+                    GoBack(navController = navController)
+
+                        HeartBeatTime(second = secondToExit)
+
                 }
-                HeaderDesign("Select Department","حدد القسم", navController)
+            }
+
+
+
               /*  AndroidView(
                     factory = { context ->
                         val view = LayoutInflater.from(context).inflate(R.layout.myfatoorah_layout, null, false)
@@ -212,34 +263,9 @@ fun SelectDepartmentScreen(
                         // Update the view
                     }
                 )*/
-                FlowColumn(
-                    Modifier.fillMaxSize(),
-                    crossAxisAlignment = FlowCrossAxisAlignment.Center,
-                    mainAxisAlignment = FlowMainAxisAlignment.Center,
-                ) {
-                    LazyVerticalGrid(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalArrangement = Arrangement.Center,
-                        state = rememberLazyGridState(),
-                        contentPadding = PaddingValues(70.dp),
-                        modifier = Modifier
-                            .width(730.dp)
-                            .height(950.dp),
-                        columns = GridCells.Fixed(2),
-                    ) {
-                        items(state.departments.size) { index ->
-                            CustomButton(onClick = {
-                                navController.currentBackStackEntry?.savedStateHandle?.set(
-                                    Constants.STATE_SELECT_DEPARTMENT, state.departments[index]
-                                )
-                             showDialog.value = true
-                            }, text = state.departments[index].DepartmentNameEN
-                                ?: "" , textAr =
-                            state.departments[index].DepartmentNameAR ?: "",
-                            )
-                        }
-                    }
-                }
+
+
+
 
             /*
              if (state.isLoading) {
@@ -320,11 +346,8 @@ fun GoBack(navController: NavController) {
 
 @Composable
 fun HeartBeatTime(second: MutableState<Int>) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.Bottom
-    ) {
+
+
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -334,7 +357,7 @@ fun HeartBeatTime(second: MutableState<Int>) {
             Text(second.value.toString(), fontSize = 40.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.width(20.dp))
         }
-    }
+
 }
 
 
@@ -351,4 +374,24 @@ fun HeartBeatTimeRow(second: MutableState<Int>) {
         Spacer(modifier = Modifier.width(20.dp))
     }
 }
+
+
+fun Modifier.disableSplitMotionEvents() =
+    pointerInput(Unit) {
+        coroutineScope {
+            var currentId: Long = -1L
+            awaitPointerEventScope {
+                while (true) {
+                    awaitPointerEvent(PointerEventPass.Initial).changes.forEach { pointerInfo ->
+                        when {
+                            pointerInfo.pressed && currentId == -1L -> currentId = pointerInfo.id.value
+                            pointerInfo.pressed.not() && currentId == pointerInfo.id.value -> currentId = -1
+                            pointerInfo.id.value != currentId && currentId != -1L -> pointerInfo.consume()
+                            else -> Unit
+                        }
+                    }
+                }
+            }
+        }
+    }
 

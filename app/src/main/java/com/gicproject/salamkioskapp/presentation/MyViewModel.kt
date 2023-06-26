@@ -104,7 +104,6 @@ class MyViewModel @Inject constructor(
     val isRefreshingSetting: StateFlow<Boolean>
         get() = _isRefreshingSetting.asStateFlow()
 
-    var isFirst = true
 
 
     init {
@@ -655,10 +654,10 @@ class MyViewModel @Inject constructor(
                                 //  onEvent(MyEvent.GetDepartment)
                             }
                             is Resource.Loading -> {
-                                if(isFirstSelectDepartmentApi){
+
                                     _stateSelectDepartment.value = SelectDepartmentScreenState(isLoading = true)
 
-                                }
+
                                 _stateSelectDepartment.value = _stateSelectDepartment.value.copy(
                                     isApiLoading = true,
                                 )
@@ -715,30 +714,37 @@ class MyViewModel @Inject constructor(
                 }
             }
             is MyEvent.GetDoctor -> {
-                surveyUseCases.getDoctors().onEach { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            result.data?.let {
-                                isFirst = false
-                                viewModelScope.launch {
-                                    _stateSelectDoctor.value = SelectDoctorScreenState(doctors = it)
-
+                if(_selectedBranchId.value.isNotEmpty() && _selectedDepartmentId.value.isNotEmpty()) {
+                    surveyUseCases.getDoctors(event.parentId,_selectedBranchId.value).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                result.data?.let {
+                                    viewModelScope.launch {
+                                        _stateSelectDoctor.value =
+                                            SelectDoctorScreenState(doctors = it)
+                                    }
                                 }
                             }
+                            is Resource.Error -> {
+                                _stateSelectDoctor.value = _stateSelectDoctor.value.copy(
+                                    error = result.message ?: "An unexpected error occurred",
+                                    isLoading = false, isApiLoading = false
+                                )
+                                // delay(2000)
+                                //  onEvent(MyEvent.GetDepartment)
+                            }
+                            is Resource.Loading -> {
+                                _stateSelectDoctor.value = SelectDoctorScreenState(isLoading = true, isApiLoading = true)
+                            }
                         }
-                        is Resource.Error -> {
-                            _stateSelectDoctor.value = _stateSelectDoctor.value.copy(
-                                error = result.message ?: "An unexpected error occurred",
-                                isLoading = false,
-                            )
-                            // delay(2000)
-                            //  onEvent(MyEvent.GetDepartment)
-                        }
-                        is Resource.Loading -> {
-                                _stateSelectDoctor.value = SelectDoctorScreenState(isLoading = true)
-                        }
-                    }
-                }.launchIn(viewModelScope)
+                    }.launchIn(viewModelScope)
+                }else{
+                    _stateSelectDoctor.value = _stateSelectDoctor.value.copy(
+                        error =  "Select Department and Branch",
+                        isLoading = false,
+                        isApiLoading = false,
+                    )
+                }
             }
             is MyEvent.GetPrintTicket -> {
                 surveyUseCases.getPrintTicket().onEach { result ->

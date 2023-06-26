@@ -42,8 +42,10 @@ fun SelectOptionScreen(
     viewModel: MyViewModel,
 ) {
 
-    val state = viewModel.stateSelectOption.value
-      LaunchedEffect(true) {
+    val state = viewModel.stateSelectOption.value;
+
+
+    LaunchedEffect(true) {
           while (true) {
               Log.d("TAG", "SelectDepartmentScreen: called GetSelectDepartments" )
               if(!state.isApiLoading){
@@ -73,31 +75,38 @@ fun SelectOptionScreen(
                 )
             }
 
-            HeaderDesign("Select Option","حدد خيار", navController)
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(top = 180.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+            Column(
+                modifier = Modifier.fillMaxSize()
             ) {
 
-                items(state.options.size) { index ->
-                    CustomButtonLarge(onClick = {
-                        if(state.options[index].DepartmentPKID == 2){
-                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                Constants.STATE_EXTRA, true
-                            )
-                            navController.navigate(Screen.InsertCivilIdScreen.route)
-                        }else{
-                            navController.navigate(Screen.SelectDepartmentScreen.route)
+                HeaderDesign("Select Option","حدد خيار", navController)
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
 
-                        }
-                        //  navController.navigate(Screen.SelectTestServiceScreen.route)
-                    }, textEn = state.options[index].DepartmentNameEN ?: "" , textAr =state.options[index].DepartmentNameAR ?: "" )
-                    Spacer(modifier = Modifier.height(40.dp))
+                    items(state.options.size) { index ->
+                        CustomButtonLarge(onClick = {
+                            if(state.options[index].DepartmentPKID == 2){
+                                navController.currentBackStackEntry?.savedStateHandle?.set(
+                                    Constants.STATE_EXTRA, true
+                                )
+                                navController.navigate(Screen.InsertCivilIdScreen.route)
+                            }else{
+                                navController.navigate(Screen.SelectDepartmentScreen.route)
+
+                            }
+                            //  navController.navigate(Screen.SelectTestServiceScreen.route)
+                        }, textEn = state.options[index].DepartmentNameEN ?: "" , textAr =state.options[index].DepartmentNameAR ?: "" )
+                        Spacer(modifier = Modifier.height(40.dp))
+                    }
+
+
                 }
-
-
             }
+
+
 
         }
 
@@ -136,6 +145,7 @@ fun CustomButtonLarge(onClick: () -> Unit, textEn: String,textAr: String,) {
     Button(
         onClick = onClick,
         modifier = Modifier
+            .disableSplitMotionEvents()
             .width(480.dp)
             .height(140.dp)
             .shadow(50.dp, shape = RoundedCornerShape(5.dp)), shape = RoundedCornerShape(30.dp)
@@ -171,6 +181,7 @@ fun CustomButton(onClick: () -> Unit, text: String,textAr: String) {
         colors = ButtonDefaults.outlinedButtonColors(contentColor = primarySidra),
         border = BorderStroke(1.dp, primarySidra),
         modifier = Modifier
+            .disableSplitMotionEvents()
             .width(260.dp)
             .height(220.dp)
             .padding(horizontal = 8.dp, vertical = 12.dp)
@@ -214,7 +225,7 @@ fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
     Box(modifier = Modifier.padding(horizontal = 10.dp, vertical = 20.dp)) {
 
 
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Color.White, shape = RoundedCornerShape(10.dp))
@@ -225,14 +236,7 @@ fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
                     .padding(horizontal = 10.dp, vertical = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = Constants.LOGO),
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = "bg",
-                    modifier = Modifier
-                        .width(180.dp)
-                        .height(55.dp)
-                )
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically

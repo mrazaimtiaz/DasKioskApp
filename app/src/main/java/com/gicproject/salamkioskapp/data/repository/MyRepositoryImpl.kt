@@ -9,6 +9,12 @@ import javax.inject.Inject
 class MyRepositoryImpl @Inject constructor(
     private val api: MyApi
 ) : MyRepository {
+
+
+    override suspend fun getDoctorsWithTime(branchId: String,parentId: String): List<DoctorDto>? {
+        return api.getDoctorsWithTime(branchId,parentId)
+    }
+
     override suspend fun getCivilIdAppointment(civilId: String,serviceId: String): List<CheckAppt>? {
         return api.getCivilIdAppointment(civilId,serviceId)
     }
