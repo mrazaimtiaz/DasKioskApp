@@ -43,6 +43,11 @@ interface MyRepository {
         deptParentId: String,
     ): List<SelectOptionDto>?
 
+    suspend fun getTestServiceOptions(
+        branchId: String,
+        deptParentId: String,
+    ): List<SelectOptionDto>?
+
     suspend fun getSelectDepartments(
         branchId: String,
         deptParentId: String,

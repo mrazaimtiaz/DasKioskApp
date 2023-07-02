@@ -57,7 +57,7 @@ fun InsertCivilIdScreen(
 
     val listState = rememberLazyListState()
 
-    val second = remember { mutableStateOf(60) }
+    val second = remember { mutableStateOf(180) }
 
 
 
@@ -99,7 +99,27 @@ fun InsertCivilIdScreen(
                     modifier = Modifier.fillMaxSize()
                 )
             }
-            HeartBeatTime(second = second)
+
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(20.dp)
+                ) {
+                    GoBack(navController)
+                }
+            }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                HeartBeatTime(second = second)
+            }
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -130,6 +150,7 @@ fun InsertCivilIdScreen(
                 var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
                 Column(modifier = Modifier
                     .fillMaxHeight()
+                    .padding(bottom=100.dp)
                     .weight(5f), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                    Column(modifier = Modifier
                        .fillMaxWidth()
@@ -414,16 +435,7 @@ fun InsertCivilIdScreen(
                 }*/
 
 
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically,
 
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .fillMaxWidth()
-                    ) {
-                        GoBack(navController)
-                    }
 
 
 

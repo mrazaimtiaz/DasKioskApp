@@ -94,6 +94,8 @@ class MyViewModel @Inject constructor(
     private val _stateSelectService = mutableStateOf(SelectServiceScreenState())
     val stateSelectService: State<SelectServiceScreenState> = _stateSelectService
 
+    private val _stateSelectTestService = mutableStateOf(SelectTestServiceScreenState())
+    val stateSelectTestService: State<SelectTestServiceScreenState> = _stateSelectTestService
 
     private val _readCivilId = mutableStateOf(false)
 
@@ -625,6 +627,45 @@ class MyViewModel @Inject constructor(
                     }.launchIn(viewModelScope)
                 }else{
                     _stateSelectOption.value = _stateSelectOption.value.copy(
+                        error =  "Select Department and Branch",
+                        isLoading = false,
+                        isApiLoading = false,
+                    )
+                }
+
+            }
+            is MyEvent.GetSelectTestServices -> {
+                if(_selectedBranchId.value.isNotEmpty() && _selectedDepartmentId.value.isNotEmpty()){
+                    surveyUseCases.getSelectTestServices(_selectedBranchId.value,_selectedDepartmentId.value).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                result.data?.let {
+                                    isFirstSelectOptionApi = false
+                                    viewModelScope.launch {
+                                        _stateSelectTestService.value = SelectTestServiceScreenState(options = it,isApiLoading = false)
+
+                                    }
+                                }
+                            }
+                            is Resource.Error -> {
+                                _stateSelectTestService.value = SelectTestServiceScreenState(
+                                    error = result.message ?: "An unexpected error occurred",
+                                    isLoading = false,
+                                )
+                                // delay(2000)
+                                //  onEvent(MyEvent.GetDepartment)
+                            }
+                            is Resource.Loading -> {
+                                    _stateSelectTestService.value = SelectTestServiceScreenState(isLoading = true)
+                                _stateSelectTestService.value = _stateSelectTestService.value.copy(
+                                    isApiLoading = true,
+
+                                )
+                            }
+                        }
+                    }.launchIn(viewModelScope)
+                }else{
+                    _stateSelectTestService.value = _stateSelectTestService.value.copy(
                         error =  "Select Department and Branch",
                         isLoading = false,
                         isApiLoading = false,

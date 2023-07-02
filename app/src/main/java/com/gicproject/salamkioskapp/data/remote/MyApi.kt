@@ -24,6 +24,15 @@ interface MyApi {
     ): List<SelectOptionDto>?
 
 
+    @GET("api/getTestServiceOptions")
+    suspend fun getTestServiceOptions(
+        @Query("branchid")
+        branchId: String,
+        @Query("DeptParentID")
+        DeptParentID: String,
+    ): List<SelectOptionDto>?
+
+
     @POST("api/checkAppt")
     suspend fun getCivilIdAppointment(
         @Query("civilID")

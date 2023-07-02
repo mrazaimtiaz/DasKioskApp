@@ -63,7 +63,8 @@ class AppModule {
             getTicket = GetTicket(repository = repository),
             getBookTicket = GetBookTicket(repository = repository),
             getCheckIsWalkIn = GetCheckIsWalkIn(repository = repository),
-            getCivilIdAppointment = GetCivilIdAppointment(repository = repository)
+            getCivilIdAppointment = GetCivilIdAppointment(repository = repository),
+            getSelectTestServices = GetSelectTestServices(repository = repository)
         )
     }
 }
