@@ -10,6 +10,13 @@ class MyRepositoryImpl @Inject constructor(
     private val api: MyApi
 ) : MyRepository {
 
+    override suspend fun getSelectTestService(
+        branchId: String,
+        ParentID: String,
+    ): List<SelectServiceDto>?{
+        return api.getSelectTestService(branchId,ParentID)
+    }
+
 
     override suspend fun getDoctorsWithTime(branchId: String,parentId: String): List<DoctorDto>? {
         return api.getDoctorsWithTime(branchId,parentId)

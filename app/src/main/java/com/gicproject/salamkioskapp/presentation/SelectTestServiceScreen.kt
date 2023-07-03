@@ -12,8 +12,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -80,58 +82,81 @@ fun SelectTestServiceScreen(
 
             }
             Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 100.dp)
+            ) {
+
+                HeaderDesign("Select Service","حدد الخدمة",navController)
+                Column(modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,) {
+                    LazyVerticalGrid(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalArrangement = Arrangement.Center,
+                        state = rememberLazyGridState(),
+                        contentPadding = PaddingValues(70.dp),
+                        columns = GridCells.Fixed(2),
+                    ) {
+                        items(state.options.size) { index ->
+                            CustomButton(onClick = {
+                                navController.currentBackStackEntry?.savedStateHandle?.set(
+                                    Constants.STATE_EXTRA, state.options[index].DepartmentPKID
+                                )
+                                navController.navigate(Screen.SelectChildTestServiceScreen.route)
+                            }, text = state.options[index].DepartmentNameEN ?:"",state.options[index].DepartmentNameAR ?:"")
+
+
+                        }
+                    }
+                }
+            }
+
+            Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(20.dp)
-                ) {
-                   GoBack(navController)
-                }
-            }
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                HeartBeatTime(second = second)
-            }
-            HeaderDesign("Select Service","حدد الخدمة",navController)
-            if (state.error.isNotBlank()) {
-                Text(
-                    state.error,
-                    color = MaterialTheme.colors.error,
-                    fontSize = 24.sp,
-                    modifier = Modifier.padding(top = 180.dp)
-                )
-            }
-            FlowColumn(
-                Modifier.fillMaxSize(),
-                crossAxisAlignment = FlowCrossAxisAlignment.Center,
-                mainAxisAlignment = FlowMainAxisAlignment.Center,
-            ) {
-                LazyVerticalGrid(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalArrangement = Arrangement.Center,
-                    state = rememberLazyGridState(),
-                    contentPadding = PaddingValues(70.dp),
                     modifier = Modifier
-                        .width(730.dp)
-                        .height(Constants.SERVICE_HEIGHT),
-                    columns = GridCells.Fixed(2),
+                        .padding(horizontal = 20.dp, vertical = 5.dp)
+                        .fillMaxWidth()
                 ) {
-                    items(state.options.size) { index ->
-                        CustomButton(onClick = {
-                            navController.navigate(Screen.SelectChildServiceScreen.route)
-                        }, text = state.options[index].DepartmentNameEN ?:"",state.options[index].DepartmentNameAR ?:"")
+                    GoBack(navController = navController)
 
+                    HeartBeatTime(second = second)
 
-                    }
                 }
             }
+
+
+            if (state.error.isNotBlank()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(15.dp),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Bottom,
+                ) {
+                    Text(state.error, color = MaterialTheme.colors.error, fontSize = 24.sp)
+                }
+            }
+
+            if (state.isLoading) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.6f)),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+
 
         /*    Column(
                 modifier = Modifier.fillMaxSize(),

@@ -12,6 +12,11 @@ interface MyRepository {
         ParentID: String,
     ): List<DoctorDto>?
 
+    suspend fun getSelectTestService(
+        branchId: String,
+        ParentID: String,
+    ): List<SelectServiceDto>?
+
     suspend fun getCivilIdAppointment(civilId: String,serviceId: String): List<CheckAppt>?
 
     suspend fun checkIsWalkIn(

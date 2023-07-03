@@ -45,6 +45,7 @@ import com.gicproject.salamkioskapp.R
 import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Constants
 import com.gicproject.salamkioskapp.common.Constants.Companion.heartBeatJson
+import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -62,6 +63,8 @@ fun SelectDepartmentScreen(
     val state = viewModel.stateSelectDepartment.value
 
     var isClickable = true
+
+    var mSelectDepartment =remember{ mutableStateOf(SelectDepartment()) }
 
 
 
@@ -129,6 +132,9 @@ fun SelectDepartmentScreen(
                     CustomButton(
                         onClick = {
                                 CoroutineScope(Dispatchers.Main).launch {
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        Constants.STATE_SELECT_DEPARTMENT, mSelectDepartment.value
+                                    )
                                     navController.navigate(Screen.SelectDoctorScreen.route)
 
 
@@ -200,7 +206,9 @@ fun SelectDepartmentScreen(
                 )
             }
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 100.dp)
             ) {
 
                 HeaderDesign("Select Department","حدد القسم", navController)
@@ -215,9 +223,10 @@ fun SelectDepartmentScreen(
 
                     items(state.departments.size) { index ->
                         CustomButton(onClick = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                Constants.STATE_SELECT_DEPARTMENT, state.departments[index]
-                            )
+
+                            mSelectDepartment.value = state.departments[index]
+
+
                             showDialog.value = true
                         }, text = state.departments[index].DepartmentNameEN
                             ?: "" , textAr =

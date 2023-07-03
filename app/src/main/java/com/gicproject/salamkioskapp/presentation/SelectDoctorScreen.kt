@@ -66,7 +66,7 @@ fun SelectDoctorScreen(
     val state = viewModel.stateSelectDoctor.value
 
     LaunchedEffect(true) {
-        Log.d("TAG", "SelectDoctorScreen: called ")
+        Log.d("TAG", "SelectDoctorScreen: called ${selectDepartment?.DepartmentPKID} ")
         viewModel.onEvent(MyEvent.GetDoctor(selectDepartment?.DepartmentPKID.toString()))
     }
 

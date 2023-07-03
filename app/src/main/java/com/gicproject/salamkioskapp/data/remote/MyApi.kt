@@ -7,6 +7,15 @@ import retrofit2.http.*
 
 interface MyApi {
 
+    @GET("api/selectTest")
+    suspend fun getSelectTestService(
+        @Query("branchid")
+        branchId: String,
+        @Query("ParentID")
+        ParentID: String,
+    ): List<SelectServiceDto>?
+
+
     @GET("api/getDoctorsWithTime")
     suspend fun getDoctorsWithTime(
         @Query("branchid")

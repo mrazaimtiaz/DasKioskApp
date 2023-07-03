@@ -24,6 +24,7 @@ import android.hardware.usb.UsbManager
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -379,6 +380,7 @@ class MainActivity : ComponentActivity(){
                                 navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
                                     Constants.STATE_SELECT_DEPARTMENT
                                 ) //d
+                            Log.d(TAG, "onCreate: SelectDoctorScreen main ${selectDepartment?.DepartmentPKID}")
                             SelectDoctorScreen(selectDepartment,navController, viewModel!!)
                         }
                         composable(
@@ -410,10 +412,14 @@ class MainActivity : ComponentActivity(){
                             SelectTestServiceScreen(navController, viewModel!!)
                         }
                         composable(
-                            route = Screen.SelectChildServiceScreen.route
+                            route = Screen.SelectChildTestServiceScreen.route
                         ) {
                             viewModel?.readCivilIdOff()
-                            SelectChildServiceScreen(navController, viewModel!!)
+                            var extra =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Int?>(
+                                    Constants.STATE_EXTRA
+                                )
+                            SelectChildTestServiceScreen(extra.toString(),navController, viewModel!!)
                         }
 
                         composable(
