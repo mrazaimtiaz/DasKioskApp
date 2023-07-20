@@ -3,9 +3,6 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.DepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.SelectDepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.SelectOptionDto
 import com.gicproject.salamkioskapp.domain.model.Department
 import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.gicproject.salamkioskapp.domain.model.SelectOption
@@ -28,10 +25,10 @@ class GetSelectTestServices @Inject constructor(
 
           //var selectTestServices= repository.getTestServiceOptions(branchId,deptParentId)
 
-          var selectTestServices = listOf(SelectOptionDto(1,"Laboratory","معمل"),SelectOptionDto(2,"X-Rays","الأشعة السينية"),)
+          var selectTestServices = listOf(SelectOption(1,"Laboratory","معمل"),SelectOption(2,"X-Rays","الأشعة السينية"),)
             if (!selectTestServices.isNullOrEmpty()) {
                 emit(Resource.Success(selectTestServices.map {
-                    it.toSelectOption()
+                    it
                 }))
             } else {
                 emit(Resource.Error("Empty Department List."))

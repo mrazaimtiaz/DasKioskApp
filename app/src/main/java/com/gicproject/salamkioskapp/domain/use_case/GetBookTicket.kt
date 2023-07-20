@@ -2,9 +2,6 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.BookTicketDto
-import com.gicproject.salamkioskapp.data.remote.dto.DepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.DoctorDto
 import com.gicproject.salamkioskapp.domain.model.BookTicket
 import com.gicproject.salamkioskapp.domain.model.Department
 import com.gicproject.salamkioskapp.domain.model.Doctor
@@ -37,7 +34,7 @@ class GetBookTicket @Inject constructor(
 
 
             if (!bookTicket.isNullOrEmpty()) {
-                emit(Resource.Success(bookTicket[0].toBookTicket()))
+                emit(Resource.Success(bookTicket[0]))
             } else {
                 emit(Resource.Error("Empty GetBookTicket List."))
             }

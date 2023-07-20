@@ -2,7 +2,7 @@ package com.gicproject.salamkioskapp.data.repository
 
 
 import com.gicproject.salamkioskapp.data.remote.MyApi
-import com.gicproject.salamkioskapp.data.remote.dto.*
+import com.gicproject.salamkioskapp.domain.model.*
 import com.gicproject.salamkioskapp.domain.repository.MyRepository
 import javax.inject.Inject
 
@@ -13,12 +13,12 @@ class MyRepositoryImpl @Inject constructor(
     override suspend fun getSelectTestService(
         branchId: String,
         ParentID: String,
-    ): List<SelectServiceDto>?{
+    ): List<SelectService>?{
         return api.getSelectTestService(branchId,ParentID)
     }
 
 
-    override suspend fun getDoctorsWithTime(branchId: String,parentId: String): List<DoctorDto>? {
+    override suspend fun getDoctorsWithTime(branchId: String,parentId: String): List<Doctor>? {
         return api.getDoctorsWithTime(branchId,parentId)
     }
 
@@ -39,13 +39,13 @@ class MyRepositoryImpl @Inject constructor(
         isaapt: Boolean,
         refid: String,
         DoctorServiceID: String,
-    ): List<BookTicketDto>? {
+    ): List<BookTicket>? {
         return api.getBookTicket(serviceID, isHandicap,isVip,languageID,appointmentCode,isaapt,refid,DoctorServiceID)
     }
 
     override suspend fun getTicket(
         QueueID: Int,language: Int
-    ): List<GetTicketDto>? {
+    ): List<GetTicket>? {
         return api.getTicket(QueueID, language)
 
     }
@@ -54,21 +54,21 @@ class MyRepositoryImpl @Inject constructor(
     override suspend fun getSelectServices(
         branchId: String,
         deptId: String,
-    ): List<SelectServiceDto>? {
+    ): List<SelectService>? {
         return api.getSelectServices(branchId, deptId)
     }
 
     override suspend fun getOptions(
         branchId: String,
         deptParentId: String,
-    ): List<SelectOptionDto>? {
+    ): List<SelectOption>? {
         return api.getOptions(branchId, deptParentId)
     }
 
     override suspend fun getTestServiceOptions(
         branchId: String,
         deptParentId: String,
-    ):  List<SelectOptionDto>? {
+    ):  List<SelectOption>? {
         return api.getTestServiceOptions(branchId, deptParentId)
     }
 
@@ -76,20 +76,20 @@ class MyRepositoryImpl @Inject constructor(
     override suspend fun getSelectDepartments(
         branchId: String,
         deptParentId: String,
-    ): List<SelectDepartmentDto>? {
-        return api.getSelectDepartments(branchId, deptParentId)
+    ): List<SelectDepartment>? {
+        return api.getDepartmentList(branchId, "en")
     }
 
 
-    override suspend fun getDepartments(): List<DepartmentDto>? {
+    override suspend fun getDepartments(): List<Department>? {
         return api.getDepartments()
     }
 
-    override suspend fun getCounters(branchId: String): List<CounterDto>? {
+    override suspend fun getCounters(branchId: String): List<Counter>? {
         return api.getCounters(branchId)
     }
 
-    override suspend fun getBranches(): List<BranchDto>? {
+    override suspend fun getBranches(): List<Branch>? {
         return api.getBranches()
     }
 

@@ -1,6 +1,6 @@
 package com.gicproject.salamkioskapp.domain.repository
 
-import com.gicproject.salamkioskapp.data.remote.dto.*
+import com.gicproject.salamkioskapp.domain.model.*
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -10,12 +10,12 @@ interface MyRepository {
     suspend fun getDoctorsWithTime(
         branchId: String,
         ParentID: String,
-    ): List<DoctorDto>?
+    ): List<Doctor>?
 
     suspend fun getSelectTestService(
         branchId: String,
         ParentID: String,
-    ): List<SelectServiceDto>?
+    ): List<SelectService>?
 
     suspend fun getCivilIdAppointment(civilId: String,serviceId: String): List<CheckAppt>?
 
@@ -31,9 +31,9 @@ interface MyRepository {
         isaapt: Boolean,
         refid: String,
         DoctorServiceID: String,
-    ): List<BookTicketDto>?
+    ): List<BookTicket>?
 
-    suspend fun getTicket(QueueID: Int,language: Int): List<GetTicketDto>?
+    suspend fun getTicket(QueueID: Int,language: Int): List<GetTicket>?
 
 
     suspend fun getSelectServices(
@@ -41,32 +41,32 @@ interface MyRepository {
         branchId: String,
         @Query("DeptParentID")
         deptId: String,
-    ): List<SelectServiceDto>?
+    ): List<SelectService>?
 
     suspend fun getOptions(
         branchId: String,
         deptParentId: String,
-    ): List<SelectOptionDto>?
+    ): List<SelectOption>?
 
     suspend fun getTestServiceOptions(
         branchId: String,
         deptParentId: String,
-    ): List<SelectOptionDto>?
+    ): List<SelectOption>?
 
     suspend fun getSelectDepartments(
         branchId: String,
         deptParentId: String,
-    ): List<SelectDepartmentDto>?
+    ): List<SelectDepartment>?
 
     suspend fun getDepartments(
-    ): List<DepartmentDto>?
+    ): List<Department>?
 
     suspend fun getCounters(
         branchId: String,
-    ): List<CounterDto>?
+    ): List<Counter>?
 
     suspend fun getBranches(
-    ): List<BranchDto>?
+    ): List<Branch>?
 
 
 }

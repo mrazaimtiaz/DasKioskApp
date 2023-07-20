@@ -2,8 +2,6 @@ package com.gicproject.dasdoctorcvapp.domain.use_case
 
 
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.BranchDto
-import com.gicproject.salamkioskapp.data.remote.dto.DepartmentDto
 import com.gicproject.salamkioskapp.domain.model.Branch
 import com.gicproject.salamkioskapp.domain.repository.MyRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,10 +18,10 @@ class GetBranches @Inject constructor(
             emit(Resource.Loading())
 
         //   var branches = repository.getBranches()
-           var branches = listOf(BranchDto(1,"Surgery Department"), BranchDto(2,"Medical"))
+           var branches = listOf(Branch(1,"Surgery Department"), Branch(2,"Medical"))
             if (!branches.isNullOrEmpty()) {
                 emit(Resource.Success(branches.map {
-                    it.toBranch()
+                    it
                 }))
             } else {
                 emit(Resource.Error("Empty Branch List."))

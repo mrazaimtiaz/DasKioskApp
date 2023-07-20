@@ -2,23 +2,38 @@ package com.gicproject.salamkioskapp.domain.model
 
 import com.google.gson.annotations.SerializedName
 
-data class SelectService(
-    var ServicesNameEN: String? = null, var ServicesNameAR: String? = null,
-    var ServicesPKID: Int? = null,
-    var ServicesTicketDesignerFKID: Int? = null, var ServicesDescription: String? = null,
-    var ServicesColor: String? = null,
-    var ServicesAllowSMS: Boolean? = null,
-    var BranchServicesServiceFKID: Int? = null,
-    var BranchServicesBranchFKID: Int? = null,
-   var ApptServiceID : Int? = null,
-    var ServicesParentID: Int? = null,
-    var ServicesLogo: String? = null,
-    var ServicesDescriptionAr: String? = null,
-    var ServicesBackGroundImage: String? = null,
-    var ServicesFontName: String? = null,
-    var ServicesFontSize: String? = null,
-    var ServicesFontStyle: String? = null,
-    var ServicesFontColor: String? = null,
-    var TicketDesignerFileName: String? = null
+
+data class SelectService (
+
+
+    @SerializedName("Services_PK_ID"   ) var ServicesPKID   : Int?    = null,
+    @SerializedName("Services_Name_EN" ) var ServicesNameEN : String? = null,
+    @SerializedName("Services_Name_AR" ) var ServicesNameAR : String? = null,
+    @SerializedName("Result"           ) var Result         : Int?    = null,
+    @SerializedName("Waiting"          ) var Waiting        : String? = null,
+    @SerializedName("Doctor_ID_SAP"    ) var DoctorIDSAP    : String? = null,
+    @SerializedName("Alert_Message"    ) var AlertMessage   : String? = null,
+    @SerializedName("Logo"             ) var Logo           : Int?    = null,
+    @SerializedName("CONS_FEE"         ) var CONSFEE        : Int?    = null,
+    @SerializedName("DOC_NAME"         ) var DOCNAME        : String? = null,
+    @SerializedName("Sapid"            ) var Sapid          : String? = null,
+    @SerializedName("sap_Logo"         ) var sapLogo        : String? = null,
+    @SerializedName("DOC_NAMEAR"       ) var DOCNAMEAR      : String? = null,
+    @SerializedName("sap_Waiting"      ) var sapWaiting     : String? = null,
+    @SerializedName("ATT_PHYS"         ) var ATTPHYS        : String? = null,
+    @SerializedName("nurse"            ) var nurse          : String? = null,
+    @SerializedName("sap_jobtitle"     ) var sapJobtitle    : String? = null,
+    @SerializedName("doctoridsap"      ) var doctoridsap    : String? = null,
+    @SerializedName("jobtitlear"       ) var jobtitlear     : String? = null,
+    @SerializedName("jobtitle"         ) var jobtitle       : String? = null,
+    @SerializedName("sapids"           ) var sapids         : String? = null,
+    @SerializedName("nursid"           ) var nursid         : String? = null,
+    @SerializedName("Orgid"            ) var Orgid          : String? = null
+
+
 )
+
+
+
+
 

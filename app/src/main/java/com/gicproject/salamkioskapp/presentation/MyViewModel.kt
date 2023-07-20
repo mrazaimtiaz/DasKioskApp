@@ -111,10 +111,8 @@ class MyViewModel @Inject constructor(
         get() = _isRefreshingSetting.asStateFlow()
 
 
-
     init {
         initPreference()
-
     }
 
     fun resetDepartmentScreen(){

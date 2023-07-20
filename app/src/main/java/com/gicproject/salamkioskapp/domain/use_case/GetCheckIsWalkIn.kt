@@ -2,7 +2,7 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.CheckIsWalkIn
+import com.gicproject.salamkioskapp.domain.model.CheckIsWalkIn
 import com.gicproject.salamkioskapp.domain.repository.MyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

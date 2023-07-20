@@ -2,8 +2,6 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.DepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.DoctorDto
 import com.gicproject.salamkioskapp.domain.model.Department
 import com.gicproject.salamkioskapp.domain.model.Doctor
 import com.gicproject.salamkioskapp.domain.repository.MyRepository
@@ -22,12 +20,12 @@ class GetDoctors @Inject constructor(
             emit(Resource.Loading())
 
        //   var doctors = repository.getDoctorsWithTime(branchId,parentId)
-            var doctors = listOf(DoctorDto("1","Dr Emad Al Hamar","Head Surgen - Dar ul Shifa","30 KD","01:00 PM - 01:30 PM","03-02-2023"),DoctorDto("1","Dr Emad","ENT","30 KD","01:00 PM - 01:30 PM","03-02-2023"),DoctorDto("1","Dr Emad","ENT","30 KD","01:00 PM - 01:30 PM","03-02-2023"),DoctorDto("1","Dr Emad","ENT","30 KD","01:00 PM - 01:30 PM","03-02-2023"),DoctorDto("1","Dr Emad","ENT","30 KD","01:00 PM - 01:30 PM","03-02-2023"),DoctorDto("1","Dr Emad","ENT","30 KD","01:00 PM - 01:30 PM","03-02-2023"),DoctorDto("1","Dr Emad","ENT","30 KD","01:00 PM - 01:30 PM","03-02-2023"),DoctorDto("1","Dr Wasim Hashim","Head Surgen - Dar ul Shifa","25 KD","02:00 AM - 02: 30 AM","03-02-2023"),)
+            var doctors = listOf(Doctor("1","Dr Emad Al Hamar","Head Surgen - Dar ul Shifa","30 KD","01:00 PM - 01:30 PM","03-02-2023"),)
 
             delay(500)
             if (!doctors.isNullOrEmpty()) {
                 emit(Resource.Success(doctors.map {
-                    it.toDoctor()
+                    it
                 }))
             } else {
                 emit(Resource.Error("Empty Department List."))

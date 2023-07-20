@@ -21,7 +21,7 @@ class GetCounters @Inject constructor(
             var counters = repository.getCounters(branchId)
             if (!counters.isNullOrEmpty()) {
                 emit(Resource.Success(counters.map {
-                    it.toCounter()
+                    it
                 }))
             } else {
                 emit(Resource.Error("Empty Counter List."))

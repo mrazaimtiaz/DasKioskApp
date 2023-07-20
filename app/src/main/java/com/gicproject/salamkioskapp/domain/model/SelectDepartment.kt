@@ -2,13 +2,16 @@ package com.gicproject.salamkioskapp.domain.model
 
 import com.google.gson.annotations.SerializedName
 
+
 data class SelectDepartment(
-    var DepartmentPKID: Int? = null,
-    var DepartmentNameEN: String? = null,
-    var DepartmentNameAR: String? = null,
-    var DepartmentLocation: String? = null,
-    var DepartmentDescriptions: String? = null,
-    var DepartmentParentID: Int? = null,
-    var DepartmentClinicID: Int? = null
-): java.io.Serializable
+    @SerializedName("Department_PK_ID"        ) var DepartmentPKID         : Int?    = null,
+    @SerializedName("Department_Name_EN"      ) var DepartmentNameEN       : String? = null,
+    @SerializedName("Department_Name_AR"      ) var DepartmentNameAR       : String? = null,
+    @SerializedName("Result"                  ) var Result                 : Int?    = null,
+    @SerializedName("Department_Descriptions" ) var DepartmentDescriptions : String? = null,
+    @SerializedName("SAP"                     ) var SAP                    : String? = null,
+    @SerializedName("Alert_Message"           ) var AlertMessage           : String? = null
+)
+
+
 

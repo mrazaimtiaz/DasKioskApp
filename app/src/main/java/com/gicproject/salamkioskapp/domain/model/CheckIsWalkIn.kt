@@ -1,4 +1,4 @@
-package com.gicproject.salamkioskapp.data.remote.dto
+package com.gicproject.salamkioskapp.domain.model
 
 import com.gicproject.salamkioskapp.domain.model.Department
 import com.google.gson.annotations.SerializedName

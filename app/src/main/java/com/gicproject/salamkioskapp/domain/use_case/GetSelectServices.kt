@@ -2,9 +2,6 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.DepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.SelectDepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.SelectServiceDto
 import com.gicproject.salamkioskapp.domain.model.Department
 import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.gicproject.salamkioskapp.domain.model.SelectService
@@ -77,7 +74,7 @@ class GetSelectServices @Inject constructor(
            var selectServices = repository.getSelectServices(branchId,deptId)
             if (!selectServices.isNullOrEmpty()) {
                 emit(Resource.Success(selectServices.map {
-                    it.toSelectService()
+                    it
                 }))
             } else {
                 emit(Resource.Error("Empty Service List."))

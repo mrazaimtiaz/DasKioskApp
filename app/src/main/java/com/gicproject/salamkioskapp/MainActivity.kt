@@ -334,6 +334,7 @@ class MainActivity : ComponentActivity(){
                             route = Screen.SelectOptionScreen.route
                         ) {
                             viewModel?.resetDepartmentScreen()
+                            viewModel?.resetInsertCivilIdScreen()
                             viewModel?.readCivilIdOff()
 
                             SelectOptionScreen(navController, viewModel!!)

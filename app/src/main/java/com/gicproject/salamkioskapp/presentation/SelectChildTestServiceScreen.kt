@@ -114,7 +114,7 @@ fun SelectChildTestServiceScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,) {
                     LazyVerticalGrid(
-                        modifier = Modifier.height((screenHeight / 1.75).dp),
+                        modifier = Modifier.height((screenHeight / 1.90).dp),
                         verticalArrangement = Arrangement.Center,
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         state = rememberLazyGridState(),
@@ -133,9 +133,9 @@ fun SelectChildTestServiceScreen(
                         }
 
                     }
-                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     Text("Total: ${total.value} KD ", fontSize = 35.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(0.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,

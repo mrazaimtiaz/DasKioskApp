@@ -2,8 +2,6 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.DepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.SelectDepartmentDto
 import com.gicproject.salamkioskapp.domain.model.Department
 import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.gicproject.salamkioskapp.domain.repository.MyRepository
@@ -24,10 +22,10 @@ class GetSelectDepartments @Inject constructor(
 
          //  var selectDepartments = repository.getSelectDepartments(branchId,deptParentId)
 
-            var selectDepartments = listOf(SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(1,"Surgery Department"),SelectDepartmentDto(2,"Medical"))
+            var selectDepartments = listOf(SelectDepartment(1,"Surgery Department"),SelectDepartment(1,"Surgery Department"))
             if (!selectDepartments.isNullOrEmpty()) {
                 emit(Resource.Success((selectDepartments).map {
-                    it.toSelectDepartment()
+                    it
                 }))
             } else {
                 emit(Resource.Error("Empty Department List."))

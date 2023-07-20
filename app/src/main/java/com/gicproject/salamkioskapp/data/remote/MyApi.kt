@@ -1,11 +1,12 @@
 package com.gicproject.salamkioskapp.data.remote
 
 
-import com.gicproject.salamkioskapp.data.remote.dto.*
+import com.gicproject.salamkioskapp.domain.model.*
 import retrofit2.Response
 import retrofit2.http.*
 
 interface MyApi {
+
 
     @GET("api/selectTest")
     suspend fun getSelectTestService(
@@ -13,7 +14,7 @@ interface MyApi {
         branchId: String,
         @Query("ParentID")
         ParentID: String,
-    ): List<SelectServiceDto>?
+    ): List<SelectService>?
 
 
     @GET("api/getDoctorsWithTime")
@@ -22,7 +23,7 @@ interface MyApi {
         branchId: String,
         @Query("ParentID")
         ParentID: String,
-    ): List<DoctorDto>?
+    ): List<Doctor>?
 
     @GET("api/getOptions")
     suspend fun getOptions(
@@ -30,7 +31,7 @@ interface MyApi {
         branchId: String,
         @Query("DeptParentID")
         DeptParentID: String,
-    ): List<SelectOptionDto>?
+    ): List<SelectOption>?
 
 
     @GET("api/getTestServiceOptions")
@@ -39,7 +40,7 @@ interface MyApi {
         branchId: String,
         @Query("DeptParentID")
         DeptParentID: String,
-    ): List<SelectOptionDto>?
+    ): List<SelectOption>?
 
 
     @POST("api/checkAppt")
@@ -74,10 +75,10 @@ interface MyApi {
         refid: String,
         @Query("DoctorServiceID")
         DoctorServiceID: String,
-    ): List<BookTicketDto>?
+    ): List<BookTicket>?
 
     @GET("api/GetTicket")
-    suspend fun getTicket(@Query("QueueID") QueueID: Int, @Query("language") language: Int): List<GetTicketDto>?
+    suspend fun getTicket(@Query("QueueID") QueueID: Int, @Query("language") language: Int): List<GetTicket>?
 
 
     @GET("api/GetServices")
@@ -86,30 +87,30 @@ interface MyApi {
         branchId: String,
         @Query("DeptParentID")
         deptId: String,
-    ): List<SelectServiceDto>?
+    ): List<SelectService>?
 
 
-    @GET("api/BranchDept")
-    suspend fun getSelectDepartments(
+    @GET("api/getdepartmentlist")
+    suspend fun getDepartmentList(
         @Query("branchid")
-        branchId: String,
-        @Query("DeptParentID")
-        DeptParentID: String,
-    ): List<SelectDepartmentDto>?
+        branchid: String,
+        @Query("lang")
+        lang: String,
+    ): List<SelectDepartment>?
 
     @GET("api/dept")
     suspend fun getDepartments(
-    ): List<DepartmentDto>?
+    ): List<Department>?
 
     @GET("api/Counters")
     suspend fun getCounters(
         @Query("branchid")
         branchId: String,
-    ): List<CounterDto>?
+    ): List<Counter>?
 
     @GET("api/getbranches")
     suspend fun getBranches(
-    ): List<BranchDto>?
+    ): List<Branch>?
 
 
 

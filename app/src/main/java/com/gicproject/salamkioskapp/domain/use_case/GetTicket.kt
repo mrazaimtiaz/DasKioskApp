@@ -3,8 +3,6 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 import android.util.Log
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.BookTicketDto
-import com.gicproject.salamkioskapp.data.remote.dto.GetTicketDto
 import com.gicproject.salamkioskapp.domain.repository.MyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -26,7 +24,7 @@ class GetTicket @Inject constructor(
            var getTicket = repository.getTicket(queueId,languageId,)
           //  var getTicket = listOf(GetTicketDto(""),GetTicketDto("Dr Emad",),)
             if (!getTicket.isNullOrEmpty()) {
-                emit(Resource.Success(getTicket[0].toGetTicket()))
+                emit(Resource.Success(getTicket[0]))
             } else {
                 emit(Resource.Error("Empty GetTicket List."))
             }

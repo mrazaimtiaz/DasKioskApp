@@ -2,8 +2,6 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.DepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.DoctorDto
 import com.gicproject.salamkioskapp.domain.model.Department
 import com.gicproject.salamkioskapp.domain.model.Doctor
 import com.gicproject.salamkioskapp.domain.model.ResultData
@@ -22,7 +20,7 @@ class GetPrintTicket @Inject constructor(
             emit(Resource.Loading())
 
          //  var locations = repository.getLocations()
-            var doctors = listOf(DoctorDto("1","Dr Emad","ENT","30 KD","01:00 AM","03-02-2023"),DoctorDto("1","Dr Wasim","ENT","25 KD","02:00 AM","03-02-2023"),)
+            var doctors = listOf(Doctor("1","Dr Emad","ENT","30 KD","01:00 AM","03-02-2023"),Doctor("1","Dr Wasim","ENT","25 KD","02:00 AM","03-02-2023"),)
             if (!doctors.isNullOrEmpty()) {
                 emit(Resource.Success(ResultData()))
             } else {

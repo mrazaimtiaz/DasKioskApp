@@ -2,9 +2,6 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.DepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.SelectDepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.SelectOptionDto
 import com.gicproject.salamkioskapp.domain.model.Department
 import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.gicproject.salamkioskapp.domain.model.SelectOption
@@ -26,10 +23,10 @@ class GetSelectOptions @Inject constructor(
 
           // var selectDepartments = repository.getOptions(branchId,deptParentId)
 
-          var selectDepartments = listOf(SelectOptionDto(1,"Consultation Visit","زيارة استشارية"),SelectOptionDto(2,"Services","خدمات"),)
+          var selectDepartments = listOf(SelectOption(1,"Consultation Visit","زيارة استشارية"),SelectOption(2,"Services","خدمات"),)
             if (!selectDepartments.isNullOrEmpty()) {
                 emit(Resource.Success(selectDepartments.map {
-                    it.toSelectOption()
+                    it
                 }))
             } else {
                 emit(Resource.Error("Empty Department List."))

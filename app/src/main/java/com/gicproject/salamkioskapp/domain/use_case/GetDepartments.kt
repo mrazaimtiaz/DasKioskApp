@@ -3,8 +3,6 @@ package com.gicproject.salamkioskapp.domain.use_case
 
 
 import com.gicproject.salamkioskapp.common.Resource
-import com.gicproject.salamkioskapp.data.remote.dto.DepartmentDto
-import com.gicproject.salamkioskapp.data.remote.dto.SelectDepartmentDto
 import com.gicproject.salamkioskapp.domain.model.Department
 import com.gicproject.salamkioskapp.domain.repository.MyRepository
 import kotlinx.coroutines.flow.Flow
@@ -22,11 +20,11 @@ class GetDepartments @Inject constructor(
             emit(Resource.Loading())
 
           //  var departments = repository.getDepartments()
-            var departments = listOf(DepartmentDto(1,"Surgery Department"), DepartmentDto(2,"Medical"))
+            var departments = listOf(Department(1,"Surgery Department"), Department(2,"Medical"))
 
             if (!departments.isNullOrEmpty()) {
                 emit(Resource.Success(departments.map {
-                    it.toDepartment()
+                    it
                 }))
             } else {
                 emit(Resource.Error("Empty Department List."))
