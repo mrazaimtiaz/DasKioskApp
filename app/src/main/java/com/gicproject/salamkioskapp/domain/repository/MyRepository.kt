@@ -7,6 +7,69 @@ import retrofit2.http.Query
 
 interface MyRepository {
 
+
+
+    suspend fun getDepartmentList(
+        branchid: String,
+        lang: String,
+    ): List<SelectDepartment>?
+
+    suspend fun checkCivilIDinSAP(
+        civilid: String,
+        lang: String,
+    ): List<Patient>?
+
+    suspend fun getdoctorlist(
+        deptid: String,
+        lang: String,
+    ): List<SelectService>?
+
+
+    suspend fun createConsultVisit(
+        patientid: String,
+        department: String,
+        nurseou: String,
+        att_phys: String,
+        appidlbl: String,
+        CIVILID: String,
+        PntName: String,
+        pntnamear: String,
+        TerminalId: String,
+        BranchID: String,
+        lang: String,
+    ): List<ConsultVisit>?
+
+
+    suspend fun createInvoice(
+        docsapid: String,
+        patientid: String,
+        caseid: String,
+        sequence: String,
+        Auth: String,
+        Cardtype: String,
+        PntName: String,
+        BranchID: String,
+        DocName: String,
+        transactionno: String,
+        authcode: String,
+        cardno: String,
+        recipts: String,
+        bankname: String,
+        MerchaintId: String,
+        TerminalId: String,
+        lang: String,
+    ): List<Invoice>?
+
+
+    suspend fun cancelVisit(
+        E_MOVEMNT_SEQNOlbl: String,
+        caseidlbl: String,
+        Servicelbl_id: String,
+        BranchID: String,
+        lang: String,
+    ): List<SelectDepartment>?
+
+
     suspend fun getDoctorsWithTime(
         branchId: String,
         ParentID: String,

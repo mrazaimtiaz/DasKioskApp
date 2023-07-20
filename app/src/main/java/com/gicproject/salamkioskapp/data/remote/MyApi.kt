@@ -2,10 +2,119 @@ package com.gicproject.salamkioskapp.data.remote
 
 
 import com.gicproject.salamkioskapp.domain.model.*
+import com.gicproject.salamkioskapp.emvnfccard.model.Service
 import retrofit2.Response
 import retrofit2.http.*
 
 interface MyApi {
+
+
+    @GET("api/getdepartmentlist")
+    suspend fun getDepartmentList(
+        @Query("branchid")
+        branchid: String,
+        @Query("lang")
+        lang: String,
+    ): List<SelectDepartment>?
+
+    @GET("api/CheckCivilIDinSAP")
+    suspend fun checkCivilIDinSAP(
+        @Query("civilid")
+        civilid: String,
+        @Query("lang")
+        lang: String,
+    ): List<Patient>?
+
+    @GET("api/getdoctorlist")
+    suspend fun getdoctorlist(
+        @Query("deptid")
+        deptid: String,
+        @Query("lang")
+        lang: String,
+    ): List<SelectService>?
+
+
+    @GET("api/CreateConsultVisit")
+    suspend fun createConsultVisit(
+        @Query("patientid")
+        patientid: String,
+        @Query("department")
+        department: String,
+        @Query("nurseou")
+        nurseou: String,
+        @Query("att_phys")
+        att_phys: String,
+        @Query("appidlbl")
+        appidlbl: String,
+        @Query("CIVILID")
+        CIVILID: String,
+        @Query("PntName")
+        PntName: String,
+        @Query("pntnamear")
+        pntnamear: String,
+        @Query("TerminalId")
+        TerminalId: String,
+        @Query("BranchID")
+        BranchID: String,
+        @Query("lang")
+        lang: String,
+    ): List<ConsultVisit>?
+
+
+    @GET("api/CreateInvoice")
+    suspend fun createInvoice(
+        @Query("docsapid")
+        docsapid: String,
+        @Query("patientid")
+        patientid: String,
+        @Query("caseid")
+        caseid: String,
+        @Query("sequence")
+        sequence: String,
+        @Query("Auth")
+        Auth: String,
+        @Query("Cardtype")
+        Cardtype: String,
+        @Query("PntName")
+        PntName: String,
+        @Query("BranchID")
+        BranchID: String,
+        @Query("DocName")
+        DocName: String,
+        @Query("transactionno")
+        transactionno: String,
+        @Query("authcode")
+        authcode: String,
+        @Query("cardno")
+        cardno: String,
+        @Query("recipts")
+        recipts: String,
+        @Query("bankname")
+        bankname: String,
+        @Query("MerchaintId")
+        MerchaintId: String,
+        @Query("TerminalId")
+        TerminalId: String,
+        @Query("lang")
+        lang: String,
+    ): List<Invoice>?
+
+
+
+
+    @GET("api/CancelVisit")
+    suspend fun cancelVisit(
+        @Query("E_MOVEMNT_SEQNOlbl")
+        E_MOVEMNT_SEQNOlbl: String,
+        @Query("caseidlbl")
+        caseidlbl: String,
+        @Query("Servicelbl_id")
+        Servicelbl_id: String,
+        @Query("BranchID")
+        BranchID: String,
+        @Query("lang")
+        lang: String,
+    ): List<SelectDepartment>?
 
 
     @GET("api/selectTest")
@@ -89,14 +198,6 @@ interface MyApi {
         deptId: String,
     ): List<SelectService>?
 
-
-    @GET("api/getdepartmentlist")
-    suspend fun getDepartmentList(
-        @Query("branchid")
-        branchid: String,
-        @Query("lang")
-        lang: String,
-    ): List<SelectDepartment>?
 
     @GET("api/dept")
     suspend fun getDepartments(

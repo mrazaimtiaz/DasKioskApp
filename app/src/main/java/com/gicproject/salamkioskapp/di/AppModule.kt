@@ -4,7 +4,6 @@ import android.content.Context
 import com.gicproject.salamkioskapp.data.remote.MyApi
 import com.gicproject.dasdoctorcvapp.domain.use_case.*
 import com.gicproject.salamkioskapp.common.Constants
-import com.gicproject.salamkioskapp.data.remote.dto.CheckIsWalkIn
 import com.gicproject.salamkioskapp.data.repository.DataStoreRepositoryImpl
 import com.gicproject.salamkioskapp.data.repository.MyRepositoryImpl
 import com.gicproject.salamkioskapp.domain.repository.DataStoreRepository
@@ -52,6 +51,12 @@ class AppModule {
         dataStoreRepository: DataStoreRepository
     ): MyUseCases {
         return MyUseCases(
+            getDepartmentList = GetDepartmentList(repository = repository),
+            checkCivilIDinSAP = CheckCivilIDinSAP(repository = repository),
+            getDoctorList = GetDoctorList(repository = repository),
+            createConsultVisit = CreateConsultVisit(repository = repository),
+            createInvoice = CreateInvoice(repository = repository),
+            cancelVisit = CancelVisit(repository = repository),
             getSelectOptions = GetSelectOptions(repository = repository),
             getDepartments = GetDepartments(repository = repository),
             getBranches = GetBranches(repository = repository),
@@ -65,7 +70,7 @@ class AppModule {
             getCheckIsWalkIn = GetCheckIsWalkIn(repository = repository),
             getCivilIdAppointment = GetCivilIdAppointment(repository = repository),
             getSelectTestServices = GetSelectTestServices(repository = repository),
-            getChildTestServices = GetChildTestServices(repository= repository)
+            getChildTestServices = GetChildTestServices(repository = repository)
         )
     }
 }

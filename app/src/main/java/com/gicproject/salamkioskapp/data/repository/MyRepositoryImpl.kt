@@ -10,6 +10,80 @@ class MyRepositoryImpl @Inject constructor(
     private val api: MyApi
 ) : MyRepository {
 
+
+    override suspend fun getDepartmentList(
+        branchid: String,
+        lang: String,
+    ): List<SelectDepartment>?  {
+        return api.getDepartmentList(branchid,lang)
+    }
+
+
+    override suspend fun checkCivilIDinSAP(
+        civilid: String,
+        lang: String,
+    ): List<Patient>? {
+        return api.checkCivilIDinSAP(civilid,lang)
+    }
+
+    override suspend fun getdoctorlist(
+        deptid: String,
+        lang: String,
+    ): List<SelectService>?{
+        return api.getdoctorlist(deptid,lang)
+    }
+
+
+    override suspend fun createConsultVisit(
+        patientid: String,
+        department: String,
+        nurseou: String,
+        att_phys: String,
+        appidlbl: String,
+        CIVILID: String,
+        PntName: String,
+        pntnamear: String,
+        TerminalId: String,
+        BranchID: String,
+        lang: String,
+    ): List<ConsultVisit>? {
+        return  api.createConsultVisit(patientid,department,nurseou,att_phys,appidlbl,CIVILID,PntName,pntnamear,TerminalId,BranchID,lang)
+    }
+
+
+    override suspend fun createInvoice(
+        docsapid: String,
+        patientid: String,
+        caseid: String,
+        sequence: String,
+        Auth: String,
+        Cardtype: String,
+        PntName: String,
+        BranchID: String,
+        DocName: String,
+        transactionno: String,
+        authcode: String,
+        cardno: String,
+        recipts: String,
+        bankname: String,
+        MerchaintId: String,
+        TerminalId: String,
+        lang: String,
+    ): List<Invoice>? {
+        return  api.createInvoice(docsapid,patientid,caseid,sequence,Auth,Cardtype,PntName,BranchID,DocName,transactionno,authcode,cardno,recipts,bankname,MerchaintId,TerminalId,lang)
+    }
+
+
+    override suspend fun cancelVisit(
+        E_MOVEMNT_SEQNOlbl: String,
+        caseidlbl: String,
+        Servicelbl_id: String,
+        BranchID: String,
+        lang: String,
+    ): List<SelectDepartment>? {
+        return  api.cancelVisit(E_MOVEMNT_SEQNOlbl,caseidlbl,Servicelbl_id,BranchID,lang,)
+    }
+
     override suspend fun getSelectTestService(
         branchId: String,
         ParentID: String,

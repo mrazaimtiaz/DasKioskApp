@@ -17,7 +17,9 @@ class Constants {
 
 const val BASE_URL = "http://192.168.20.160/SelfServiceAPI/"
      //  const val BASE_URL = "http://gickuwait-dev.com/APIQ/"
-
+     const val PRODUCTION = "PRODUCTION"
+        const val TEST = "TEST"
+         const val APPSTATUS = TEST
 
       const val LOGO = R.drawable.daslogo //sidra
        const val BACKGROUND_IMAGE = R.drawable.dasbackground //sidra
