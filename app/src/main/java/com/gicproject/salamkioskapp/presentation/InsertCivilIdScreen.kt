@@ -39,18 +39,18 @@ import androidx.navigation.NavController
 import com.gicproject.salamkioskapp.R
 import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Constants
+import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.gicproject.salamkioskapp.ui.theme.keypadBackground
 import com.gicproject.salamkioskapp.ui.theme.keypadText
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun InsertCivilIdScreen(
     isService: Boolean?,
+    isAppointment: Boolean?,
+    selectDepartment: SelectDepartment?,
     navController: NavController,
     viewModel: MyViewModel,
 ) {
@@ -58,6 +58,8 @@ fun InsertCivilIdScreen(
     val listState = rememberLazyListState()
 
     val second = remember { mutableStateOf(180) }
+
+    viewModel.setCivilIdValues(isService,isAppointment,selectDepartment)
 
 
 
@@ -126,7 +128,7 @@ fun InsertCivilIdScreen(
                 verticalArrangement = Arrangement.Center
             ) {
 
-                HeaderDesign(  "Appointment","موعد",navController)
+                HeaderDesign( if(isAppointment == true)  "Appointment" else "Without Appointment","بدون موعد",navController)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -145,9 +147,7 @@ fun InsertCivilIdScreen(
 
                     }
                 }
-                  // PayKnetAnimation()
-                var fontEnglish = FontFamily(Font(R.font.questrial_regular))
-                var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
+                  // PayKnetAnimation()=
                 Column(modifier = Modifier
                     .fillMaxHeight()
                     .padding(bottom=100.dp)
@@ -155,9 +155,9 @@ fun InsertCivilIdScreen(
                    Column(modifier = Modifier
                        .fillMaxWidth()
                        .padding(25.dp)) {
-                       Text("Insert Mobile Number or Civil ID of Patient",modifier = Modifier.fillMaxWidth(), fontSize = 27.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, style = TextStyle(fontFamily = fontEnglish))
+                       Text("Insert Mobile Number or Civil ID of Patient",modifier = Modifier.fillMaxWidth(), fontSize = 27.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, style = TextStyle(fontFamily = Constants.FontEnglish))
                        Spacer(modifier = Modifier.height(10.dp))
-                       Text("أدخل البطاقة المدنية للمريض أو رقم الهاتف المحمول" , modifier = Modifier.fillMaxWidth(), fontSize = 27.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, style = TextStyle(fontFamily = fontArabic))
+                       Text("أدخل البطاقة المدنية للمريض أو رقم الهاتف المحمول" , modifier = Modifier.fillMaxWidth(), fontSize = 27.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, style = TextStyle(fontFamily = Constants.FontArabic))
                    }
 
                     Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
@@ -320,7 +320,6 @@ fun InsertCivilIdScreen(
                                     }, isIconBack = true)
                                     Spacer(modifier = Modifier.width(10.dp))
                                 }
-
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.Center,
@@ -328,11 +327,17 @@ fun InsertCivilIdScreen(
                                 ) {
                                     Button(
                                         onClick = {
+                                            if(isService == false){
+                                                if(Constants.APPSTATUS == Constants.TEST){
+                                                        Toast.makeText(
+                                                            context,"selectDepartmentId:${selectDepartment?.DepartmentPKID} 233333333333 isservice: $isService isAppointment: $isAppointment ",
+                                                            Toast.LENGTH_LONG).show()
 
-                                            if(isService == true){
-                                                navController.navigate(Screen.SelectTestServiceScreen.route)
-                                            }else{
-                                                navController.navigate(Screen.DoctorPayScreen.route)
+
+                                                    viewModel.onEvent(MyEvent.CheckCivilIDInSap("233333333333",isAppointment))
+                                                }else{
+                                                    viewModel.onEvent(MyEvent.CheckCivilIDInSap(viewModel.textCivilId.value,isAppointment))
+                                                }
                                             }
                                           /*  if(viewModel.textCivilId.value.isNotBlank()){
                                                 if(!viewModel.stateInsertCivilId.value.isLoading){
@@ -359,8 +364,8 @@ fun InsertCivilIdScreen(
                                         )
                                         Spacer(modifier = Modifier.width(10.dp))
                                         Row() {
-                                            Text("Submit  ", fontSize = 20.sp, fontFamily = fontEnglish, fontWeight = FontWeight.Bold)
-                                            Text("ارسل", fontSize = 20.sp, fontFamily = fontArabic, fontWeight = FontWeight.Bold)
+                                            Text("Submit  ", fontSize = 20.sp, fontFamily = Constants.FontEnglish, fontWeight = FontWeight.Bold)
+                                            Text("ارسل", fontSize = 20.sp, fontFamily = Constants.FontArabic, fontWeight = FontWeight.Bold)
 
                                         }
                                         Spacer(modifier = Modifier.width(10.dp))
@@ -459,7 +464,16 @@ fun InsertCivilIdScreen(
         }
 
         if (state.success.isNotBlank()) {
-            navController.popBackStack(Screen.SelectOptionScreen.route, false)
+            LaunchedEffect(key1 = true) {
+                navController.currentBackStackEntry?.savedStateHandle?.set(
+                    Constants.STATE_PATIENT, state.patient
+                )
+                navController.currentBackStackEntry?.savedStateHandle?.set(
+                    Constants.STATE_SELECT_DEPARTMENT, selectDepartment
+                )
+                navController.navigate(Screen.SelectDoctorScreen.route)
+            }
+
         }
         if (state.isLoading) {
             Column(

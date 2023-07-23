@@ -117,7 +117,7 @@ fun InsertKnetScreen(
                 Spacer(modifier = Modifier.height(60.dp))
                 SubmitButton({
                     navController.popBackStack(Screen.SelectOptionScreen.route, false)
-                }, "Pay")
+                }, "Pay","ادفع")
             }
 
 

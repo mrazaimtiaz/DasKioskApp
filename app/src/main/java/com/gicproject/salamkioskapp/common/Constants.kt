@@ -1,5 +1,7 @@
 package com.gicproject.salamkioskapp.common
 
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.gicproject.salamkioskapp.R
 
@@ -15,7 +17,7 @@ class Constants {
       //alsalam
       //test
 
-const val BASE_URL = "http://192.168.20.160/SelfServiceAPI/"
+const val BASE_URL = "http://192.168.20.160/"
      //  const val BASE_URL = "http://gickuwait-dev.com/APIQ/"
      const val PRODUCTION = "PRODUCTION"
         const val TEST = "TEST"
@@ -51,9 +53,15 @@ const val BASE_URL = "http://192.168.20.160/SelfServiceAPI/"
       const val KEY_BRANCH_NAME = "branch name"
       const val KEY_BRANCH_NAME_AR = "branch name ar"
 
+          val FontEnglish = FontFamily(Font(R.font.questrial_regular))
+          val FontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
+
         const val KEY_AUTO_DETECT_CARD = "auto detect card"
         const val STATE_EXTRA = "state extrs"
+        const val STATE_IS_APPOINTMENT = "STATE_IS_APPOINTMENT"
         const val STATE_SELECT_DEPARTMENT= "STATE_SELECT_DEPARTMENT"
+        const val STATE_PATIENT= "STATE_PATIENT"
+        const val STATE_SERVICE= "STATE_SERVICE"
         const val STATE_MSG_EN = "state msg en"
         const val STATE_MSG_AR = "state msg ar"
         const val STATE_ANSWER = "answer"

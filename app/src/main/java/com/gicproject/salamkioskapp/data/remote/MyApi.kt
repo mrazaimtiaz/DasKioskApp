@@ -9,7 +9,7 @@ import retrofit2.http.*
 interface MyApi {
 
 
-    @GET("api/getdepartmentlist")
+    @GET("SelfServiceAPI/api/getdepartmentlist")
     suspend fun getDepartmentList(
         @Query("branchid")
         branchid: String,
@@ -17,7 +17,7 @@ interface MyApi {
         lang: String,
     ): List<SelectDepartment>?
 
-    @GET("api/CheckCivilIDinSAP")
+    @GET("SelfServiceAPI/api/CheckCivilIDinSAP")
     suspend fun checkCivilIDinSAP(
         @Query("civilid")
         civilid: String,
@@ -25,7 +25,7 @@ interface MyApi {
         lang: String,
     ): List<Patient>?
 
-    @GET("api/getdoctorlist")
+    @GET("SelfServiceAPI/api/getdoctorlist")
     suspend fun getdoctorlist(
         @Query("deptid")
         deptid: String,
@@ -34,7 +34,7 @@ interface MyApi {
     ): List<SelectService>?
 
 
-    @GET("api/CreateConsultVisit")
+    @GET("SelfServiceAPI/api/CreateConsultVisit")
     suspend fun createConsultVisit(
         @Query("patientid")
         patientid: String,
@@ -61,7 +61,7 @@ interface MyApi {
     ): List<ConsultVisit>?
 
 
-    @GET("api/CreateInvoice")
+    @GET("SelfServiceAPI/api/CreateInvoice")
     suspend fun createInvoice(
         @Query("docsapid")
         docsapid: String,
@@ -102,7 +102,7 @@ interface MyApi {
 
 
 
-    @GET("api/CancelVisit")
+    @GET("SelfServiceAPI/api/CancelVisit")
     suspend fun cancelVisit(
         @Query("E_MOVEMNT_SEQNOlbl")
         E_MOVEMNT_SEQNOlbl: String,
@@ -117,7 +117,7 @@ interface MyApi {
     ): List<SelectDepartment>?
 
 
-    @GET("api/selectTest")
+    @GET("SelfServiceAPI/api/selectTest")
     suspend fun getSelectTestService(
         @Query("branchid")
         branchId: String,
@@ -126,7 +126,7 @@ interface MyApi {
     ): List<SelectService>?
 
 
-    @GET("api/getDoctorsWithTime")
+    @GET("SelfServiceAPI/api/getDoctorsWithTime")
     suspend fun getDoctorsWithTime(
         @Query("branchid")
         branchId: String,
@@ -134,7 +134,7 @@ interface MyApi {
         ParentID: String,
     ): List<Doctor>?
 
-    @GET("api/getOptions")
+    @GET("SelfServiceAPI/api/getOptions")
     suspend fun getOptions(
         @Query("branchid")
         branchId: String,
@@ -143,7 +143,7 @@ interface MyApi {
     ): List<SelectOption>?
 
 
-    @GET("api/getTestServiceOptions")
+    @GET("SelfServiceAPI/api/getTestServiceOptions")
     suspend fun getTestServiceOptions(
         @Query("branchid")
         branchId: String,
@@ -152,7 +152,7 @@ interface MyApi {
     ): List<SelectOption>?
 
 
-    @POST("api/checkAppt")
+    @POST("SelfServiceAPI/api/checkAppt")
     suspend fun getCivilIdAppointment(
         @Query("civilID")
         civilID: String,
@@ -160,13 +160,13 @@ interface MyApi {
         serviceID: String,
     ): List<CheckAppt>?
 
-    @POST("api/Checkwalkinappt")
+    @POST("SelfServiceAPI/api/Checkwalkinappt")
     suspend fun checkIsWalkIn(
         @Query("ServiceID")
         serviceId: String,
     ): List<CheckIsWalkIn>?
 
-    @POST("api/BookTicket")
+    @POST("SelfServiceAPI/api/BookTicket")
     suspend fun getBookTicket(
         @Query("serviceID")
         serviceID: String,
@@ -186,11 +186,11 @@ interface MyApi {
         DoctorServiceID: String,
     ): List<BookTicket>?
 
-    @GET("api/GetTicket")
+    @GET("SelfServiceAPI/api/GetTicket")
     suspend fun getTicket(@Query("QueueID") QueueID: Int, @Query("language") language: Int): List<GetTicket>?
 
 
-    @GET("api/GetServices")
+    @GET("SelfServiceAPI/api/GetServices")
     suspend fun getSelectServices(
         @Query("branchid")
         branchId: String,
@@ -199,17 +199,17 @@ interface MyApi {
     ): List<SelectService>?
 
 
-    @GET("api/dept")
+    @GET("screensapi/api/dept")
     suspend fun getDepartments(
     ): List<Department>?
 
-    @GET("api/Counters")
+    @GET("screensapi/api/Counters")
     suspend fun getCounters(
         @Query("branchid")
         branchId: String,
     ): List<Counter>?
 
-    @GET("api/getbranches")
+    @GET("screensapi/api/Branches")
     suspend fun getBranches(
     ): List<Branch>?
 

@@ -1,5 +1,6 @@
 package com.gicproject.salamkioskapp.presentation
 
+import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -33,7 +34,9 @@ import androidx.navigation.NavController
 import com.gicproject.salamkioskapp.R
 import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Constants
+import com.gicproject.salamkioskapp.domain.model.Patient
 import com.gicproject.salamkioskapp.domain.model.SelectDepartment
+import com.gicproject.salamkioskapp.domain.model.SelectService
 import com.gicproject.salamkioskapp.ui.theme.DarkBlueText
 import com.gicproject.salamkioskapp.ui.theme.DarkGreyText
 import com.gicproject.salamkioskapp.ui.theme.LightGreyText
@@ -48,6 +51,8 @@ import com.skydoves.balloon.compose.Balloon
 import com.skydoves.balloon.compose.BalloonWindow
 import com.skydoves.balloon.compose.rememberBalloonBuilder
 import kotlinx.coroutines.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 
 
@@ -55,6 +60,7 @@ import java.time.format.TextStyle
 @Composable
 fun SelectDoctorScreen(
     selectDepartment: SelectDepartment?,
+    patient: Patient?,
     navController: NavController,
     viewModel: MyViewModel,
 ) {
@@ -135,11 +141,9 @@ fun SelectDoctorScreen(
                         )
 
                         Spacer(modifier = Modifier.width(20.dp))
-                        val fontEnglish = FontFamily(Font(R.font.questrial_regular))
-                        val fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
                         Row(){
-                            Text("Back  ", fontSize = 25.sp, fontFamily = fontEnglish)
-                            Text("عوده", fontSize = 25.sp, fontFamily = fontArabic)
+                            Text("Back  ", fontSize = 25.sp, fontFamily = Constants.FontEnglish)
+                            Text("عوده", fontSize = 25.sp, fontFamily = Constants.FontArabic)
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -238,17 +242,22 @@ fun SelectDoctorScreen(
                                 }
                             ) { balloonWindow ->
                                 DoctorInfoTimeNew(
-                                    state.doctors[index].nameEn ?: "",
-                                    state.doctors[index].time ?: "",
-                                    state.doctors[index].date ?: "",
-                                    state.doctors[index].departmentEn ?: "",
-                                    state.doctors[index].price ?: "",
-                                    Constants.DOCTOR_SAMPLE_IMAGE,
+                                    state.doctors[index],
                                     navController,
                                     balloonWindow
                                 ) {
                                     if (!state.isLoading) {
-                                        navController.navigate(Screen.DoctorPayScreen.route)
+                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                            Constants.STATE_PATIENT, patient
+                                        )
+                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                            Constants.STATE_SELECT_DEPARTMENT, selectDepartment
+                                        )
+
+                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                            Constants.STATE_SERVICE,   state.doctors[index]
+                                        )
+                                        navController.navigate(Screen.AppointmentInfoScreen.route)
                                     }
                                 }
 
@@ -423,23 +432,16 @@ fun DoctorInfoTime(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DoctorInfoTimeNew(
-    name: String,
-    time: String,
-    date: String,
-    deptName: String,
-    price: String,
-    image: Int,
+    selectService: SelectService,
     navController: NavController,
     ballonWindow: BalloonWindow,
     onClick: () -> Unit,
 ) {
 
 
-    var fontEnglish = FontFamily(Font(R.font.questrial_regular))
-    var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
     
     Card(elevation = 4.dp,
-        shape = RoundedCornerShape(25.dp)) {
+        shape = RoundedCornerShape(25.dp),) {
         Spacer(modifier = Modifier.width(5.dp))
         Row(modifier = Modifier
             .fillMaxWidth()
@@ -448,25 +450,32 @@ fun DoctorInfoTimeNew(
             }, )
         {
             Column() {
-                Image(
+               /* Image(
                     painter = painterResource(id = image),
                     contentDescription = "",
                     modifier = Modifier
                         .width(120.dp)
                         .height(120.dp)
-                )
+                )*/
             }
             Spacer(modifier = Modifier.width(20.dp))
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().padding(end=15.dp)) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
                     Text(
-                        "$name",
-                        style = androidx.compose.ui.text.TextStyle(fontFamily = fontEnglish),
+                        "${selectService.DOCNAME}",
+                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),
                         color = DarkBlueText,
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    IconButton(onClick = {
+                    Text(
+                        "${selectService.DOCNAMEAR}",
+                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontArabic),
+                        color = DarkBlueText,
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    /*IconButton(onClick = {
                         jobBallon?.cancel()
                         ballonWindow.showAlignTop()
                         jobBallon = CoroutineScope(Dispatchers.Main).launch {
@@ -480,32 +489,67 @@ fun DoctorInfoTimeNew(
                             modifier = Modifier.size(25.dp)
                         )
 
-                    }
+                    }*/
                 }
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text("$deptName",
-                        style = androidx.compose.ui.text.TextStyle(fontFamily = fontEnglish),
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
+                    Text("${selectService.jobtitle}",
+                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),
+                        color = LightGreyText, fontSize = 22.sp)
+                    Text("${selectService.jobtitlear}",
+                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),
                         color = LightGreyText, fontSize = 22.sp)
 
+                }
+
+
+
                 Spacer(modifier = Modifier.height(5.dp))
-                    Text(
-                        "$time",
-                        color = DarkGreyText,
-                        style = androidx.compose.ui.text.TextStyle(fontFamily = fontEnglish),
-                        fontSize = 27.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val dateFormatter =  DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        val now = LocalDateTime.now()
+                        var currentDate = now?.format(dateFormatter)
+                        Text(
+                            "$currentDate",
+                            color = DarkGreyText,
+                            style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),
+                            fontSize = 27.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+                        val now = LocalDateTime.now()
+                        var  currentTime = now.format(timeFormatter)
+                        // Update the time every second
+
+                        Text(
+                            currentTime,
+                            color = DarkGreyText,
+                            style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),
+                            fontSize = 27.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                }
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+
+
+
+
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
                     Text(
-                        "$price",
-                        style = androidx.compose.ui.text.TextStyle(fontFamily = fontEnglish,
+                        "${selectService.CONSFEE} KD",
+                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish,
                             color = LightGreyText,),
-                        color = Color.LightGray,
                         fontSize = 27.sp,
                         fontWeight = FontWeight.Bold
                     )
-
-
                     Chip(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         colors = ChipDefaults.chipColors(backgroundColor = DarkBlueText),

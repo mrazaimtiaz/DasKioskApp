@@ -183,7 +183,7 @@ fun SelectSingleServiceScreen(
                 ) {
                     items(state.services.size) { index ->
 
-                        if(state.services[index].ServicesLogo != null)
+                        if(state.services[index].Logo != null)
                             CustomButton(onClick = {
                                 if(!viewModel.stateSelectService.value.isLoading){
                                     viewModel.enableServiceLoading()
@@ -201,7 +201,7 @@ fun SelectSingleServiceScreen(
                                                 isaapt = false,
                                                 refid = "-1",
                                                 DoctorServiceID = "-1",
-                                                ticketDesignId = state.services[index].ServicesTicketDesignerFKID.toString()
+                                                ticketDesignId = state.services[index].doctoridsap.toString()
                                             )
                                         )
 
@@ -230,7 +230,7 @@ fun SelectSingleServiceScreen(
                                             isaapt = false,
                                             refid = "-1",
                                             DoctorServiceID = "-1",
-                                            ticketDesignId = state.services[index].ServicesTicketDesignerFKID.toString()
+                                            ticketDesignId = state.services[index].doctoridsap.toString()
                                         )
                                     )
 

@@ -39,7 +39,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gicproject.salamkioskapp.common.Constants
+import com.gicproject.salamkioskapp.domain.model.Patient
 import com.gicproject.salamkioskapp.domain.model.SelectDepartment
+import com.gicproject.salamkioskapp.domain.model.SelectService
 import com.gicproject.salamkioskapp.presentation.*
 import com.gicproject.salamkioskapp.ui.theme.SalamKioskAppTheme
 import com.gicproject.salamkioskapp.utils.PermissionUtil
@@ -377,12 +379,36 @@ class MainActivity : ComponentActivity(){
                             route = Screen.SelectDoctorScreen.route
                         ) {
                             viewModel?.readCivilIdOff()
-                            var selectDepartment =
+                            viewModel?.resetInsertCivilIdScreen()
+                            val selectDepartment =
                                 navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
                                     Constants.STATE_SELECT_DEPARTMENT
                                 ) //d
+                            val patient =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Patient?>(
+                                    Constants.STATE_PATIENT
+                                )
                             Log.d(TAG, "onCreate: SelectDoctorScreen main ${selectDepartment?.DepartmentPKID}")
-                            SelectDoctorScreen(selectDepartment,navController, viewModel!!)
+                            SelectDoctorScreen(selectDepartment,patient,navController, viewModel!!)
+                        }
+                        composable(
+                            route = Screen.AppointmentInfoScreen.route
+                        ) {
+                            viewModel?.readCivilIdOff()
+                            val selectDepartment =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
+                                    Constants.STATE_SELECT_DEPARTMENT
+                                )
+                            val patient =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Patient?>(
+                                    Constants.STATE_PATIENT
+                                )
+
+                            val selectService =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectService?>(
+                                    Constants.STATE_SERVICE
+                                )
+                            AppointmentInfoScreen(selectDepartment,patient,selectService,navController, viewModel!!)
                         }
                         composable(
                             route = Screen.DoctorPayScreen.route
@@ -404,7 +430,15 @@ class MainActivity : ComponentActivity(){
                                 navController.previousBackStackEntry?.savedStateHandle?.get<Boolean?>(
                                     Constants.STATE_EXTRA
                                 )
-                            InsertCivilIdScreen(extra, navController, viewModel!!)
+                            var isAppointment =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Boolean?>(
+                                    Constants.STATE_IS_APPOINTMENT
+                                )
+                            var selectDepartment =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
+                                    Constants.STATE_SELECT_DEPARTMENT
+                                ) //double sidra and hadi app
+                            InsertCivilIdScreen(extra,isAppointment,selectDepartment, navController, viewModel!!)
                         }
                         composable(
                             route = Screen.SelectTestServiceScreen.route

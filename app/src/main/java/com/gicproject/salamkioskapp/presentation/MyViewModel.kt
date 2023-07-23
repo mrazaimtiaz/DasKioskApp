@@ -17,12 +17,12 @@ import com.gicproject.salamkioskapp.common.Constants.Companion.NO_BRANCH_SELECTE
 import com.gicproject.salamkioskapp.common.Constants.Companion.NO_COUNTER_SELECTED
 import com.gicproject.salamkioskapp.common.Constants.Companion.NO_DEPARTMENT_SELECTED
 import com.gicproject.salamkioskapp.common.Resource
+import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.gicproject.salamkioskapp.domain.model.SelectService
 import com.gicproject.salamkioskapp.domain.repository.DataStoreRepository
 import com.gicproject.salamkioskapp.domain.use_case.MyUseCases
 import com.gicproject.salamkioskapp.pacicardlibrary.PaciCardReaderAbstract
 import com.gicproject.salamkioskapp.pacicardlibrary.PaciCardReaderMAV3
-import com.github.devnied.emvnfccard.iso7816emv.*
 import com.identive.libs.SCard
 import com.identive.libs.WinDefs
 import com.szsicod.print.escpos.PrinterAPI
@@ -89,6 +89,9 @@ class MyViewModel @Inject constructor(
 
     private val _stateInsertCivilId = mutableStateOf(InsertCivilIdScreenState())
     val stateInsertCivilId: State<InsertCivilIdScreenState> = _stateInsertCivilId
+
+    private val _stateAppointmentInfo = mutableStateOf(AppointmentInfoState())
+    val stateAppointmentInfo: State<AppointmentInfoState> = _stateAppointmentInfo
 
 
     private val _stateSelectService = mutableStateOf(SelectServiceScreenState())
@@ -453,30 +456,24 @@ class MyViewModel @Inject constructor(
                 }
 
             }
-            is MyEvent.GetCivilIdAppointment -> {
-                    surveyUseCases.getCivilIdAppointment(event.civilId,selectService.ServicesPKID.toString()).onEach { result ->
+            is MyEvent.CheckCivilIDInSap -> {
+                    surveyUseCases.checkCivilIDinSAP(event.civilId).onEach { result ->
                         when (result) {
                             is Resource.Success -> {
                                 result.data?.let {
                                     viewModelScope.launch {
                                         Log.d("TAG", "InsertCivilIdScreen: called isLoading1")
-                                        if(result.data.ApptExist == true){
-                                            onEvent(MyEvent.GetBookTicket(
-                                                isCivilIdPage = true,
-                                                serviceID =  selectService.ApptServiceID.toString(),//selectService.ServicesPKID.toString()
-                                                isHandicap = false,
-                                                isVip = false,
-                                                languageID = "0",
-                                                appointmentCode = "-1",
-                                                isaapt = false,
-                                                refid = "-1",
-                                                DoctorServiceID = selectService.ServicesPKID.toString(),
-                                                ticketDesignId = selectService.ServicesTicketDesignerFKID.toString()
-                                            ))
+                                        if(result.data.Result == 1){
+                                            _stateInsertCivilId.value = InsertCivilIdScreenState(
+                                                success = "success",
+                                                patient = it,
+                                                error = "",
+                                                isLoading = false,
+                                            )
                                         }else{
                                             textCivilId.value = ""
                                             _stateInsertCivilId.value = InsertCivilIdScreenState(
-                                                error = "No Appointment Found - لم يتم العثور على موعد",
+                                                error = "No Date Found For this Patient. Please Go to Reception - لم يتم العثور على تاريخ لهذا المريض. من فضلك اذهب إلى الاستقبال",
                                                 isLoading = false,
                                             )
                                         }
@@ -514,7 +511,7 @@ class MyViewModel @Inject constructor(
                                         if(result.data.IsAvailable == true){
 
                                             showDialogService.value = true
-                                            selectService.ApptServiceID = result.data.ApptServiceID
+                                            selectService.ServicesNameEN = result.data.ApptServiceID.toString()
                                             _stateSelectService.value =  _stateSelectService.value.copy(isLoading = false)
                                         }else{
                                             onEvent(MyEvent.GetBookTicket(
@@ -527,7 +524,7 @@ class MyViewModel @Inject constructor(
                                                 isaapt = false,
                                                 refid = "-1",
                                                 DoctorServiceID = "-1",
-                                                ticketDesignId = selectService.ServicesTicketDesignerFKID.toString()
+                                                ticketDesignId = selectService.ServicesNameEN.toString()
                                             ))
                                         }
 
@@ -636,7 +633,7 @@ class MyViewModel @Inject constructor(
 
             }
             is MyEvent.GetSelectOptions -> {
-                if(_selectedBranchId.value.isNotEmpty() && _selectedDepartmentId.value.isNotEmpty()){
+                if(_selectedBranchId.value.isNotEmpty() ){
                     surveyUseCases.getSelectOptions(_selectedBranchId.value,_selectedDepartmentId.value).onEach { result ->
                         when (result) {
                             is Resource.Success -> {
@@ -677,7 +674,7 @@ class MyViewModel @Inject constructor(
 
             }
             is MyEvent.GetSelectTestServices -> {
-                if(_selectedBranchId.value.isNotEmpty() && _selectedDepartmentId.value.isNotEmpty()){
+                if(_selectedBranchId.value.isNotEmpty() ){
                     surveyUseCases.getSelectTestServices(_selectedBranchId.value,_selectedDepartmentId.value).onEach { result ->
                         when (result) {
                             is Resource.Success -> {
@@ -716,8 +713,8 @@ class MyViewModel @Inject constructor(
 
             }
             is MyEvent.GetSelectDepartments -> {
-                if(_selectedBranchId.value.isNotEmpty() && _selectedDepartmentId.value.isNotEmpty()){
-                    surveyUseCases.getSelectDepartments(_selectedBranchId.value,_selectedDepartmentId.value).onEach { result ->
+                if(_selectedBranchId.value.isNotEmpty()){
+                    surveyUseCases.getDepartmentList(_selectedBranchId.value).onEach { result ->
                         when (result) {
                             is Resource.Success -> {
                                 result.data?.let {
@@ -796,9 +793,53 @@ class MyViewModel @Inject constructor(
                     }.launchIn(viewModelScope)
                 }
             }
+            is MyEvent.CreateConsultVisit -> {
+                if(_selectedBranchId.value.isNotEmpty() ) {
+                    surveyUseCases.createConsultVisit(
+                        event.patient?.Patientid ?: "",
+                        event.service?.Orgid ?: "",
+                        event.service?.nursid ?: "",
+                        event.service?.ATTPHYS ?: "",
+                        "",
+                        event.patient?.CIVILID ?: "",
+                        event.patient?.Patientname ?: "",
+                        event.patient?.PatientnameAr ?: "",
+                        "000",
+                        _selectedBranchId.value,
+                    ).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                result.data?.let {
+                                    viewModelScope.launch {
+                                        _stateAppointmentInfo.value =
+                                            AppointmentInfoState(consultVisit = it)
+                                    }
+                                }
+                            }
+                            is Resource.Error -> {
+                                _stateAppointmentInfo.value = _stateAppointmentInfo.value.copy(
+                                    error = result.message ?: "An unexpected error occurred",
+                                    isLoading = false, isApiLoading = false
+                                )
+                                // delay(2000)
+                                //  onEvent(MyEvent.GetDepartment)
+                            }
+                            is Resource.Loading -> {
+                                _stateAppointmentInfo.value = AppointmentInfoState(isLoading = true, isApiLoading = true)
+                            }
+                        }
+                    }.launchIn(viewModelScope)
+                }else{
+                    _stateAppointmentInfo.value = _stateAppointmentInfo.value.copy(
+                        error =  "Select Branch",
+                        isLoading = false,
+                        isApiLoading = false,
+                    )
+                }
+            }
             is MyEvent.GetDoctor -> {
-                if(_selectedBranchId.value.isNotEmpty() && _selectedDepartmentId.value.isNotEmpty()) {
-                    surveyUseCases.getDoctors(event.parentId,_selectedBranchId.value).onEach { result ->
+                if(_selectedBranchId.value.isNotEmpty() ) {
+                    surveyUseCases.getDoctorList(event.parentId).onEach { result ->
                         when (result) {
                             is Resource.Success -> {
                                 result.data?.let {
@@ -867,6 +908,12 @@ class MyViewModel @Inject constructor(
         mPrinter = printer
         mContext = context
     }
+
+   var isService: Boolean? = null
+    var isAppointment: Boolean? = null
+    var selectDepartment: SelectDepartment? = null
+
+
 
     fun funcPrinterImage(bitmap: Bitmap,isCivilIdPage: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -1068,6 +1115,11 @@ class MyViewModel @Inject constructor(
 
         onCardEvent(scard, baseContext)
     }
+    fun setCivilIdValues(mIsService: Boolean?, mIsAppointment: Boolean?, mSelectDepartment: SelectDepartment?){
+        isService = mIsService
+        isAppointment =mIsAppointment
+        selectDepartment =mSelectDepartment
+    }
     fun onCardEvent(scard: SCard, baseContext: Context) {
 
         if(!readers.isNullOrEmpty()){
@@ -1200,37 +1252,37 @@ class MyViewModel @Inject constructor(
                                     e.printStackTrace()
                                 }
                                 try {
-                                    firstNameText = paci.GetData("1", "LATIN-NAME-1")
+                                  //  firstNameText = paci.GetData("1", "LATIN-NAME-1")
                                 } catch (e: java.lang.Exception) {
                                     e.printStackTrace()
                                 }
                                 try {
-                                    secondNameText = paci.GetData("1", "LATIN-NAME-2")
+                                 //   secondNameText = paci.GetData("1", "LATIN-NAME-2")
                                 } catch (e: java.lang.Exception) {
                                     e.printStackTrace()
                                 }
                                 try {
-                                    thirdNameText = paci.GetData("1", "LATIN-NAME-3")
+                                 //   thirdNameText = paci.GetData("1", "LATIN-NAME-3")
                                 } catch (e: java.lang.Exception) {
                                     e.printStackTrace()
                                 }
                                 try {
-                                    firstNameArText = paci!!.GetData("", "ARABIC-NAME-1")
+                               //     firstNameArText = paci!!.GetData("", "ARABIC-NAME-1")
                                 } catch (e: java.lang.Exception) {
                                     e.printStackTrace()
                                 }
                                 try {
-                                    secondNameArText = paci.GetData("", "ARABIC-NAME-2")
+                                 //   secondNameArText = paci.GetData("", "ARABIC-NAME-2")
                                 } catch (e: java.lang.Exception) {
                                     e.printStackTrace()
                                 }
                                 try {
-                                    thirdNameArText = paci.GetData("", "ARABIC-NAME-3")
+                                //    thirdNameArText = paci.GetData("", "ARABIC-NAME-3")
                                 } catch (e: java.lang.Exception) {
                                     e.printStackTrace()
                                 }
                                 try {
-                                    fourNameArText = paci.GetData("", "ARABIC-NAME-4")
+                              //      fourNameArText = paci.GetData("", "ARABIC-NAME-4")
                                 } catch (e: java.lang.Exception) {
                                     e.printStackTrace()
                                 }
@@ -1264,12 +1316,12 @@ class MyViewModel @Inject constructor(
                                     e.printStackTrace()
                                 }
                                  try {
-                                     dobText = paci.GetData("1", "BIRTH-DATE")
+                                   //  dobText = paci.GetData("1", "BIRTH-DATE")
                                  } catch (e: java.lang.Exception) {
                                      e.printStackTrace()
                                  }
                                 try {
-                                    expiryText = paci.GetData("1", "CARD-EXPIRY-DATE")
+                                //    expiryText = paci.GetData("1", "CARD-EXPIRY-DATE")
                                 } catch (e: java.lang.Exception) {
                                     e.printStackTrace()
                                 }
@@ -1295,15 +1347,23 @@ class MyViewModel @Inject constructor(
                                 if(civilidText.isBlank()){
                                     _stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error="Please Insert CivilID Correctly - Cannot Read Data")
                                 }else{
+                                    //civilid logic
                                     Log.d(TAG, "onCardEvent: get result $civilidText $firstNameArText $secondNameArText `6f")
+                                    if(isService == false){
+                                        if(Constants.APPSTATUS == Constants.TEST){
+                                             withContext(Dispatchers.Main){
+                                      Toast.makeText(baseContext," $civilidText isservice: $isService isAppointment: $isAppointment selectDepartmentId:${selectDepartment?.DepartmentPKID}",
+                                          Toast.LENGTH_LONG).show()
 
-                                    onEvent(MyEvent.GetCivilIdAppointment(civilidText))
+                                  }
+                                            onEvent(MyEvent.CheckCivilIDInSap("233333333333",isAppointment))
+                                        }else{
+                                            onEvent(MyEvent.CheckCivilIDInSap(civilidText,isAppointment))
+                                        }
+                                    }
+
                                     //_stateInsertCivilId.value =  _stateInsertCivilId.value.copy(isLoading = false,error="$civilidText")
-                                  /*  withContext(Dispatchers.Main){
-                                        Toast.makeText(baseContext," $civilidText $firstNameArText",
-                                            Toast.LENGTH_LONG).show()
 
-                                    }*/
                                 }
 
                             } catch (e: Exception) {

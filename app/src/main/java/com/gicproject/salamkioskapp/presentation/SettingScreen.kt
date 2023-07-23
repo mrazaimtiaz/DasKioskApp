@@ -100,7 +100,7 @@ fun SettingScreen(
             onRefresh = {
                 Log.d("TAG", "SettingScreen: swipe refresh")
                 viewModel.onEvent(MyEvent.GetBranches)
-                viewModel.onEvent(MyEvent.GetDepartments)
+               // viewModel.onEvent(MyEvent.GetDepartments)
 
             },
         ) {
@@ -174,7 +174,7 @@ fun SettingScreen(
                         },
                     )*/
                     Spacer(modifier = Modifier.height(30.dp))
-                    ComposeMenu(
+                 /*   ComposeMenu(
                         label = "Select Dept",
                         selectedText =  if (selectedIndexDept != -1 && state.department.isNotEmpty() && state.department.size > selectedIndexDept) state.department[selectedIndexDept].DepartmentNameEn.toString() else "Select Department",
                         content = {
@@ -196,7 +196,7 @@ fun SettingScreen(
                         updateExpandedValue = {
                             isDepartmentExpanded = true
                         },
-                    )
+                    )*/
                     Row() {
                         Text(
                             "Selected Branch: $branchName",
@@ -236,7 +236,7 @@ fun SettingScreen(
                         modifier = Modifier.padding(top = 30.dp)
                     )
                     Spacer(modifier = Modifier.height(30.dp))
-                    Row() {
+                   /* Row() {
                         Text(
                             "Selected Dept: $deptName",
                             fontSize = 18.sp,
@@ -250,7 +250,7 @@ fun SettingScreen(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 30.dp)
                         )
-                    }
+                    }*/
                     IntentToSetting(context)
                     Button(
                         modifier = Modifier.padding(top = 30.dp),

@@ -8,9 +8,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -33,6 +31,8 @@ import com.gicproject.salamkioskapp.R
 import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Constants
 import com.gicproject.salamkioskapp.common.Constants.Companion.heartBeatJson
+import com.gicproject.salamkioskapp.ui.theme.greenVarient
+import com.gicproject.salamkioskapp.ui.theme.redVarient
 import kotlinx.coroutines.delay
 import java.util.*
 
@@ -131,7 +131,8 @@ fun DoctorPayScreen(
                         showDialog.value = true
                    // viewModel.funcPrinterConnect()
                     },
-                    "Proceed to Pay"
+                    "Proceed to Pay",
+                    "المضي قدما في الدفع"
                 )
 
 
@@ -240,25 +241,79 @@ fun PaymentDialog(showDialog: MutableState<Boolean>,navController: NavController
 }
 
 @Composable
-fun SubmitButton(onClick: () -> Unit, text: String) {
+fun SubmitButton(onClick: () -> Unit, text: String, textAr: String) {
     Button(
         onClick = onClick,
         modifier = Modifier
-            .padding(vertical = 40.dp)
+            .padding(20.dp)
             .shadow(50.dp, shape = RoundedCornerShape(5.dp)),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(30.dp),
     ) {
-        Spacer(modifier = Modifier.width(20.dp))
         Icon(
             Icons.Default.Send,
             contentDescription = "",
-            modifier = Modifier.size(25.dp)
+            modifier = Modifier.size(30.dp)
         )
-        Spacer(modifier = Modifier.width(30.dp))
-        Text(text, fontSize = 35.sp)
+        Spacer(modifier = Modifier.width(20.dp))
+        Row(){
+            Text("$text  ", fontSize = 25.sp, fontFamily = Constants.FontEnglish)
+            Text("$textAr", fontSize = 25.sp, fontFamily = Constants.FontArabic)
+        }
         Spacer(modifier = Modifier.width(10.dp))
     }
 
+
+}
+
+
+@Composable
+fun GreenButton(onClick: () -> Unit, text: String, textAr: String){
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .padding(20.dp)
+            .shadow(50.dp, shape = RoundedCornerShape(5.dp)),
+        shape = RoundedCornerShape(30.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor =greenVarient)
+    ) {
+        Icon(
+            Icons.Default.ArrowForward,
+            contentDescription = "",
+            modifier = Modifier.size(50.dp)
+        )
+        Spacer(modifier = Modifier.width(20.dp))
+        Row(){
+            Text("$text  ", fontSize = 25.sp, fontFamily = Constants.FontEnglish)
+            Text("$textAr", fontSize = 25.sp, fontFamily = Constants.FontArabic)
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+    }
+}
+
+
+
+@Composable
+fun RedButton(onClick: () -> Unit, text: String, textAr: String){
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .padding(20.dp)
+            .shadow(50.dp, shape = RoundedCornerShape(5.dp)),
+        shape = RoundedCornerShape(30.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor =  redVarient)
+    ) {
+        Icon(
+            Icons.Default.Close,
+            contentDescription = "",
+            modifier = Modifier.size(50.dp)
+        )
+        Spacer(modifier = Modifier.width(20.dp))
+        Row(){
+            Text("$text  ", fontSize = 25.sp, fontFamily = Constants.FontEnglish)
+            Text("$textAr", fontSize = 25.sp, fontFamily = Constants.FontArabic)
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+    }
 }
 
 

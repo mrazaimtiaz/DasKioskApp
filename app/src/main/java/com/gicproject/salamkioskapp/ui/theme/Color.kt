@@ -6,7 +6,7 @@ val Purple200 = Color(0xFFBB86FC)
 val greenSalam = Color(0xFF1680bd)
 
 val DarkBlueText = Color(0xFF1f2e4d)
-val LightGreyText = Color(0xFFb0b6c1)
+val LightGreyText = Color(0xFF3E4044)
 val DarkGreyText = Color(0xFF858d9e)
 //Color(0xFF218882)
 val Purple500 = Color(0xFF6200EE)
@@ -17,6 +17,8 @@ val primaryVarient = Color(0xFF6ec078) //sidra
 val primarySidra =  Color(0xFF1680bd)//sidra
 val keypadBackground =Color.White //sidra
 val keypadText =  Color(0xFF0080c5) //sidra
+val greenVarient = Color(0xFF6ec078) //sidra
+val redVarient = Color(0xFFC06E6E) //sidra
 
 
 /*val primarySidra =  Color(0xFFcdaf75)//hadi

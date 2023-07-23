@@ -166,8 +166,8 @@ fun SelectServiceScreen(
                         val fontEnglish = FontFamily(Font(R.font.questrial_regular))
                         val fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
                         Row(){
-                            Text("Back  ", fontSize = 25.sp, fontFamily = fontEnglish)
-                            Text("عوده", fontSize = 25.sp, fontFamily = fontArabic)
+                            Text("Back  ", fontSize = 25.sp, fontFamily = Constants.FontEnglish)
+                            Text("عوده", fontSize = 25.sp, fontFamily = Constants.FontArabic)
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -327,9 +327,6 @@ fun ServiceInfo(service: SelectService, navController: NavController, onClick: (
     )
     val arabicBold = TextStyle(fontFamily = fontFamily)
 
-    var DoctorDisplayNameEnFontSIze: TextUnit = with(LocalDensity.current) {
-        service.ServicesFontSize?.toInt()?.toSp() ?: 88.toSp()
-    }
 
     //  var DoctorDisplayNameEnFontColor: Color = state.doctorDetail.DoctorDisplayNameEnFontColor?.color ?: "#2e3192".color
 
@@ -365,9 +362,9 @@ fun ServiceInfo(service: SelectService, navController: NavController, onClick: (
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 var bitmap: ImageBitmap? = null
-                if (service.ServicesLogo != null) {
+                if (service.Logo != null) {
                     try {
-                        bitmap = service.ServicesLogo!!.toBitmap().asImageBitmap()
+                        bitmap = service.Logo!!.toString().toBitmap().asImageBitmap()
                     } catch (e: java.lang.Exception) {
                         bitmap = null
                     }
@@ -399,7 +396,7 @@ fun ServiceInfo(service: SelectService, navController: NavController, onClick: (
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                style = TextStyle(fontFamily =fontEnglish),
+                style = TextStyle(fontFamily =Constants.FontEnglish),
             )
 
             Text(
@@ -408,7 +405,7 @@ fun ServiceInfo(service: SelectService, navController: NavController, onClick: (
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                style = TextStyle(fontFamily =fontArabic),
+                style = TextStyle(fontFamily =Constants.FontArabic),
             )
             Spacer(modifier = Modifier.height(10.dp))
             Row(
@@ -421,15 +418,15 @@ fun ServiceInfo(service: SelectService, navController: NavController, onClick: (
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
-                    style = TextStyle(fontFamily =fontEnglish),
+                    style = TextStyle(fontFamily =Constants.FontEnglish),
                 )
                 Text(
-                    service.ServicesFontSize ?: "",
+                    service.Waiting ?: "",
                     color = Color.DarkGray,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
-                    style = TextStyle(fontFamily =fontEnglish),
+                    style = TextStyle(fontFamily =Constants.FontEnglish),
                 )
                 Text(
                      "الانتظار",
@@ -437,28 +434,28 @@ fun ServiceInfo(service: SelectService, navController: NavController, onClick: (
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
-                    style = TextStyle(fontFamily =fontArabic),
+                    style = TextStyle(fontFamily =Constants.FontArabic),
                 )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                service.ServicesDescription
+                service.sapJobtitle
                     ?: "",
                 color = MaterialTheme.colors.secondary,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                style = TextStyle(fontFamily =fontEnglish),
+                style = TextStyle(fontFamily =Constants.FontEnglish),
             )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                service.ServicesDescriptionAr ?: "",
+                service.jobtitlear ?: "",
                 color = MaterialTheme.colors.secondary,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                style = TextStyle(fontFamily =fontArabic),
+                style = TextStyle(fontFamily =Constants.FontArabic),
             )
             Spacer(modifier = Modifier.height(10.dp))
 

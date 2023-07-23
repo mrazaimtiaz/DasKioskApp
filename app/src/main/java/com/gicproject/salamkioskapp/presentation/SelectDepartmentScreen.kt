@@ -123,6 +123,13 @@ fun SelectDepartmentScreen(
                             navController.currentBackStackEntry?.savedStateHandle?.set(
                                 Constants.STATE_EXTRA, false
                             )
+
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                Constants.STATE_IS_APPOINTMENT, true
+                            )
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                Constants.STATE_SELECT_DEPARTMENT, mSelectDepartment.value
+                            )
                             navController.navigate(Screen.InsertCivilIdScreen.route)
                         }
 
@@ -131,11 +138,23 @@ fun SelectDepartmentScreen(
                     }, text = "Appointment","موعد")
                     CustomButton(
                         onClick = {
+
                                 CoroutineScope(Dispatchers.Main).launch {
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        Constants.STATE_EXTRA, false
+                                    )
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        Constants.STATE_IS_APPOINTMENT, false
+                                    )
                                     navController.currentBackStackEntry?.savedStateHandle?.set(
                                         Constants.STATE_SELECT_DEPARTMENT, mSelectDepartment.value
                                     )
-                                    navController.navigate(Screen.SelectDoctorScreen.route)
+                                    navController.navigate(Screen.InsertCivilIdScreen.route)
+                                 /*   navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        Constants.STATE_SELECT_DEPARTMENT, mSelectDepartment.value
+                                    )
+
+                                    navController.navigate(Screen.SelectDoctorScreen.route)*/
 
 
 
@@ -162,11 +181,9 @@ fun SelectDepartmentScreen(
                             modifier = Modifier.size(50.dp)
                         )
                         Spacer(modifier = Modifier.width(20.dp))
-                        val fontEnglish = FontFamily(Font(R.font.questrial_regular))
-                        val fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
                         Row(){
-                            Text("Back  ", fontSize = 25.sp, fontFamily = fontEnglish)
-                            Text("عوده", fontSize = 25.sp, fontFamily = fontArabic)
+                            Text("Back  ", fontSize = 25.sp, fontFamily = Constants.FontEnglish)
+                            Text("عوده", fontSize = 25.sp, fontFamily = Constants.FontArabic)
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -343,11 +360,9 @@ fun GoBack(navController: NavController) {
             modifier = Modifier.size(50.dp)
         )
         Spacer(modifier = Modifier.width(20.dp))
-        val fontEnglish = FontFamily(Font(R.font.questrial_regular))
-        val fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
         Row(){
-            Text("Back  ", fontSize = 25.sp, fontFamily = fontEnglish)
-            Text("عوده", fontSize = 25.sp, fontFamily = fontArabic)
+            Text("Back  ", fontSize = 25.sp, fontFamily = Constants.FontEnglish)
+            Text("عوده", fontSize = 25.sp, fontFamily = Constants.FontArabic)
         }
         Spacer(modifier = Modifier.width(10.dp))
     }

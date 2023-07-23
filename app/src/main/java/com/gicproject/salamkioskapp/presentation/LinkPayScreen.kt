@@ -203,7 +203,7 @@ fun LinkPayScreen(
                             }
 
 
-                        }, text = "Proceed")
+                        }, text = "Proceed","تقدم")
                     }
                 }
 

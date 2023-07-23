@@ -143,7 +143,7 @@ fun SelectChildTestServiceScreen(
                     ) {
                         SubmitButton(onClick = {
                             showDialog.value = true
-                        }, text = "Proceed to Pay")
+                        }, text = "Proceed to Pay","المضي قدما في الدفع")
                     }
                 }
 

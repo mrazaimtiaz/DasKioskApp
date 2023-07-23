@@ -89,8 +89,13 @@ fun SelectOptionScreen(
                     items(state.options.size) { index ->
                         CustomButtonLarge(onClick = {
                             if(state.options[index].DepartmentPKID == 2){
+
                                 navController.currentBackStackEntry?.savedStateHandle?.set(
                                     Constants.STATE_EXTRA, true
+                                )
+
+                                navController.currentBackStackEntry?.savedStateHandle?.set(
+                                    Constants.STATE_IS_APPOINTMENT, true
                                 )
                                 navController.navigate(Screen.InsertCivilIdScreen.route)
                             }else{
@@ -140,8 +145,7 @@ fun SelectOptionScreen(
 @Composable
 fun CustomButtonLarge(onClick: () -> Unit, textEn: String,textAr: String,) {
 
-    var fontEnglish = FontFamily(Font(R.font.questrial_regular))
-    var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
+
     Button(
         onClick = onClick,
         modifier = Modifier
@@ -157,13 +161,13 @@ fun CustomButtonLarge(onClick: () -> Unit, textEn: String,textAr: String,) {
         ) {
             Text(
                 textEn,
-                style = TextStyle(fontFamily =fontEnglish),
+                style = TextStyle(fontFamily =Constants.FontEnglish),
                 fontSize = 40.sp,
                 textAlign = TextAlign.Center
             )
             Text(
                 textAr,
-                style = TextStyle(fontFamily =fontArabic),
+                style = TextStyle(fontFamily =Constants.FontArabic),
                 fontSize = 40.sp,
                 textAlign = TextAlign.Center
             )
@@ -174,8 +178,6 @@ fun CustomButtonLarge(onClick: () -> Unit, textEn: String,textAr: String,) {
 
 @Composable
 fun CustomButton(onClick: () -> Unit, text: String,textAr: String) {
-    var fontEnglish = FontFamily(Font(R.font.questrial_regular))
-    var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
     OutlinedButton(
         onClick = onClick,
         colors = ButtonDefaults.outlinedButtonColors(contentColor = primarySidra),
@@ -200,14 +202,14 @@ fun CustomButton(onClick: () -> Unit, text: String,textAr: String) {
                     fontSize = 23.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
-                    style = TextStyle(fontFamily =fontEnglish),
+                    style = TextStyle(fontFamily =Constants.FontEnglish),
                 )
                 Text(
                     textAr,
                     fontSize = 23.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Medium,
-                    style = TextStyle(fontFamily =fontArabic),
+                    style = TextStyle(fontFamily =Constants.FontArabic),
                 )
 
             }
@@ -220,8 +222,6 @@ fun CustomButton(onClick: () -> Unit, text: String,textAr: String) {
 @Composable
 fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
 
-    var fontEnglish = FontFamily(Font(R.font.questrial_regular))
-    var fontArabic = FontFamily(Font(R.font.ge_dinar_one_medium))
     Box(modifier = Modifier.padding(horizontal = 10.dp, vertical = 20.dp)) {
 
 
@@ -244,9 +244,9 @@ fun HeaderDesign(title: String,titleAr: String, navController: NavController) {
                     Column(verticalArrangement = Arrangement.Center,modifier  =Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(title, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Black,
-                            style = TextStyle(fontFamily =fontEnglish),)
+                            style = TextStyle(fontFamily =Constants.FontEnglish),)
                         Text(titleAr, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Black,
-                            style = TextStyle(fontFamily =fontArabic),)
+                            style = TextStyle(fontFamily =Constants.FontArabic),)
 
                     }
 
