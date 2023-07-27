@@ -1,14 +1,13 @@
 package com.gicproject.salamkioskapp.presentation
 
 import com.gicproject.salamkioskapp.domain.model.ConsultVisit
-import com.gicproject.salamkioskapp.domain.model.Department
-import com.gicproject.salamkioskapp.domain.model.Doctor
-import com.gicproject.salamkioskapp.domain.model.SelectService
 
 
-data class AppointmentInfoState(
+data class ConsultVisitState(
     val isLoading: Boolean = false,
     val error: String = "",
+    val isBack: Boolean = false,
+    val isCancel: Boolean = false,
     val isApiLoading: Boolean = false,
     val consultVisit: ConsultVisit? = null,
 )

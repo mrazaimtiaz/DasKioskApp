@@ -1,5 +1,6 @@
 package com.gicproject.salamkioskapp.presentation
 
+import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,8 +37,11 @@ import com.gicproject.salamkioskapp.common.Constants.Companion.heartBeatJson
 import com.gicproject.salamkioskapp.domain.model.Patient
 import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.gicproject.salamkioskapp.domain.model.SelectService
+import com.gicproject.salamkioskapp.ui.theme.DarkGreyText
 import com.gicproject.salamkioskapp.ui.theme.LightGreyText
 import kotlinx.coroutines.delay
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -51,15 +55,7 @@ fun AppointmentInfoScreen(
     viewModel: MyViewModel,
     ) {
 
-    val state = viewModel.stateAppointmentInfo.value
 
-    LaunchedEffect(true) {
-            Log.d("TAG", "CreateConsultVisit: called ${selectDepartment?.DepartmentPKID} ")
-
-            viewModel.onEvent(MyEvent.CreateConsultVisit(selectDepartment,patient,service))
-
-
-    }
 
     val second = remember { mutableStateOf(180) }
 
@@ -117,9 +113,7 @@ fun AppointmentInfoScreen(
                 HeartBeatTime(second = second)
             }
             HeaderDesign("Appointment Information","معلومات التعيين",navController)
-            if (state.error.isNotBlank()) {
-                Text(state.error, color = MaterialTheme.colors.error, fontSize =30.sp, modifier = Modifier.padding(top= 30.dp))
-            }
+
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -164,8 +158,18 @@ fun AppointmentInfoScreen(
                 Row() {
                     GreenButton(
                         {
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                Constants.STATE_PATIENT, patient
+                            )
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                Constants.STATE_SELECT_DEPARTMENT, selectDepartment
+                            )
 
-                            // viewModel.funcPrinterConnect()
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                Constants.STATE_SERVICE,service
+                            )
+                            navController.navigate(Screen.ConsultVisitScreen.route)
+
                         },
                         "Ok",
                         textAr = "موافق"
@@ -233,10 +237,12 @@ fun AppointmentInfo(service: SelectService?) {
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
 
-                Text("${service?.DOCNAME?.trim()}", color = Color.Black, fontSize = 30.sp, fontWeight = FontWeight.Bold,
+                Text(
+                    service?.DOCNAME?.trim() ?: "", color = Color.Black, fontSize = 25.sp, fontWeight = FontWeight.Bold,
                     style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),)
 
-                Text("${service?.DOCNAMEAR?.trim()}", color = Color.Black, fontSize = 30.sp, fontWeight = FontWeight.Bold,
+                Text(
+                    service?.DOCNAMEAR?.trim() ?: "", color = Color.Black, fontSize = 25.sp, fontWeight = FontWeight.Bold,
                     style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontArabic),)
 
 
@@ -244,35 +250,90 @@ fun AppointmentInfo(service: SelectService?) {
             Spacer(modifier = Modifier.height(20.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
 
-                Text("${service?.jobtitle}", color = Color.Black, fontSize = 28.sp,
+                Text(
+                    service?.jobtitle ?: "", color = Color.Black, fontSize = 23.sp,
                     style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),)
 
 
-                Text("${service?.jobtitlear}", color = Color.Black, fontSize = 28.sp,
+                Text(
+                    service?.jobtitlear ?: "", color = Color.Black, fontSize = 23.sp,
                         style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontArabic),)
 
             }
 
+            Spacer(modifier = Modifier.height(20.dp))
+
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val dateFormatter =  DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                    val now = LocalDateTime.now()
+                    var currentDate = now?.format(dateFormatter)
+                    // Update the time every second
+                    Text(
+                        "Appointment Date  $currentDate  ",
+                        color =DarkGreyText,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),
+                    )
+                    Text(
+                        "تاريخ الموعد ",
+                        color = DarkGreyText,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontArabic),
+                    )
+                }
+
+
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+                    val now = LocalDateTime.now()
+                    var  currentTime = now.format(timeFormatter)
+                    // Update the time every second
+                    Text(
+                        "Appointment Time  $currentTime  ",
+                        color = DarkGreyText,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),
+                    )
+                    Text(
+                        "وقت الموعد ",
+                        color = DarkGreyText,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontArabic),
+                    )
+                }
+
+
+            }
+
+         /*   Spacer(modifier = Modifier.height(20.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
 
                 Text(
-                    "Price ${service?.CONSFEE?.toString()} KD ",
+                    "Fees  ${service?.CONSFEE?.toString()} KD ",
                     color = Color.Black,
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                     style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),
                 )
                 Text(
-                    "السعر ",
+                    "رسوم ",
                     color = Color.Black,
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                     style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontArabic),
                 )
 
-            }
+            }*/
 
         }
     }

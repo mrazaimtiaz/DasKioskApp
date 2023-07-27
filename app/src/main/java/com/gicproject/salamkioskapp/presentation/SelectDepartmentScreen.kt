@@ -343,12 +343,33 @@ fun HeartBeatAnimation() {
 
         )
 }
-
-
 @Composable
 fun GoBack(navController: NavController) {
     Button(
         onClick = { navController.popBackStack() },
+        modifier = Modifier
+            .padding(20.dp)
+            .shadow(50.dp, shape = RoundedCornerShape(5.dp)),
+        shape = RoundedCornerShape(30.dp)
+    ) {
+        Icon(
+            Icons.Default.KeyboardArrowLeft,
+            contentDescription = "",
+            modifier = Modifier.size(50.dp)
+        )
+        Spacer(modifier = Modifier.width(20.dp))
+        Row(){
+            Text("Back  ", fontSize = 25.sp, fontFamily = Constants.FontEnglish)
+            Text("عوده", fontSize = 25.sp, fontFamily = Constants.FontArabic)
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+    }
+}
+
+@Composable
+fun GoBackWithClick(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
         modifier = Modifier
             .padding(20.dp)
             .shadow(50.dp, shape = RoundedCornerShape(5.dp)),

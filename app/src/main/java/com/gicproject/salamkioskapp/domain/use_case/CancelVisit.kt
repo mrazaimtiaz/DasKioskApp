@@ -8,6 +8,7 @@ import com.gicproject.salamkioskapp.domain.model.Department
 import com.gicproject.salamkioskapp.domain.model.Patient
 import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.gicproject.salamkioskapp.domain.repository.MyRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -33,6 +34,7 @@ class CancelVisit @Inject constructor(
                     Servicelbl_id,
                     BranchID,"en")
             } else {
+                delay(2000)
                 listOf(
                     SelectDepartment(
                         0,

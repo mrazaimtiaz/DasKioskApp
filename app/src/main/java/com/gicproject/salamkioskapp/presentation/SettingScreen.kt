@@ -10,9 +10,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -211,6 +209,41 @@ fun SettingScreen(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 30.dp)
                         )
+                    }
+                    Row() {
+                        Button(
+                            modifier = Modifier.padding(top = 30.dp),
+                            onClick = {
+                                viewModel.hideBar(context)
+
+                            }) {
+                            Icon(
+                                Icons.Filled.ArrowDropDown,
+                                "setting",
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .size(30.dp, 30.dp)
+                            )
+
+                            Text(text = "Hide Bar", Modifier.padding(start = 10.dp))
+                        }
+                        Spacer(modifier = Modifier.width(30.dp))
+                        Button(
+                            modifier = Modifier.padding(top = 30.dp),
+                            onClick = {
+                                viewModel.showBar(context)
+
+                            }) {
+                            Icon(
+                                Icons.Filled.ThumbUp,
+                                "setting",
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .size(30.dp, 30.dp)
+                            )
+
+                            Text(text = "Show Status Bar", Modifier.padding(start = 10.dp))
+                        }
                     }
                     /*Spacer(modifier = Modifier.height(30.dp))
                     Row() {

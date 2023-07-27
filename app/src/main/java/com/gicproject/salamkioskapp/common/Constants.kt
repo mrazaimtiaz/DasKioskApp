@@ -21,7 +21,7 @@ const val BASE_URL = "http://192.168.20.160/"
      //  const val BASE_URL = "http://gickuwait-dev.com/APIQ/"
      const val PRODUCTION = "PRODUCTION"
         const val TEST = "TEST"
-         const val APPSTATUS = TEST
+         const val APPSTATUS = PRODUCTION
 
       const val LOGO = R.drawable.daslogo //sidra
        const val BACKGROUND_IMAGE = R.drawable.dasbackground //sidra
@@ -62,6 +62,7 @@ const val BASE_URL = "http://192.168.20.160/"
         const val STATE_SELECT_DEPARTMENT= "STATE_SELECT_DEPARTMENT"
         const val STATE_PATIENT= "STATE_PATIENT"
         const val STATE_SERVICE= "STATE_SERVICE"
+        const val STATE_PAY= "STATE_PAY"
         const val STATE_MSG_EN = "state msg en"
         const val STATE_MSG_AR = "state msg ar"
         const val STATE_ANSWER = "answer"

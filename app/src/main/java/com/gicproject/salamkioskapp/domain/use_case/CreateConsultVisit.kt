@@ -6,6 +6,7 @@ import com.gicproject.salamkioskapp.common.Constants
 import com.gicproject.salamkioskapp.common.Resource
 import com.gicproject.salamkioskapp.domain.model.*
 import com.gicproject.salamkioskapp.domain.repository.MyRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -45,6 +46,7 @@ class CreateConsultVisit @Inject constructor(
                     BranchID,"en")
 
             } else {
+                delay(2000)
                 listOf(ConsultVisit("00001","0.0", "0000366636","233333333333","Test Patient . Kiosk","0000300417", "", "0026201198","Office or other outpatient Visit for an established Patient,Follow Up Within A W","CB99212A", "",1), )
 
             }

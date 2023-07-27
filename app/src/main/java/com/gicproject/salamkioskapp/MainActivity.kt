@@ -276,6 +276,15 @@ class MainActivity : ComponentActivity(){
 
 
 
+        var ACTION_SHOW_NAVIGATIONBAR = "com.android.internal.policy.impl.showNavigationBar";
+        var ACTION_HIDE_NAVIGATIONBAR = "com.android.internal.policy.impl.hideNavigationBar";
+        var ACTION_OPEN_STATUSBAR = "com.android.systemui.statusbar.phone.statusopen"; 1
+        var ACTION_CLOSE_STATUSBAR = "com.android.systemui.statusbar.phone.statusclose";
+
+        //sendBroadcast( Intent(ACTION_SHOW_NAVIGATIONBAR));
+        sendBroadcast( Intent(ACTION_HIDE_NAVIGATIONBAR));
+        // sendBroadcast( Intent(ACTION_OPEN_STATUSBAR));
+        sendBroadcast( Intent(ACTION_CLOSE_STATUSBAR));
         mPrinter = PrinterAPI.getInstance()
 
 
@@ -336,7 +345,9 @@ class MainActivity : ComponentActivity(){
                             route = Screen.SelectOptionScreen.route
                         ) {
                             viewModel?.resetDepartmentScreen()
+                            viewModel?.resetServicesScreen()
                             viewModel?.resetInsertCivilIdScreen()
+                            viewModel?.resetConsultVisitScreen()
                             viewModel?.readCivilIdOff()
 
                             SelectOptionScreen(navController, viewModel!!)
@@ -395,6 +406,7 @@ class MainActivity : ComponentActivity(){
                             route = Screen.AppointmentInfoScreen.route
                         ) {
                             viewModel?.readCivilIdOff()
+                            viewModel?.resetConsultVisitScreen()
                             val selectDepartment =
                                 navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
                                     Constants.STATE_SELECT_DEPARTMENT
@@ -411,16 +423,68 @@ class MainActivity : ComponentActivity(){
                             AppointmentInfoScreen(selectDepartment,patient,selectService,navController, viewModel!!)
                         }
                         composable(
+                            route = Screen.ConsultVisitScreen.route
+                        ) {
+                            viewModel?.readCivilIdOff()
+                            val selectDepartment =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
+                                    Constants.STATE_SELECT_DEPARTMENT
+                                )
+                            val patient =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Patient?>(
+                                    Constants.STATE_PATIENT
+                                )
+
+                            val selectService =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectService?>(
+                                    Constants.STATE_SERVICE
+                                )
+                            ConsultVisitScreen(selectDepartment,patient,selectService,navController, viewModel!!)
+                        }
+                        composable(
                             route = Screen.DoctorPayScreen.route
                         ) {
                             viewModel?.readCivilIdOff()
                             DoctorPayScreen(navController, viewModel!!)
                         }
                         composable(
+                            route = Screen.CreateInvoiceScreen.route
+                        ) {
+                            viewModel?.readCivilIdOff()
+                            val selectDepartment =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
+                                    Constants.STATE_SELECT_DEPARTMENT
+                                )
+                            val patient =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Patient?>(
+                                    Constants.STATE_PATIENT
+                                )
+
+                            val selectService =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectService?>(
+                                    Constants.STATE_SERVICE
+                                )
+                            CreateInvoiceScreen(selectDepartment,patient,selectService,navController, viewModel!!)
+                        }
+                        composable(
                             route = Screen.InsertKnetScreen.route
                         ) {
                             viewModel?.readCivilIdOff()
-                            InsertKnetScreen(navController, viewModel!!)
+                            val selectDepartment =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectDepartment?>(
+                                    Constants.STATE_SELECT_DEPARTMENT
+                                )
+                            val patient =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Patient?>(
+                                    Constants.STATE_PATIENT
+                                )
+
+                            val selectService =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<SelectService?>(
+                                    Constants.STATE_SERVICE
+                                )
+                            InsertKnetScreen(selectDepartment,patient,selectService,navController, viewModel!!)
+
                         }
                         composable(
                             route = Screen.InsertCivilIdScreen.route

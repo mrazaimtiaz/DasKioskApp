@@ -1,6 +1,7 @@
 package com.gicproject.salamkioskapp.presentation
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -90,8 +91,12 @@ class MyViewModel @Inject constructor(
     private val _stateInsertCivilId = mutableStateOf(InsertCivilIdScreenState())
     val stateInsertCivilId: State<InsertCivilIdScreenState> = _stateInsertCivilId
 
-    private val _stateAppointmentInfo = mutableStateOf(AppointmentInfoState())
-    val stateAppointmentInfo: State<AppointmentInfoState> = _stateAppointmentInfo
+    private val _stateConsultVisitInfo = mutableStateOf(ConsultVisitState())
+    val stateConsultVisitInfo: State<ConsultVisitState> = _stateConsultVisitInfo
+
+
+    private val _stateInsertKnet = mutableStateOf(InsertKnetScreenState())
+    val stateInsertKnet: State<InsertKnetScreenState> = _stateInsertKnet
 
 
     private val _stateSelectService = mutableStateOf(SelectServiceScreenState())
@@ -103,6 +108,11 @@ class MyViewModel @Inject constructor(
 
     private val _stateSelectChildTestService = mutableStateOf(SelectChildTestServiceScreenState())
     val stateSelectChildTestService: State<SelectChildTestServiceScreenState> = _stateSelectChildTestService
+
+
+
+    private val _stateCreateInvoice = mutableStateOf(CreateInvoiceScreenState())
+    val stateCreateInvoice: State<CreateInvoiceScreenState> = _stateCreateInvoice
 
     private val _readCivilId = mutableStateOf(false)
 
@@ -118,11 +128,34 @@ class MyViewModel @Inject constructor(
         initPreference()
     }
 
+    fun hideBar(context: Context){
+        var ACTION_HIDE_NAVIGATIONBAR = "com.android.internal.policy.impl.hideNavigationBar";
+        var ACTION_CLOSE_STATUSBAR = "com.android.systemui.statusbar.phone.statusclose";
+
+        //sendBroadcast( Intent(ACTION_SHOW_NAVIGATIONBAR));
+        context.sendBroadcast( Intent(ACTION_HIDE_NAVIGATIONBAR));
+        // sendBroadcast( Intent(ACTION_OPEN_STATUSBAR));
+        context.sendBroadcast( Intent(ACTION_CLOSE_STATUSBAR));
+    }
+
+    fun showBar(context: Context){
+        var ACTION_SHOW_NAVIGATIONBAR = "com.android.internal.policy.impl.showNavigationBar";
+        var ACTION_OPEN_STATUSBAR = "com.android.systemui.statusbar.phone.statusopen"; 1
+
+        //sendBroadcast( Intent(ACTION_SHOW_NAVIGATIONBAR));
+        context.sendBroadcast( Intent(ACTION_SHOW_NAVIGATIONBAR));
+        // sendBroadcast( Intent(ACTION_OPEN_STATUSBAR));
+        context.sendBroadcast( Intent(ACTION_OPEN_STATUSBAR));
+    }
+
     fun resetDepartmentScreen(){
         _stateSelectDepartment.value = SelectDepartmentScreenState()
     }
     fun resetServicesScreen(){
         _stateSelectService.value = SelectServiceScreenState()
+    }
+    fun resetConsultVisitScreen(){
+        _stateConsultVisitInfo.value = ConsultVisitState()
     }
     fun resetInsertCivilIdScreen(){
         textCivilId.value = ""
@@ -793,6 +826,106 @@ class MyViewModel @Inject constructor(
                     }.launchIn(viewModelScope)
                 }
             }
+            is MyEvent.CancelConsultVisit -> {
+                if(_selectedBranchId.value.isNotEmpty() ) {
+                    surveyUseCases.cancelVisit(
+                        event.consultVisit.EMOVEMNTSEQNOlbl ?: "",
+                        event.consultVisit.caseidlbl ?: "",
+                        event.consultVisit.Servicelblid ?: "",
+                        _selectedBranchId.value,
+                    ).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                result.data?.let {
+                                    viewModelScope.launch {
+                                        if(it.Result == 1){
+                                            _stateConsultVisitInfo.value =
+                                                _stateConsultVisitInfo.value.copy(isBack = event.isBack, isCancel = event.isCancel,  isLoading = false, isApiLoading = false)
+                                        }else{
+                                            _stateConsultVisitInfo.value = _stateConsultVisitInfo.value.copy(
+                                                error = it.AlertMessage + " Result ${it.Result} Cancel Visit",
+                                                isLoading = false, isApiLoading = false
+                                            )
+
+                                        }
+
+                                    }
+                                }
+                            }
+                            is Resource.Error -> {
+                                _stateConsultVisitInfo.value = _stateConsultVisitInfo.value.copy(
+                                    error = result.message ?: "An unexpected error occurred",
+                                    isLoading = false, isApiLoading = false
+                                )
+                                // delay(2000)
+                                //  onEvent(MyEvent.GetDepartment)
+                            }
+                            is Resource.Loading -> {
+                                _stateConsultVisitInfo.value = _stateConsultVisitInfo.value.copy(isLoading = true, isApiLoading = true)
+                            }
+                        }
+                    }.launchIn(viewModelScope)
+                }else{
+                    _stateConsultVisitInfo.value = _stateConsultVisitInfo.value.copy(
+                        error =  "Select Branch",
+                        isLoading = false,
+                        isApiLoading = false,
+                    )
+                }
+            }
+            is MyEvent.PayKnet -> {
+
+            }
+            is MyEvent.CreateInvoice -> {
+                if(_selectedBranchId.value.isNotEmpty() ) {
+                    surveyUseCases.createInvoice(
+                        event.service?.doctoridsap ?: "",
+                        event.patient?.Patientid ?: "",
+                        event.consultVisit?.caseidlbl ?: "",
+                        event.consultVisit?.EMOVEMNTSEQNOlbl ?: "",
+                        "0000",
+                        "Visa" ?: "",
+                        event.patient?.Patientname ?: "",
+                        event.patient?.PatientnameAr ?: "",
+                        event.service?.ServicesNameEN ?: "",
+                        _selectedBranchId.value,
+                        "1234",
+                        "123456789",
+                        "12358",
+                        "name",
+                        "25",
+                        "1234",
+
+                    ).onEach { result ->
+                        when (result) {
+                            is Resource.Success -> {
+                                result.data?.let {
+                                    viewModelScope.launch {
+                                        _stateCreateInvoice.value =
+                                            CreateInvoiceScreenState(invoice = it)
+                                    }
+                                }
+                            }
+                            is Resource.Error -> {
+                                _stateCreateInvoice.value = _stateCreateInvoice.value.copy(
+                                    error = result.message ?: "An unexpected error occurred",
+                                    isLoading = false,
+                                )
+                                // delay(2000)
+                                //  onEvent(MyEvent.GetDepartment)
+                            }
+                            is Resource.Loading -> {
+                                _stateCreateInvoice.value = CreateInvoiceScreenState(isLoading = true,)
+                            }
+                        }
+                    }.launchIn(viewModelScope)
+                }else{
+                    _stateCreateInvoice.value = _stateCreateInvoice.value.copy(
+                        error =  "Select Branch",
+                        isLoading = false,
+                    )
+                }
+            }
             is MyEvent.CreateConsultVisit -> {
                 if(_selectedBranchId.value.isNotEmpty() ) {
                     surveyUseCases.createConsultVisit(
@@ -811,13 +944,13 @@ class MyViewModel @Inject constructor(
                             is Resource.Success -> {
                                 result.data?.let {
                                     viewModelScope.launch {
-                                        _stateAppointmentInfo.value =
-                                            AppointmentInfoState(consultVisit = it)
+                                        _stateConsultVisitInfo.value =
+                                            ConsultVisitState(consultVisit = it)
                                     }
                                 }
                             }
                             is Resource.Error -> {
-                                _stateAppointmentInfo.value = _stateAppointmentInfo.value.copy(
+                                _stateConsultVisitInfo.value = _stateConsultVisitInfo.value.copy(
                                     error = result.message ?: "An unexpected error occurred",
                                     isLoading = false, isApiLoading = false
                                 )
@@ -825,12 +958,12 @@ class MyViewModel @Inject constructor(
                                 //  onEvent(MyEvent.GetDepartment)
                             }
                             is Resource.Loading -> {
-                                _stateAppointmentInfo.value = AppointmentInfoState(isLoading = true, isApiLoading = true)
+                                _stateConsultVisitInfo.value = ConsultVisitState(isLoading = true, isApiLoading = true)
                             }
                         }
                     }.launchIn(viewModelScope)
                 }else{
-                    _stateAppointmentInfo.value = _stateAppointmentInfo.value.copy(
+                    _stateConsultVisitInfo.value = _stateConsultVisitInfo.value.copy(
                         error =  "Select Branch",
                         isLoading = false,
                         isApiLoading = false,

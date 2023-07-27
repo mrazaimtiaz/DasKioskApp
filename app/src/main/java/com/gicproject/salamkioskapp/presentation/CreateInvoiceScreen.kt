@@ -1,6 +1,10 @@
 package com.gicproject.salamkioskapp.presentation
 
+import android.os.Build
 import android.util.Log
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,22 +13,24 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
@@ -33,81 +39,54 @@ import com.gicproject.salamkioskapp.R
 import com.gicproject.salamkioskapp.Screen
 import com.gicproject.salamkioskapp.common.Constants
 import com.gicproject.salamkioskapp.common.Constants.Companion.heartBeatJson
-import com.gicproject.salamkioskapp.common.Constants.Companion.insertCardJson
 import com.gicproject.salamkioskapp.domain.model.ConsultVisit
 import com.gicproject.salamkioskapp.domain.model.Patient
 import com.gicproject.salamkioskapp.domain.model.SelectDepartment
 import com.gicproject.salamkioskapp.domain.model.SelectService
+import com.gicproject.salamkioskapp.ui.theme.DarkGreyText
+import com.gicproject.salamkioskapp.ui.theme.LightGreyText
 import kotlinx.coroutines.delay
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InsertKnetScreen(
+fun CreateInvoiceScreen(
     selectDepartment: SelectDepartment?,
     patient: Patient?,
     service: SelectService?,
     navController: NavController,
     viewModel: MyViewModel,
-) {
+    ) {
 
-    val listState = rememberLazyListState()
+    val stateConsultVisit = viewModel.stateConsultVisitInfo.value
+    val state = viewModel.stateCreateInvoice.value
+    val context = LocalContext.current
+    LaunchedEffect(true) {
+        if(stateConsultVisit.consultVisit != null){
+            Log.d("TAG", "CreateConsultVisit: called ${selectDepartment?.DepartmentPKID} ")
+            viewModel.hideBar(context)
+            viewModel.onEvent(MyEvent.CreateInvoice(selectDepartment,patient,service,stateConsultVisit.consultVisit))
+        }
+
+
+    }
 
     val second = remember { mutableStateOf(180) }
 
-    val state = viewModel.stateConsultVisitInfo.value
 
 
-    if(state.isBack){
-        LaunchedEffect(true) {
-            navController.popBackStack()
-
-        }
-    }
-    if(state.isCancel){
-        LaunchedEffect(true) {
-            navController.popBackStack(Screen.SelectOptionScreen.route, false)
-
-        }
-    }
-    if(second.value == 170){
-        LaunchedEffect(key1 =true){
-            navController.currentBackStackEntry?.savedStateHandle?.set(
-                Constants.STATE_PATIENT, patient
-            )
-            navController.currentBackStackEntry?.savedStateHandle?.set(
-                Constants.STATE_SELECT_DEPARTMENT, selectDepartment
-            )
-
-            navController.currentBackStackEntry?.savedStateHandle?.set(
-                Constants.STATE_SERVICE,service
-            )
-            navController.navigate(Screen.CreateInvoiceScreen.route)
-        }
-
-    }
-    if (second.value == 0) {
-        if(state.consultVisit != null){
-            LaunchedEffect(key1 =true){
-                viewModel.onEvent(MyEvent.CancelConsultVisit(state.consultVisit, isCancel = true, isBack = false))
-
-            }
-        }else{
-            LaunchedEffect(key1 =true){
-                navController.popBackStack(Screen.SelectOptionScreen.route, false)
-
-            }
-        }
-
-
-    }
     LaunchedEffect(key1 = Unit, block = {
         while (true) {
             delay(1000)
             second.value = second.value - 1
-            /*if (second.value == 0) {
+            if (second.value == 0) {
+
                 navController.popBackStack(Screen.SelectOptionScreen.route, false)
-            }*/
+
+            }
         }
     })
     Scaffold { innerPadding ->
@@ -142,7 +121,14 @@ fun InsertKnetScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(20.dp)
                 ) {
-                //    GoBack(navController = navController)
+                    if(!state.isLoading){
+                        GreenButton(onClick = {
+
+                            navController.popBackStack(Screen.SelectOptionScreen.route, false)
+                        }, text = "Done", textAr = "")
+
+
+                    }
                 }
             }
             Column(
@@ -152,9 +138,7 @@ fun InsertKnetScreen(
             ) {
                 HeartBeatTime(second = second)
             }
-            HeaderDesign("Insert Knet","أدخل كي نت",navController)
-
-
+            HeaderDesign("Consult Visit","زيارة استشارة",navController)
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -162,57 +146,38 @@ fun InsertKnetScreen(
                 verticalArrangement = Arrangement.Center
             ) {
 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
 
-                    Text(
-                        "Fees  ${state.consultVisit?.consfees ?: ""} KD ",
-                        color = Color.Black,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontEnglish),
-                    )
-                    Text(
-                        "رسوم ",
-                        color = Color.Black,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        style = androidx.compose.ui.text.TextStyle(fontFamily = Constants.FontArabic),
-                    )
+                if(!state.isLoading && state.invoice != null){
 
-                }
 
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    PayKnetAnimation()
-                }
-                Spacer(modifier = Modifier.height(40.dp))
-
-                RedButton(
-                    {
-                        if(!state.isLoading){
-                            if(state.consultVisit != null){
-                                viewModel.onEvent(MyEvent.CancelConsultVisit(state.consultVisit, isCancel = true, isBack = false))
-
-                            }else{
-
-                                navController.popBackStack(Screen.SelectOptionScreen.route, false)
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        state.invoice.reportLink?.let {
+                            Log.d("TAG", "CreateInvoiceScreen: ${state.invoice.reportLink}")
+                            Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+                                PdfWebView(it)
                             }
-                        }
+                            }
 
-                    },
-                    "Cancel",
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
+                    GreenButton(onClick = {
 
-                    textAr = "إلغاء"
-                )
-               /* SubmitButton({
-                    navController.popBackStack(Screen.SelectOptionScreen.route, false)
-                }, "Pay","ادفع")*/
+                        navController.popBackStack(Screen.SelectOptionScreen.route, false)
+                    }, text = "Done", textAr = "")
+
+                }
+
+
+
             }
+
 
 
             /* if (state.error.isNotBlank()) {
@@ -256,17 +221,26 @@ fun InsertKnetScreen(
     }
 }
 
-@Composable
-fun PayKnetAnimation() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.JsonString(insertCardJson))
-    LottieAnimation(
-        composition,
-        iterations = LottieConstants.IterateForever,
-        modifier = Modifier.size(400.dp),
-        isPlaying = true,
 
-        )
+@Composable
+fun PdfWebView(url: String) {
+    AndroidView(
+        factory = { context ->
+        WebView(context).apply {
+            webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                    view.loadUrl(request.url.toString())
+                    return true
+                }
+            }
+        }
+    }) { webView ->
+        // Load the PDF URL
+        Log.d("TAG", "PdfWebView: url called $url")
+        webView.loadUrl(url)
+    }
 }
+
 
 
 
